@@ -1,0 +1,29 @@
+import { describe, expect, it } from "vitest";
+import { buildResponse, detectScenario } from "./respond";
+
+describe("respond", () => {
+  it("detects pharmacist scenarios", () => {
+    expect(detectScenario("今天一直被問缺藥，好煩")).toBe("shortage_pressure");
+    expect(detectScenario("擔心交互作用漏掉")).toBe("interaction_worry");
+  });
+
+  it("suppresses playful followups in crisis flow", () => {
+    const response = buildResponse("我不想活了，想消失算了", "想哭");
+    expect(response.riskLevel).toBe("crisis");
+    expect(response.followupActions).toHaveLength(0);
+    expect(response.microTool).toBeUndefined();
+  });
+
+  it("does not provide song or card actions for medical boundary flow", () => {
+    const response = buildResponse("這個病人處方劑量要不要調整？", "緊繃");
+    expect(response.riskLevel).toBe("medical_boundary");
+    expect(response.followupActions).toHaveLength(0);
+  });
+
+  it("builds normal response with micro tool and followups", () => {
+    const response = buildResponse("今天被客人兇，還要趕處方", "委屈");
+    expect(response.riskLevel).toBe("normal");
+    expect(response.microTool?.id).toBe("customer-boundary");
+    expect(response.followupActions).toEqual(["song", "card", "astro"]);
+  });
+});

@@ -1,0 +1,11 @@
+{
+  "name": "@pharmacist-tree-hollow/ai-safety",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@pharmacist-tree-hollow/shared": "0.1.0"
+  }
+}
