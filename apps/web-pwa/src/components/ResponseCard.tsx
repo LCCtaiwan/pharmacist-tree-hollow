@@ -2,21 +2,23 @@ import { useEffect, useRef, useState } from "react";
 import type { ConversationResponse, FollowupAction } from "@pharmacist-tree-hollow/shared";
 
 const actionLabels: Record<FollowupAction, string> = {
-  song: "上一首今晚的歌",
-  card: "拿一張紙籤",
-  astro: "換一個夜空角度"
+  song: "收音機",
+  card: "紙籤盒",
+  astro: "窗邊星光"
 };
 
 export function ResponseCard({
   response,
   activePanel,
   onPanel,
-  onSave
+  onSave,
+  onNewNote
 }: {
   response: ConversationResponse;
   activePanel: FollowupAction | null;
   onPanel: (panel: FollowupAction) => void;
   onSave: () => void;
+  onNewNote: () => void;
 }) {
   const isCrisis = response.riskLevel === "crisis";
   const [microStep, setMicroStep] = useState(0);
@@ -72,7 +74,7 @@ export function ResponseCard({
   }
 
   return (
-    <section className={`response-card ${isCrisis ? "response-card-crisis" : ""}`} aria-live="polite">
+    <section className={`response-card ${isCrisis ? "response-card-crisis" : ""} ${showAftercare ? "response-card-aftercare" : ""}`} aria-live="polite">
       <div className="reply-meta">
         <span>{response.careTitle ?? "給值班後的你"}</span>
         <i aria-hidden="true" />
@@ -109,7 +111,7 @@ export function ResponseCard({
       {canShowFollowups && showAftercare && (
         <div className="aftercare" aria-label="可以繼續留下的方式">
           <span>不用做完，選一個就好</span>
-          <div className="followups">
+          <div className="followups npc-row">
             <button
               type="button"
               className={savedOnce ? "saved" : ""}
@@ -123,20 +125,22 @@ export function ResponseCard({
             {hasMicroTool && (
               <button
                 type="button"
-                className={showMicroTool ? "active" : ""}
+                className={`npc-button npc-light ${showMicroTool ? "active" : ""}`}
                 onClick={showThirtySeconds}
               >
-                坐 30 秒
+                <i aria-hidden="true" />
+                <span>小燈</span>
               </button>
             )}
             {response.followupActions.map((action) => (
               <button
                 type="button"
                 key={action}
-                className={activePanel === action ? "active" : ""}
+                className={`npc-button npc-${action} ${activePanel === action ? "active" : ""}`}
                 onClick={() => selectPanel(action)}
               >
-                {actionLabels[action]}
+                <i aria-hidden="true" />
+                <span>{actionLabels[action]}</span>
               </button>
             ))}
           </div>
@@ -218,7 +222,13 @@ export function ResponseCard({
         </div>
       )}
 
-      {response.closingLine && <p className="closing-line">{response.closingLine}</p>}
+      {response.closingLine && showAftercare && <p className="closing-line">{response.closingLine}</p>}
+
+      {!isCrisis && (
+        <button type="button" className="new-note-button" onClick={onNewNote}>
+          再投一張紙條
+        </button>
+      )}
     </section>
   );
 }

@@ -284,13 +284,13 @@ button {
 
 .hollow {
   position: absolute;
-  left: 69px;
-  top: 66px;
-  width: 25px;
-  height: 34px;
+  left: 64px;
+  top: 58px;
+  width: 38px;
+  height: 48px;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 42%, #030606 0 46%, #17110f 47% 100%);
-  box-shadow: inset 0 0 16px rgba(239, 211, 161, 0.13), 0 0 18px rgba(0, 0, 0, 0.26);
+  background: radial-gradient(circle at 50% 42%, #030606 0 44%, #2f2119 45% 72%, #17110f 73% 100%);
+  box-shadow: inset 0 0 22px rgba(239, 211, 161, 0.2), 0 0 26px rgba(0, 0, 0, 0.34);
 }
 
 .paper-bag {
@@ -571,7 +571,7 @@ textarea::placeholder {
 
 .response-card {
   margin-top: 12px;
-  padding: 16px;
+  padding: 14px;
 }
 
 .app-shell-has-response .scene {
@@ -699,17 +699,17 @@ textarea::placeholder {
 .chat-message p {
   margin: 0;
   color: var(--text);
-  line-height: 1.72;
+  line-height: 1.62;
 }
 
 .chat-message p + p {
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .support-strip {
   display: grid;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 10px;
+  margin-top: 13px;
   padding: 0 0 0 14px;
   border-left: 1px solid rgba(239, 211, 161, 0.24);
   animation: riseIn 520ms ease-out 80ms both;
@@ -910,6 +910,16 @@ textarea::placeholder {
   border-top: 1px solid rgba(239, 211, 161, 0.1);
   font-size: 0.95rem;
   line-height: 1.6;
+}
+
+.new-note-button {
+  width: 100%;
+  min-height: 42px;
+  margin-top: 12px;
+  border-radius: 9px;
+  color: rgba(243, 241, 231, 0.9);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(239, 211, 161, 0.14);
 }
 
 .feature-panel {
@@ -1207,4 +1217,236 @@ textarea::placeholder {
     padding: 7px 8px;
   }
 
+}
+
+@media (max-height: 720px) {
+  .scene {
+    height: 176px;
+  }
+}
+
+/* Full-screen cultivation prototype */
+.app-shell {
+  position: relative;
+  height: 100dvh;
+  min-height: 680px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.app-header {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  z-index: 5;
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(5, 15, 15, 0.28);
+  backdrop-filter: blur(14px);
+}
+
+.app-header h1 {
+  font-size: 1.1rem;
+}
+
+.scene,
+.app-shell-has-response .scene,
+.crisis-mode .scene {
+  position: absolute;
+  inset: 0;
+  height: auto;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.scene::before {
+  inset: auto -18% 0 -18%;
+  height: 42%;
+}
+
+.scene::after {
+  bottom: 25%;
+}
+
+.tree {
+  left: -24px;
+  bottom: 18%;
+  transform: scale(1.18);
+  transform-origin: left bottom;
+}
+
+.pharmacy-window {
+  right: 26px;
+  bottom: 48%;
+  width: 168px;
+  height: 92px;
+}
+
+.shop-sign {
+  right: 62px;
+  top: 18%;
+}
+
+.counter-glow {
+  right: 48px;
+  bottom: 44%;
+  width: 170px;
+}
+
+.letter-slot {
+  left: 28%;
+  bottom: 42%;
+}
+
+.bag-one {
+  left: 48%;
+  bottom: 39%;
+}
+
+.bag-two {
+  right: 12%;
+  bottom: 38%;
+}
+
+.note-one {
+  left: 36%;
+  bottom: 43%;
+}
+
+.star-one {
+  left: 65%;
+  top: 20%;
+}
+
+.star-two {
+  left: 59%;
+  top: 26%;
+}
+
+.token {
+  left: 50%;
+  bottom: 53%;
+}
+
+.composer,
+.app-shell-has-response .composer {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: 5;
+  padding: 10px;
+}
+
+.quiet-note {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 158px);
+  z-index: 4;
+}
+
+.response-card {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: 6;
+  max-height: min(62dvh, 540px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.response-card-aftercare {
+  max-height: min(72dvh, 610px);
+}
+
+.app-shell-has-response .composer {
+  display: none;
+}
+
+.app-shell-has-response textarea {
+  min-height: 58px;
+}
+
+.app-shell-has-response .send-button {
+  flex-basis: 44px;
+  min-width: 44px;
+}
+
+.app-shell-has-response .tree {
+  left: -58px;
+  bottom: 47%;
+  transform: scale(0.86);
+}
+
+.app-shell-has-response .pharmacy-window {
+  bottom: 62%;
+  transform: scale(0.82);
+}
+
+.app-shell-has-response .letter-slot {
+  left: 23%;
+  bottom: 58%;
+}
+
+.app-shell-has-response .token {
+  left: 49%;
+  bottom: 67%;
+}
+
+.app-shell-has-response .scene::after {
+  bottom: 50%;
+}
+
+.mood-row {
+  max-height: none;
+  overflow: visible;
+}
+
+.mood-row button {
+  flex: 1 0 calc(25% - 7px);
+}
+
+.npc-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.npc-button {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  text-align: left;
+}
+
+.npc-button i {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(239, 211, 161, 0.5);
+  box-shadow: 0 0 16px rgba(239, 211, 161, 0.18);
+}
+
+.npc-song i {
+  border: 2px solid rgba(239, 211, 161, 0.62);
+  background: radial-gradient(circle, rgba(239, 211, 161, 0.34) 0 28%, transparent 30%);
+}
+
+.npc-card i {
+  border-radius: 4px;
+  background: linear-gradient(160deg, rgba(155, 173, 140, 0.68), rgba(239, 211, 161, 0.3));
+}
+
+.npc-astro i {
+  background: var(--star);
+  clip-path: polygon(50% 0, 62% 35%, 100% 50%, 62% 65%, 50% 100%, 38% 65%, 0 50%, 38% 35%);
+}
+
+.npc-light i {
+  background: #f3c466;
 }

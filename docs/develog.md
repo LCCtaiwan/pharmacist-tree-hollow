@@ -47,6 +47,7 @@
 - Copy direction updated: user-facing MVP copy now targets 醫護人員 broadly, with 藥師 pressure kept as one supported scenario instead of the whole product frame。
 - Response interaction upgraded: compact post-submit layout, rotating concrete praise notes, progressive aftercare drawer, auto-scrolling song/card/astro panels and stronger crisis-first mobile flow。
 - Focused response revision: post-submit header is removed, optional aftercare content renders in one shared response surface so the user can focus on one thing at a time。
+- Full-screen cultivation prototype: first screen now uses the CSS night counter as a full-viewport scene, moves identity into the in-scene `醫護樹洞` sign, hides the composer after a reply, and presents aftercare as object/NPC-style choices inside the response surface。
 - Crisis flow: suppresses normal followups and reduces decorative visual prominence。
 - Medical boundary flow: avoids patient-specific advice and points back to SOP/senior/team resources。
 
@@ -56,7 +57,7 @@
 
 ## Current Checkpoint
 
-M1 Web App MVP implemented locally.
+M1 Web App MVP implemented locally. Current UI checkpoint is a full-screen healing-room prototype rather than a stacked page layout。
 
 ## Recommended Next Step
 
@@ -79,3 +80,5 @@ pass: `npm test` passed with 13 tests across safety, content and response behavi
 pass: `npm run build` passed for the Web PWA。
 
 pass: 375px visual screenshot check passed for first screen, normal response, progressive aftercare drawer and crisis response。
+
+revise -> pass: 375px full-screen prototype initially overlapped the reply card with the input composer and showed a form-like chip scrollbar. Revised by hiding the composer after submit, adding a `再投一張紙條` reset action, removing the page header, moving product identity into the scene sign, and fixing the mood chip layout。

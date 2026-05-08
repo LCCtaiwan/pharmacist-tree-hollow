@@ -96,12 +96,14 @@ export default function App() {
     localStorage.removeItem(savedKey);
   }
 
+  function resetConversation() {
+    setResponse(null);
+    setActivePanel(null);
+    setInput("");
+  }
+
   return (
     <main className={`app-shell ${response ? "app-shell-has-response" : ""} ${response?.riskLevel === "crisis" ? "crisis-mode" : ""}`}>
-      <header className="app-header">
-        <h1>樹洞裡有人在</h1>
-      </header>
-
       <NightPharmacyScene mood={mood} quiet={response?.riskLevel === "crisis"} depositing={isDepositing} />
 
       <section className="composer" aria-label="樹洞輸入">
@@ -139,6 +141,7 @@ export default function App() {
           activePanel={activePanel}
           onPanel={(panel) => setActivePanel((current) => (current === panel ? null : panel))}
           onSave={saveCurrent}
+          onNewNote={resetConversation}
         />
       ) : isThinking ? (
         <section className="quiet-note quiet-note-thinking" aria-live="polite">

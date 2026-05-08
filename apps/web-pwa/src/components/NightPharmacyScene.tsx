@@ -28,7 +28,7 @@ export function NightPharmacyScene({
       <div className="night-rain rain-two" aria-hidden="true" />
       <div className="counter-glow" aria-hidden="true" />
       <div className="shop-sign" aria-hidden="true">
-        還亮著
+        醫護樹洞
       </div>
       <div className="pharmacy-window" aria-hidden="true">
         <div className="counter-line" />
