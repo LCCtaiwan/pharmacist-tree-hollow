@@ -151,8 +151,8 @@ export default function App() {
         </section>
       ) : (
         <section className="quiet-note quiet-note-dynamic" key={mood}>
-          <p>{currentHint}</p>
-          <span>不用寫完整，像投進深夜信箱的一句話就好。</span>
+          <p>不用寫完整。</p>
+          <span>一句話也可以，樹洞會先收著。</span>
         </section>
       )}
 
