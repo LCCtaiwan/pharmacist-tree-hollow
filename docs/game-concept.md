@@ -1,12 +1,12 @@
-# Game Concept: 藥師樹洞
+# Game Concept: 醫護樹洞
 
 ## Concept
 
-一個低壓、無輸贏、無排行榜的療癒 Web 小遊戲。玩家不是要破關，而是把一天工作中承接的壓力放進樹洞，讓壓力慢慢變成葉子、星光或小藥袋，掛在自己的療癒小樹上。
+一個低壓、無輸贏、無排行榜的療癒 Web 小遊戲。玩家不是要破關，而是把一天工作中承接的壓力放進樹洞，讓壓力慢慢變成葉子、星光或小紙袋，掛在自己的療癒小樹上。
 
 ## Design Goal
 
-藥師打開後，不需要學規則、不需要競爭、不需要完成任務，只要做一個很小的互動就能得到被理解的感覺。
+醫護人員打開後，不需要學規則、不需要競爭、不需要完成任務，只要做一個很小的互動就能得到被理解的感覺。
 
 ## Core Loop
 
@@ -20,16 +20,16 @@
 
 ## Setting
 
-夜晚的藥局後門或醫院側門旁，有一棵安靜的樹。樹洞裡會收下今天沒有地方放的情緒。場景要有藥師身份線索，但不能像醫療後台或考試平台。
+夜晚的值班櫃檯或醫院側門旁，有一棵安靜的樹。樹洞裡會收下今天沒有地方放的情緒。場景要有醫護身份線索，但不能像醫療後台或考試平台。
 
 Visual motifs:
 
 - 樹洞。
 - 暖色窗光。
-- 藥袋形狀的小紙片。
+- 紙條或小紙袋形狀的 token。
 - 星光。
 - 白袍掛在椅背。
-- 安靜的調劑台遠景。
+- 安靜的工作台或值班櫃檯遠景。
 
 Avoid:
 
@@ -48,7 +48,7 @@ Token types:
 
 - 葉子: tired but stable.
 - 星光: sadness or loneliness.
-- 紙藥袋: work pressure.
+- 小紙袋: work pressure.
 - 水滴: crying or grief.
 - 小燈: recovered enough to continue.
 
@@ -97,7 +97,7 @@ Rules:
 
 ### MVP Mode
 
-- Single CSS-built night pharmacy tree hollow scene.
+- Single CSS-built late-night healthcare counter tree hollow scene.
 - Tree hollow text input.
 - Response card.
 - Visual token generation.
@@ -138,7 +138,7 @@ For more game-like version:
 
 - The first interaction is usable within 30 seconds.
 - The scene feels calm, not childish or clinical.
-- The scene reads as night pharmacy tree hollow, not a generic forest.
+- The scene reads as late-night healthcare counter tree hollow, not a generic forest.
 - Visual tokens do not expose the user's original text.
 - No failure state.
 - No streak, ranking or pressure loop.
@@ -151,7 +151,7 @@ Before integrating generated art or sprites:
 
 - Check route/path readability if a map exists.
 - Check HUD-safe space.
-- Check subject identity as 藥師樹洞.
+- Check subject identity as 醫護樹洞.
 - Check no watermarks or copied copyrighted assets.
 - Check no embedded text contamination.
 - Check no patient, prescription, chart or identifiable workplace imagery.

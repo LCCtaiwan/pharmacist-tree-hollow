@@ -22,9 +22,11 @@ export function NightPharmacyScene({
   return (
     <section
       className={`scene ${quiet ? "scene-quiet" : ""} ${depositing ? "scene-depositing" : ""}`}
-      aria-label="深夜藥局櫃檯旁的安靜樹洞"
+      aria-label="深夜醫護櫃檯旁的安靜樹洞"
     >
-      <div className="shop-sign" aria-hidden="true">OPEN</div>
+      <div className="shop-sign" aria-hidden="true">
+        還亮著
+      </div>
       <div className="pharmacy-window" aria-hidden="true">
         <div className="counter-line" />
         <div className="coat-shape" />

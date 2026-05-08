@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import type { ConversationResponse, FollowupAction } from "@pharmacist-tree-hollow/shared";
 
 const actionLabels: Record<FollowupAction, string> = {
@@ -18,6 +19,25 @@ export function ResponseCard({
   onSave: () => void;
 }) {
   const isCrisis = response.riskLevel === "crisis";
+  const [microStep, setMicroStep] = useState(0);
+  const [microDone, setMicroDone] = useState(false);
+  const microSteps = response.microTool?.steps ?? [];
+  const hasMicroTool = Boolean(response.microTool && !isCrisis);
+  const canShowFollowups = response.followupActions.length > 0 && (!hasMicroTool || microDone);
+  const microStepCount = Math.max(microSteps.length, 1);
+
+  useEffect(() => {
+    setMicroStep(0);
+    setMicroDone(false);
+  }, [response]);
+
+  function advanceMicroTool() {
+    if (microStep >= microSteps.length - 1) {
+      setMicroDone(true);
+      return;
+    }
+    setMicroStep((step) => step + 1);
+  }
 
   return (
     <section className={`response-card ${isCrisis ? "response-card-crisis" : ""}`} aria-live="polite">
@@ -28,32 +48,40 @@ export function ResponseCard({
       </div>
 
       <div className="support-strip" aria-label="櫃檯回信">
-        <div>
-          <span>{isCrisis ? "先不要一個人" : "店裡的人想先說"}</span>
-          <p>{response.praise}</p>
-        </div>
-        <div>
-          <span>{isCrisis ? "現在先做這件事" : "今晚先做這件小事"}</span>
-          <p>{response.tinyAction}</p>
-        </div>
+        {isCrisis && <span>先不要一個人</span>}
+        <p>{response.praise}</p>
+        {isCrisis && <span>現在先做這件事</span>}
+        <p>{response.tinyAction}</p>
       </div>
 
       {response.microTool && !isCrisis && (
         <div className="micro-tool">
           <div>
-            <span>一起停 {response.microTool.durationSeconds} 秒</span>
+            <span>店裡陪你坐 {response.microTool.durationSeconds} 秒</span>
             <h3>{response.microTool.title}</h3>
           </div>
-          <ol>
-            {response.microTool.steps.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
-          <p>{response.microTool.completionText}</p>
+          <div className="micro-progress" aria-hidden="true">
+            <i style={{ width: `${microDone ? 100 : ((microStep + 1) / microStepCount) * 100}%` }} />
+          </div>
+          {microDone ? (
+            <p className="micro-complete">{response.microTool.completionText}</p>
+          ) : (
+            <p className="micro-step">{microSteps[microStep]}</p>
+          )}
+          <div className="micro-actions">
+            {!microDone && (
+              <button type="button" onClick={() => setMicroDone(true)}>
+                先跳過
+              </button>
+            )}
+            <button type="button" onClick={microDone ? undefined : advanceMicroTool} disabled={microDone}>
+              {microDone ? "坐一下就好" : microStep >= microSteps.length - 1 ? "收尾" : "下一句"}
+            </button>
+          </div>
         </div>
       )}
 
-      {response.followupActions.length > 0 && (
+      {canShowFollowups && (
         <div className="followups" aria-label="後續互動">
           <button type="button" onClick={onSave}>
             夾進口袋

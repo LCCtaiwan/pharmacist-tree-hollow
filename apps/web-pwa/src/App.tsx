@@ -5,12 +5,20 @@ import { ResponseCard } from "./components/ResponseCard";
 import { buildResponse } from "./lib/respond";
 import "./styles.css";
 
-const moods: MoodTag[] = ["累", "委屈", "煩", "空", "緊繃", "想哭", "還可以"];
+const moodOptions: Array<{ mood: MoodTag; label: string; note: string }> = [
+  { mood: "累", label: "熱湯", note: "累了" },
+  { mood: "委屈", label: "紙巾", note: "委屈" },
+  { mood: "煩", label: "苦茶", note: "煩" },
+  { mood: "空", label: "空碗", note: "空空的" },
+  { mood: "緊繃", label: "小火", note: "緊繃" },
+  { mood: "想哭", label: "雨傘", note: "想哭" },
+  { mood: "還可以", label: "白水", note: "還可以" }
+];
 const savedKey = "pharmacist-tree-hollow:saved";
 const promptHints: Record<MoodTag, string> = {
   累: "寫給今晚值班後的自己：哪一幕最耗電？",
   委屈: "把那句卡在心裡的話投進來。",
-  煩: "今晚最想從櫃檯帶走哪一件煩事？",
+  煩: "今晚最想從值班櫃檯帶走哪一件煩事？",
   空: "如果現在心裡很空，留一張白紙也可以。",
   緊繃: "哪個細節讓你下班後還不敢放鬆？",
   想哭: "差點哭出來的那一刻，先放在這裡。",
@@ -90,24 +98,26 @@ export default function App() {
     <main className={`app-shell ${response?.riskLevel === "crisis" ? "crisis-mode" : ""}`}>
       <header className="app-header">
         <div>
-          <p>深夜櫃檯還亮著</p>
-          <h1>藥師樹洞</h1>
+          <p>深夜值班櫃檯還亮著</p>
+          <h1>醫護樹洞</h1>
         </div>
-        <span>把今天留一張紙條在這裡</span>
+        <span>把值班後的一張紙條留在這裡</span>
       </header>
 
       <NightPharmacyScene mood={mood} quiet={response?.riskLevel === "crisis"} depositing={isDepositing} />
 
       <section className="composer" aria-label="樹洞輸入">
-        <div className="mood-row" aria-label="選擇心情">
-          {moods.map((item) => (
+        <div className="mood-row" aria-label="今晚想點什麼">
+          {moodOptions.map((item) => (
             <button
               type="button"
-              key={item}
-              className={mood === item ? "selected" : ""}
-              onClick={() => setMood(item)}
+              key={item.mood}
+              className={mood === item.mood ? "selected" : ""}
+              onClick={() => setMood(item.mood)}
+              aria-label={`${item.label}，${item.note}`}
             >
-              {item}
+              <strong>{item.label}</strong>
+              <small>{item.note}</small>
             </button>
           ))}
         </div>
@@ -118,10 +128,10 @@ export default function App() {
             onChange={(event) => setInput(event.target.value)}
             placeholder={currentHint}
             rows={3}
-            aria-label="把今天想放下的一句話丟進來"
+            aria-label="寫一張投進深夜櫃檯的紙條"
           />
           <button type="button" className="send-button" onClick={submit} aria-label="送進樹洞">
-            ↗
+            投
           </button>
         </div>
       </section>

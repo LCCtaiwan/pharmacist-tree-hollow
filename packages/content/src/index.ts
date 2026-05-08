@@ -26,15 +26,15 @@ export const microTools: MicroTool[] = [
   },
   {
     id: "next-prescription",
-    title: "回到下一張處方",
+    title: "回到下一件能確認的事",
     scenarioTags: ["prescription_overload"],
     durationSeconds: 30,
-    steps: ["先看一眼桌面。", "只選下一張處方，不看整座山。", "提醒自己：一張一張確認，就是把安全守住。"],
-    completionText: "不用一次處理全部。下一張，就是現在的範圍。"
+    steps: ["先看一眼桌面。", "只選下一件能確認的事，不看整座山。", "提醒自己：一段一段確認，就是把安全守住。"],
+    completionText: "不用一次處理全部。下一件事，就是現在的範圍。"
   },
   {
     id: "interaction-unload",
-    title: "交互作用擔心卸載",
+    title: "安全線擔心卸載",
     scenarioTags: ["interaction_worry"],
     durationSeconds: 30,
     steps: ["把手放鬆一下。", "承認：你會擔心，是因為你在把關。", "回到 SOP、工具與團隊，不讓腦袋單獨扛。"],
@@ -45,7 +45,7 @@ export const microTools: MicroTool[] = [
     title: "交班後關機儀式",
     scenarioTags: ["after_shift", "night_shift"],
     durationSeconds: 30,
-    steps: ["把肩膀往下放。", "心裡說：今天已經交到流程裡。", "讓身體先離開藥局的速度。"],
+    steps: ["把肩膀往下放。", "心裡說：今天已經交到流程裡。", "讓身體先離開值班的速度。"],
     completionText: "下班後還想著工作很正常，但你可以慢慢回到自己。"
   }
 ];
@@ -140,7 +140,7 @@ type SongTuple = [
 ];
 
 const songSeeds: SongTuple[] = [
-  ["Somewhere Only We Know", "Keane", "en", ["累", "空"], ["after_shift", "customer_conflict"], "soft", ["下班路上"], "讓腦袋先離開剛剛那個櫃台聲音，你不用整晚都留在那個現場。"],
+  ["Somewhere Only We Know", "Keane", "en", ["累", "空"], ["after_shift", "customer_conflict"], "soft", ["下班路上"], "讓腦袋先離開剛剛那個現場聲音，你不用整晚都留在那裡。"],
   ["Fix You", "Coldplay", "en", ["委屈", "想哭"], ["unseen_effort", "after_shift"], "soft", ["夜晚"], "它適合陪你承認今天真的很累，不急著把自己修好。"],
   ["Holocene", "Bon Iver", "en", ["空", "累"], ["after_shift", "night_shift"], "quiet", ["夜班後"], "聲音很遠，適合讓身體慢慢離開工作速度。"],
   ["Yellow", "Coldplay", "en", ["委屈", "還可以"], ["unseen_effort"], "soft", ["回家路上"], "今天沒有人看見的努力，先讓一點溫暖替你留著。"],

@@ -167,16 +167,16 @@ button {
 
 .shop-sign {
   position: absolute;
-  right: 42px;
+  right: 36px;
   top: 26px;
   z-index: 2;
-  padding: 3px 7px;
+  padding: 3px 8px;
   border: 1px solid rgba(239, 211, 161, 0.22);
   border-radius: 999px;
   color: rgba(239, 211, 161, 0.72);
   background: rgba(5, 15, 15, 0.28);
   font-size: 0.62rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.02em;
 }
 
 .tree {
@@ -388,7 +388,25 @@ button {
 }
 
 .mood-row button {
-  padding: 0 13px;
+  display: grid;
+  min-width: 72px;
+  padding: 7px 12px;
+  text-align: left;
+}
+
+.mood-row button strong {
+  font-weight: 650;
+  line-height: 1.12;
+}
+
+.mood-row button small {
+  margin-top: 2px;
+  color: rgba(243, 241, 231, 0.62);
+  font-size: 0.72rem;
+}
+
+.mood-row button.selected small {
+  color: rgba(21, 33, 30, 0.68);
 }
 
 .mood-row button.selected,
@@ -430,7 +448,8 @@ textarea::placeholder {
   border-radius: 10px;
   color: #17211e;
   background: linear-gradient(180deg, #f0c66d, #dfa94f);
-  font-size: 1.35rem;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
 .quiet-note {
@@ -527,20 +546,19 @@ textarea::placeholder {
 
 .support-strip {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   margin-top: 14px;
-  padding: 12px;
-  border: 1px solid rgba(239, 211, 161, 0.12);
-  border-radius: 10px;
-  background:
-    linear-gradient(180deg, rgba(239, 211, 161, 0.045), transparent),
-    rgba(5, 15, 15, 0.36);
+  padding: 0 0 0 13px;
+  border-left: 1px solid rgba(239, 211, 161, 0.24);
   animation: riseIn 520ms ease-out 80ms both;
 }
 
-.support-strip > div + div {
-  padding-top: 10px;
-  border-top: 1px solid rgba(239, 211, 161, 0.1);
+.support-strip p {
+  color: rgba(243, 241, 231, 0.9);
+}
+
+.support-strip p + p {
+  color: rgba(243, 241, 231, 0.78);
 }
 
 .support-strip span,
@@ -583,6 +601,60 @@ textarea::placeholder {
   padding-left: 22px;
   color: var(--text);
   line-height: 1.62;
+}
+
+.micro-progress {
+  position: relative;
+  height: 4px;
+  margin: 10px 0 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(239, 211, 161, 0.1);
+}
+
+.micro-progress i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(240, 198, 109, 0.95), rgba(155, 173, 140, 0.7));
+  transition: width 300ms ease;
+}
+
+.micro-step,
+.micro-complete {
+  min-height: 3.2em;
+  font-size: 1.02rem;
+}
+
+.micro-complete {
+  color: rgba(243, 241, 231, 0.82) !important;
+}
+
+.micro-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.micro-actions button {
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 9px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.micro-actions button:last-child {
+  color: #15211e;
+  background: linear-gradient(180deg, #f0d19a, #e4b862);
+}
+
+.micro-actions button:disabled {
+  cursor: default;
+  color: rgba(243, 241, 231, 0.62);
+  background: rgba(255, 255, 255, 0.055);
 }
 
 .followups {
@@ -820,7 +892,8 @@ textarea::placeholder {
 
   .mood-row button {
     flex: 1 0 calc(25% - 7px);
-    padding: 0 8px;
+    min-width: 0;
+    padding: 7px 8px;
   }
 
 }

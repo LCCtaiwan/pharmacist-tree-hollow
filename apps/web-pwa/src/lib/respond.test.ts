@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { buildResponse, detectScenario } from "./respond";
 
 describe("respond", () => {
-  it("detects pharmacist scenarios", () => {
-    expect(detectScenario("今天一直被問缺藥，好煩")).toBe("shortage_pressure");
-    expect(detectScenario("擔心交互作用漏掉")).toBe("interaction_worry");
+  it("detects healthcare staff scenarios", () => {
+    expect(detectScenario("今天一直被問床位和缺藥，好煩")).toBe("shortage_pressure");
+    expect(detectScenario("擔心三讀五對有漏掉")).toBe("interaction_worry");
   });
 
   it("suppresses playful followups in crisis flow", () => {
@@ -21,7 +21,7 @@ describe("respond", () => {
   });
 
   it("builds normal response with micro tool and followups", () => {
-    const response = buildResponse("今天被客人兇，還要趕處方", "委屈");
+    const response = buildResponse("今天被家屬兇，還要一直補紀錄", "委屈");
     expect(response.riskLevel).toBe("normal");
     expect(response.microTool?.id).toBe("customer-boundary");
     expect(response.followupActions).toEqual(["song", "card", "astro"]);
