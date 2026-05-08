@@ -63,6 +63,14 @@ export function ResponseCard({
     onPanel(panel);
   }
 
+  function showThirtySeconds() {
+    if (activePanel) {
+      onPanel(activePanel);
+    }
+    setShowAftercare(true);
+    setShowMicroTool((current) => !current);
+  }
+
   return (
     <section className={`response-card ${isCrisis ? "response-card-crisis" : ""}`} aria-live="polite">
       <div className="reply-meta">
@@ -116,9 +124,7 @@ export function ResponseCard({
               <button
                 type="button"
                 className={showMicroTool ? "active" : ""}
-                onClick={() => {
-                  setShowMicroTool((current) => !current);
-                }}
+                onClick={showThirtySeconds}
               >
                 坐 30 秒
               </button>
@@ -134,6 +140,74 @@ export function ResponseCard({
               </button>
             ))}
           </div>
+
+          {showMicroTool && hasMicroTool && response.microTool && (
+            <div className="focus-panel micro-tool" ref={panelRef}>
+              <div>
+                <span>櫃檯陪你坐 {response.microTool.durationSeconds} 秒</span>
+                <h3>{response.microTool.title}</h3>
+              </div>
+              <div className="micro-progress" aria-hidden="true">
+                <i style={{ width: `${microDone ? 100 : ((microStep + 1) / microStepCount) * 100}%` }} />
+              </div>
+              {microDone ? (
+                <p className="micro-complete">{response.microTool.completionText}</p>
+              ) : (
+                <p className="micro-step">{microSteps[microStep]}</p>
+              )}
+              <div className="micro-actions">
+                {!microDone && (
+                  <button type="button" onClick={() => setMicroDone(true)}>
+                    先跳過
+                  </button>
+                )}
+                <button type="button" onClick={microDone ? undefined : advanceMicroTool} disabled={microDone}>
+                  {microDone ? "坐一下就好" : microStep >= microSteps.length - 1 ? "收尾" : "下一句"}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {activePanel === "song" && response.song && (
+            <div className="focus-panel feature-panel music-panel" ref={panelRef}>
+              <div className="music-mark" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+              </div>
+              <span>今晚櫃檯放這首</span>
+              <h3>
+                {response.song.title} · {response.song.artist}
+              </h3>
+              <p>{response.song.reason}</p>
+            </div>
+          )}
+
+          {activePanel === "card" && response.card && (
+            <div className="focus-panel feature-panel card-panel" ref={panelRef}>
+              <div className="symbol-card" aria-hidden="true">
+                <div />
+              </div>
+              <span>紙籤上寫著</span>
+              <h3>{response.card.name}</h3>
+              <p>{response.card.meaning}</p>
+              <p>{response.card.reflection}</p>
+              <small>娛樂與反思用，不是預測或專業建議。給今天一個角度，不替你決定答案。</small>
+            </div>
+          )}
+
+          {activePanel === "astro" && response.astro && (
+            <div className="focus-panel feature-panel astro-panel" ref={panelRef}>
+              <div className="astro-mark" aria-hidden="true">
+                <i />
+              </div>
+              <h3>{response.astro.name}</h3>
+              {response.astro.lines.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+              <small>娛樂與反思用，不是預測或專業建議。給今天一個角度，不替你決定答案。</small>
+            </div>
+          )}
         </div>
       )}
 
@@ -144,75 +218,7 @@ export function ResponseCard({
         </div>
       )}
 
-      {hasMicroTool && response.microTool && showMicroTool && (
-        <div className="micro-tool">
-          <div>
-            <span>櫃檯陪你坐 {response.microTool.durationSeconds} 秒</span>
-            <h3>{response.microTool.title}</h3>
-          </div>
-          <div className="micro-progress" aria-hidden="true">
-            <i style={{ width: `${microDone ? 100 : ((microStep + 1) / microStepCount) * 100}%` }} />
-          </div>
-          {microDone ? (
-            <p className="micro-complete">{response.microTool.completionText}</p>
-          ) : (
-            <p className="micro-step">{microSteps[microStep]}</p>
-          )}
-          <div className="micro-actions">
-            {!microDone && (
-              <button type="button" onClick={() => setMicroDone(true)}>
-                先跳過
-              </button>
-            )}
-            <button type="button" onClick={microDone ? undefined : advanceMicroTool} disabled={microDone}>
-              {microDone ? "坐一下就好" : microStep >= microSteps.length - 1 ? "收尾" : "下一句"}
-            </button>
-          </div>
-        </div>
-      )}
-
       {response.closingLine && <p className="closing-line">{response.closingLine}</p>}
-
-      {activePanel === "song" && response.song && (
-        <div className="feature-panel music-panel" ref={panelRef}>
-          <div className="music-mark" aria-hidden="true">
-            <i />
-            <i />
-            <i />
-          </div>
-          <span>今晚櫃檯放這首</span>
-          <h3>
-            {response.song.title} · {response.song.artist}
-          </h3>
-          <p>{response.song.reason}</p>
-        </div>
-      )}
-
-      {activePanel === "card" && response.card && (
-        <div className="feature-panel card-panel" ref={panelRef}>
-          <div className="symbol-card" aria-hidden="true">
-            <div />
-          </div>
-          <span>紙籤上寫著</span>
-          <h3>{response.card.name}</h3>
-          <p>{response.card.meaning}</p>
-          <p>{response.card.reflection}</p>
-          <small>娛樂與反思用，不是預測或專業建議。給今天一個角度，不替你決定答案。</small>
-        </div>
-      )}
-
-      {activePanel === "astro" && response.astro && (
-        <div className="feature-panel astro-panel" ref={panelRef}>
-          <div className="astro-mark" aria-hidden="true">
-            <i />
-          </div>
-          <h3>{response.astro.name}</h3>
-          {response.astro.lines.map((line) => (
-            <p key={line}>{line}</p>
-          ))}
-          <small>娛樂與反思用，不是預測或專業建議。給今天一個角度，不替你決定答案。</small>
-        </div>
-      )}
     </section>
   );
 }

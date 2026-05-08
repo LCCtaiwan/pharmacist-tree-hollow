@@ -99,11 +99,7 @@ export default function App() {
   return (
     <main className={`app-shell ${response ? "app-shell-has-response" : ""} ${response?.riskLevel === "crisis" ? "crisis-mode" : ""}`}>
       <header className="app-header">
-        <div>
-          <p>深夜值班櫃檯還亮著</p>
-          <h1>醫護樹洞</h1>
-        </div>
-        <span>把值班後的一張紙條留在這裡</span>
+        <h1>樹洞裡有人在</h1>
       </header>
 
       <NightPharmacyScene mood={mood} quiet={response?.riskLevel === "crisis"} depositing={isDepositing} />

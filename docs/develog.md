@@ -46,6 +46,7 @@
 - MVP app: one-screen tree hollow input, healthcare-oriented mock response, embedded 30-second micro tool, song/card/astro panels and local saved items。
 - Copy direction updated: user-facing MVP copy now targets 醫護人員 broadly, with 藥師 pressure kept as one supported scenario instead of the whole product frame。
 - Response interaction upgraded: compact post-submit layout, rotating concrete praise notes, progressive aftercare drawer, auto-scrolling song/card/astro panels and stronger crisis-first mobile flow。
+- Focused response revision: post-submit header is removed, optional aftercare content renders in one shared response surface so the user can focus on one thing at a time。
 - Crisis flow: suppresses normal followups and reduces decorative visual prominence。
 - Medical boundary flow: avoids patient-specific advice and points back to SOP/senior/team resources。
 

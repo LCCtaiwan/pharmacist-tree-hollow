@@ -88,6 +88,7 @@ Acceptance:
 - Response is short enough to read in one screen.
 - Praise mentions the user's situation when available.
 - Followup actions use progressive disclosure: first response should not feel like a task list, and optional actions appear only after the user chooses to stay.
+- Optional song/card/astro/30-second experiences should render inside the same focused response surface instead of stacking as separate sections.
 - No generic forced positivity.
 
 ### 3. Daily Healing

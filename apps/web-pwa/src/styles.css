@@ -57,9 +57,9 @@ button {
 .app-header {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .app-header p {
@@ -71,9 +71,10 @@ button {
 
 .app-header h1 {
   margin: 0;
-  font-size: 2rem;
+  font-size: 1.42rem;
   line-height: 1.12;
   letter-spacing: 0;
+  color: rgba(243, 241, 231, 0.9);
 }
 
 .app-header > span {
@@ -82,6 +83,10 @@ button {
   font-size: 0.82rem;
   line-height: 1.45;
   text-align: right;
+}
+
+.app-shell-has-response .app-header {
+  display: none;
 }
 
 .scene {
@@ -881,6 +886,11 @@ textarea::placeholder {
   background: rgba(5, 15, 15, 0.24);
   border: 1px solid rgba(239, 211, 161, 0.1);
   animation: riseIn 360ms ease-out both;
+}
+
+.focus-panel {
+  margin-top: 12px;
+  animation: riseIn 320ms ease-out both;
 }
 
 .aftercare > span {
