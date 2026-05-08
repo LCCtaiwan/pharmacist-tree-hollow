@@ -864,11 +864,36 @@ textarea::placeholder {
   background: rgba(255, 255, 255, 0.055);
 }
 
+.aftercare-open {
+  min-height: 40px;
+  margin-top: 14px;
+  padding: 0 13px;
+  border-radius: 999px;
+  color: rgba(243, 241, 231, 0.88);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(239, 211, 161, 0.14);
+}
+
+.aftercare {
+  margin-top: 14px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  background: rgba(5, 15, 15, 0.24);
+  border: 1px solid rgba(239, 211, 161, 0.1);
+  animation: riseIn 360ms ease-out both;
+}
+
+.aftercare > span {
+  display: block;
+  margin-bottom: 9px;
+  color: rgba(174, 187, 176, 0.82);
+  font-size: 0.82rem;
+}
+
 .followups {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  margin-top: 14px;
 }
 
 .followups button {

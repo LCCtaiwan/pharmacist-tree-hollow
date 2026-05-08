@@ -45,7 +45,7 @@
 - Art strategy: CSS-first MVP visuals, no runtime image generation, generated assets only after inspection gate。
 - MVP app: one-screen tree hollow input, healthcare-oriented mock response, embedded 30-second micro tool, song/card/astro panels and local saved items。
 - Copy direction updated: user-facing MVP copy now targets 醫護人員 broadly, with 藥師 pressure kept as one supported scenario instead of the whole product frame。
-- Response interaction upgraded: compact post-submit layout, rotating concrete praise notes, visible followup actions, auto-scrolling song/card/astro panels and stronger crisis-first mobile flow。
+- Response interaction upgraded: compact post-submit layout, rotating concrete praise notes, progressive aftercare drawer, auto-scrolling song/card/astro panels and stronger crisis-first mobile flow。
 - Crisis flow: suppresses normal followups and reduces decorative visual prominence。
 - Medical boundary flow: avoids patient-specific advice and points back to SOP/senior/team resources。
 
@@ -77,4 +77,4 @@ pass: `npm test` passed with 13 tests across safety, content and response behavi
 
 pass: `npm run build` passed for the Web PWA。
 
-pass: 375px visual screenshot check passed for first screen, normal response, visible followup actions and crisis response。
+pass: 375px visual screenshot check passed for first screen, normal response, progressive aftercare drawer and crisis response。

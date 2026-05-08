@@ -23,6 +23,8 @@ export function ResponseCard({
   const [microDone, setMicroDone] = useState(false);
   const [praiseIndex, setPraiseIndex] = useState(0);
   const [savedOnce, setSavedOnce] = useState(false);
+  const [showAftercare, setShowAftercare] = useState(false);
+  const [showMicroTool, setShowMicroTool] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const microSteps = response.microTool?.steps ?? [];
   const hasMicroTool = Boolean(response.microTool && !isCrisis && microSteps.length > 0);
@@ -36,6 +38,8 @@ export function ResponseCard({
     setMicroDone(false);
     setPraiseIndex(0);
     setSavedOnce(false);
+    setShowAftercare(false);
+    setShowMicroTool(false);
   }, [response]);
 
   useEffect(() => {
@@ -51,6 +55,12 @@ export function ResponseCard({
       return;
     }
     setMicroStep((step) => step + 1);
+  }
+
+  function selectPanel(panel: FollowupAction) {
+    setShowAftercare(true);
+    setShowMicroTool(false);
+    onPanel(panel);
   }
 
   return (
@@ -82,39 +92,59 @@ export function ResponseCard({
         </div>
       </div>
 
-      {canShowFollowups && (
-        <div className="followups" aria-label="後續互動">
-          <button
-            type="button"
-            className={savedOnce ? "saved" : ""}
-            onClick={() => {
-              onSave();
-              setSavedOnce(true);
-            }}
-          >
-            {savedOnce ? "已收下" : "收下回信"}
-          </button>
-          {response.followupActions.map((action) => (
+      {canShowFollowups && !showAftercare && (
+        <button type="button" className="aftercare-open" onClick={() => setShowAftercare(true)}>
+          還想留一下
+        </button>
+      )}
+
+      {canShowFollowups && showAftercare && (
+        <div className="aftercare" aria-label="可以繼續留下的方式">
+          <span>不用做完，選一個就好</span>
+          <div className="followups">
             <button
               type="button"
-              key={action}
-              className={activePanel === action ? "active" : ""}
-              onClick={() => onPanel(action)}
+              className={savedOnce ? "saved" : ""}
+              onClick={() => {
+                onSave();
+                setSavedOnce(true);
+              }}
             >
-              {actionLabels[action]}
+              {savedOnce ? "已收下" : "收下回信"}
             </button>
-          ))}
+            {hasMicroTool && (
+              <button
+                type="button"
+                className={showMicroTool ? "active" : ""}
+                onClick={() => {
+                  setShowMicroTool((current) => !current);
+                }}
+              >
+                坐 30 秒
+              </button>
+            )}
+            {response.followupActions.map((action) => (
+              <button
+                type="button"
+                key={action}
+                className={activePanel === action ? "active" : ""}
+                onClick={() => selectPanel(action)}
+              >
+                {actionLabels[action]}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
-      {response.gentleQuestion && !isCrisis && (
+      {response.gentleQuestion && !isCrisis && showAftercare && (
         <div className="gentle-question">
           <span>留給等一下的你</span>
           <p>{response.gentleQuestion}</p>
         </div>
       )}
 
-      {hasMicroTool && response.microTool && (
+      {hasMicroTool && response.microTool && showMicroTool && (
         <div className="micro-tool">
           <div>
             <span>櫃檯陪你坐 {response.microTool.durationSeconds} 秒</span>

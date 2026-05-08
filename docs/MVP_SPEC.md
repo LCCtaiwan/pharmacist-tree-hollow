@@ -87,7 +87,7 @@ Acceptance:
 
 - Response is short enough to read in one screen.
 - Praise mentions the user's situation when available.
-- Followup actions are visible before the 30-second tool is completed.
+- Followup actions use progressive disclosure: first response should not feel like a task list, and optional actions appear only after the user chooses to stay.
 - No generic forced positivity.
 
 ### 3. Daily Healing
