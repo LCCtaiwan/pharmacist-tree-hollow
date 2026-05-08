@@ -7,6 +7,15 @@ import "./styles.css";
 
 const moods: MoodTag[] = ["累", "委屈", "煩", "空", "緊繃", "想哭", "還可以"];
 const savedKey = "pharmacist-tree-hollow:saved";
+const promptHints: Record<MoodTag, string[]> = {
+  累: ["把今天最耗電的一幕放進來", "不用完整，丟一句最累的就好", "今天是哪一刻讓你覺得電量歸零？"],
+  委屈: ["把那句卡在心裡的話放進來", "誰的語氣讓你到現在還不舒服？", "不用替自己解釋，先把委屈放下來"],
+  煩: ["把最煩的那個點丟進來", "今天哪件事一直重複消耗你？", "可以只寫：我真的很煩"],
+  空: ["把那個空掉的感覺放進來", "下班後，心裡還剩下什麼？", "不用有結論，先丟一小句"],
+  緊繃: ["把剛剛讓你一直繃著的事放進來", "哪個細節讓你不敢放鬆？", "先寫那個最怕出錯的瞬間"],
+  想哭: ["把那個差點哭出來的瞬間放進來", "如果眼淚有一句話，它會說什麼？", "可以很短：我快撐不住了"],
+  還可以: ["把今天還算撐住的一刻放進來", "今天有哪一小段沒有那麼糟？", "留一句給還在撐的自己"]
+};
 
 interface SavedItem {
   id: string;
@@ -29,22 +38,34 @@ export default function App() {
   const [response, setResponse] = useState<ConversationResponse | null>(null);
   const [activePanel, setActivePanel] = useState<FollowupAction | null>(null);
   const [saved, setSaved] = useState<SavedItem[]>([]);
+  const [hintIndex, setHintIndex] = useState(0);
+  const [isThinking, setIsThinking] = useState(false);
 
   useEffect(() => {
     setSaved(loadSaved());
   }, []);
 
-  const placeholder = useMemo(() => {
-    if (mood === "想哭") return "把那個差點哭出來的瞬間放進來";
-    if (mood === "緊繃") return "把剛剛讓你一直繃著的事放進來";
-    return "把今天想放下的一句話丟進來";
-  }, [mood]);
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setHintIndex((current) => current + 1);
+    }, 3600);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const currentHint = useMemo(() => {
+    const hints = promptHints[mood];
+    return hints[hintIndex % hints.length];
+  }, [hintIndex, mood]);
 
   function submit() {
     const trimmed = input.trim();
-    const result = buildResponse(trimmed || `今天覺得${mood}`, mood);
-    setResponse(result);
+    setIsThinking(true);
     setActivePanel(null);
+    window.setTimeout(() => {
+      const result = buildResponse(trimmed || `今天覺得${mood}`, mood);
+      setResponse(result);
+      setIsThinking(false);
+    }, 520);
   }
 
   function saveCurrent() {
@@ -96,7 +117,7 @@ export default function App() {
           <textarea
             value={input}
             onChange={(event) => setInput(event.target.value)}
-            placeholder={placeholder}
+            placeholder={currentHint}
             rows={3}
             aria-label="把今天想放下的一句話丟進來"
           />
@@ -113,9 +134,19 @@ export default function App() {
           onPanel={(panel) => setActivePanel((current) => (current === panel ? null : panel))}
           onSave={saveCurrent}
         />
+      ) : isThinking ? (
+        <section className="quiet-note quiet-note-thinking" aria-live="polite">
+          <p>樹洞正在把這句話接住。</p>
+          <div className="thinking-dots" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </div>
+        </section>
       ) : (
-        <section className="quiet-note">
-          <p>不用寫完整。只要一句「今天被客人兇到很累」也可以。</p>
+        <section className="quiet-note quiet-note-dynamic" key={`${mood}-${hintIndex}`}>
+          <p>{currentHint}</p>
+          <span>不用寫完整。一句話就可以。</span>
         </section>
       )}
 

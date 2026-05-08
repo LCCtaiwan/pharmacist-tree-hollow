@@ -60,6 +60,7 @@ export interface AstroReflectionCard {
 
 export interface ConversationResponse {
   riskLevel: RiskLevel;
+  message: string[];
   empathy: string;
   praise: string;
   tinyAction: string;

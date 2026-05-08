@@ -21,17 +21,21 @@ export function ResponseCard({
 
   return (
     <section className={`response-card ${isCrisis ? "response-card-crisis" : ""}`} aria-live="polite">
-      <div className="response-section">
-        <span>我聽見了</span>
-        <p>{response.empathy}</p>
+      <div className="chat-message">
+        {response.message.map((line) => (
+          <p key={line}>{line}</p>
+        ))}
       </div>
-      <div className="response-section">
-        <span>{isCrisis ? "先讓自己不要一個人" : "你剛剛其實很值得被肯定"}</span>
-        <p>{response.praise}</p>
-      </div>
-      <div className="response-section">
-        <span>{isCrisis ? "現在最重要的一件事" : "先做一件小事"}</span>
-        <p>{response.tinyAction}</p>
+
+      <div className="support-strip" aria-label="整理一下">
+        <div>
+          <span>{isCrisis ? "先不要一個人" : "我想先肯定你"}</span>
+          <p>{response.praise}</p>
+        </div>
+        <div>
+          <span>{isCrisis ? "現在先做這件事" : "先做一件小事"}</span>
+          <p>{response.tinyAction}</p>
+        </div>
       </div>
 
       {response.microTool && !isCrisis && (
