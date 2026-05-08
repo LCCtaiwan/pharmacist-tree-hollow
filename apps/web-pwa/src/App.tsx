@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ConversationResponse, FollowupAction, MoodTag } from "@pharmacist-tree-hollow/shared";
 import { NightPharmacyScene } from "./components/NightPharmacyScene";
 import { ResponseCard } from "./components/ResponseCard";
@@ -7,14 +7,14 @@ import "./styles.css";
 
 const moods: MoodTag[] = ["累", "委屈", "煩", "空", "緊繃", "想哭", "還可以"];
 const savedKey = "pharmacist-tree-hollow:saved";
-const promptHints: Record<MoodTag, string[]> = {
-  累: ["把今天最耗電的一幕放進來", "不用完整，丟一句最累的就好", "今天是哪一刻讓你覺得電量歸零？"],
-  委屈: ["把那句卡在心裡的話放進來", "誰的語氣讓你到現在還不舒服？", "不用替自己解釋，先把委屈放下來"],
-  煩: ["把最煩的那個點丟進來", "今天哪件事一直重複消耗你？", "可以只寫：我真的很煩"],
-  空: ["把那個空掉的感覺放進來", "下班後，心裡還剩下什麼？", "不用有結論，先丟一小句"],
-  緊繃: ["把剛剛讓你一直繃著的事放進來", "哪個細節讓你不敢放鬆？", "先寫那個最怕出錯的瞬間"],
-  想哭: ["把那個差點哭出來的瞬間放進來", "如果眼淚有一句話，它會說什麼？", "可以很短：我快撐不住了"],
-  還可以: ["把今天還算撐住的一刻放進來", "今天有哪一小段沒有那麼糟？", "留一句給還在撐的自己"]
+const promptHints: Record<MoodTag, string> = {
+  累: "寫給今晚值班後的自己：哪一幕最耗電？",
+  委屈: "把那句卡在心裡的話投進來。",
+  煩: "今晚最想從櫃檯帶走哪一件煩事？",
+  空: "如果現在心裡很空，留一張白紙也可以。",
+  緊繃: "哪個細節讓你下班後還不敢放鬆？",
+  想哭: "差點哭出來的那一刻，先放在這裡。",
+  還可以: "今天還算撐住的一小段，也可以寫下來。"
 };
 
 interface SavedItem {
@@ -38,34 +38,33 @@ export default function App() {
   const [response, setResponse] = useState<ConversationResponse | null>(null);
   const [activePanel, setActivePanel] = useState<FollowupAction | null>(null);
   const [saved, setSaved] = useState<SavedItem[]>([]);
-  const [hintIndex, setHintIndex] = useState(0);
   const [isThinking, setIsThinking] = useState(false);
+  const [isDepositing, setIsDepositing] = useState(false);
+  const thinkingTimer = useRef<number | null>(null);
 
   useEffect(() => {
     setSaved(loadSaved());
   }, []);
 
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setHintIndex((current) => current + 1);
-    }, 3600);
-    return () => window.clearInterval(timer);
-  }, []);
-
   const currentHint = useMemo(() => {
-    const hints = promptHints[mood];
-    return hints[hintIndex % hints.length];
-  }, [hintIndex, mood]);
+    return promptHints[mood];
+  }, [mood]);
 
   function submit() {
     const trimmed = input.trim();
+    if (thinkingTimer.current) {
+      window.clearTimeout(thinkingTimer.current);
+    }
     setIsThinking(true);
+    setIsDepositing(true);
+    setResponse(null);
     setActivePanel(null);
-    window.setTimeout(() => {
+    thinkingTimer.current = window.setTimeout(() => {
       const result = buildResponse(trimmed || `今天覺得${mood}`, mood);
       setResponse(result);
       setIsThinking(false);
-    }, 520);
+      setIsDepositing(false);
+    }, 860);
   }
 
   function saveCurrent() {
@@ -91,13 +90,13 @@ export default function App() {
     <main className={`app-shell ${response?.riskLevel === "crisis" ? "crisis-mode" : ""}`}>
       <header className="app-header">
         <div>
-          <p>今日樹洞開著</p>
+          <p>深夜櫃檯還亮著</p>
           <h1>藥師樹洞</h1>
         </div>
-        <span>30 秒，把今天放下一點</span>
+        <span>把今天留一張紙條在這裡</span>
       </header>
 
-      <NightPharmacyScene mood={mood} quiet={response?.riskLevel === "crisis"} />
+      <NightPharmacyScene mood={mood} quiet={response?.riskLevel === "crisis"} depositing={isDepositing} />
 
       <section className="composer" aria-label="樹洞輸入">
         <div className="mood-row" aria-label="選擇心情">
@@ -136,7 +135,7 @@ export default function App() {
         />
       ) : isThinking ? (
         <section className="quiet-note quiet-note-thinking" aria-live="polite">
-          <p>樹洞正在把這句話接住。</p>
+          <p>櫃檯後面的人正在讀你的紙條。</p>
           <div className="thinking-dots" aria-hidden="true">
             <i />
             <i />
@@ -144,9 +143,9 @@ export default function App() {
           </div>
         </section>
       ) : (
-        <section className="quiet-note quiet-note-dynamic" key={`${mood}-${hintIndex}`}>
+        <section className="quiet-note quiet-note-dynamic" key={mood}>
           <p>{currentHint}</p>
-          <span>不用寫完整。一句話就可以。</span>
+          <span>不用寫完整，像投進深夜信箱的一句話就好。</span>
         </section>
       )}
 

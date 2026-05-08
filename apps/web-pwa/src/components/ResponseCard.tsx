@@ -1,9 +1,9 @@
 import type { ConversationResponse, FollowupAction } from "@pharmacist-tree-hollow/shared";
 
 const actionLabels: Record<FollowupAction, string> = {
-  song: "給這一刻一首歌",
-  card: "抽一張牌",
-  astro: "換個星象角度"
+  song: "上一首今晚的歌",
+  card: "拿一張紙籤",
+  astro: "換一個夜空角度"
 };
 
 export function ResponseCard({
@@ -27,13 +27,13 @@ export function ResponseCard({
         ))}
       </div>
 
-      <div className="support-strip" aria-label="整理一下">
+      <div className="support-strip" aria-label="櫃檯回信">
         <div>
-          <span>{isCrisis ? "先不要一個人" : "我想先肯定你"}</span>
+          <span>{isCrisis ? "先不要一個人" : "店裡的人想先說"}</span>
           <p>{response.praise}</p>
         </div>
         <div>
-          <span>{isCrisis ? "現在先做這件事" : "先做一件小事"}</span>
+          <span>{isCrisis ? "現在先做這件事" : "今晚先做這件小事"}</span>
           <p>{response.tinyAction}</p>
         </div>
       </div>
@@ -56,7 +56,7 @@ export function ResponseCard({
       {response.followupActions.length > 0 && (
         <div className="followups" aria-label="後續互動">
           <button type="button" onClick={onSave}>
-            收下這句
+            夾進口袋
           </button>
           {response.followupActions.map((action) => (
             <button
@@ -73,7 +73,7 @@ export function ResponseCard({
 
       {activePanel === "song" && response.song && (
         <div className="feature-panel music-panel">
-          <span>給這一刻一首歌</span>
+          <span>今晚櫃檯放這首</span>
           <h3>
             {response.song.title} · {response.song.artist}
           </h3>
@@ -86,7 +86,7 @@ export function ResponseCard({
           <div className="symbol-card" aria-hidden="true">
             <div />
           </div>
-          <span>抽一張牌</span>
+          <span>紙籤上寫著</span>
           <h3>{response.card.name}</h3>
           <p>{response.card.meaning}</p>
           <p>{response.card.reflection}</p>
