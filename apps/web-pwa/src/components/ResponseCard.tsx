@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ConversationResponse, FollowupAction } from "@pharmacist-tree-hollow/shared";
 
 const actionLabels: Record<FollowupAction, string> = {
@@ -21,15 +21,29 @@ export function ResponseCard({
   const isCrisis = response.riskLevel === "crisis";
   const [microStep, setMicroStep] = useState(0);
   const [microDone, setMicroDone] = useState(false);
+  const [praiseIndex, setPraiseIndex] = useState(0);
+  const [savedOnce, setSavedOnce] = useState(false);
+  const panelRef = useRef<HTMLDivElement | null>(null);
   const microSteps = response.microTool?.steps ?? [];
-  const hasMicroTool = Boolean(response.microTool && !isCrisis);
-  const canShowFollowups = response.followupActions.length > 0 && (!hasMicroTool || microDone);
+  const hasMicroTool = Boolean(response.microTool && !isCrisis && microSteps.length > 0);
+  const canShowFollowups = response.followupActions.length > 0;
   const microStepCount = Math.max(microSteps.length, 1);
+  const praiseNotes = response.praiseNotes?.length ? response.praiseNotes : [response.praise];
+  const currentPraise = praiseNotes[praiseIndex % praiseNotes.length];
 
   useEffect(() => {
     setMicroStep(0);
     setMicroDone(false);
+    setPraiseIndex(0);
+    setSavedOnce(false);
   }, [response]);
+
+  useEffect(() => {
+    if (!activePanel) return;
+    window.setTimeout(() => {
+      panelRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }, 40);
+  }, [activePanel]);
 
   function advanceMicroTool() {
     if (microStep >= microSteps.length - 1) {
@@ -41,6 +55,11 @@ export function ResponseCard({
 
   return (
     <section className={`response-card ${isCrisis ? "response-card-crisis" : ""}`} aria-live="polite">
+      <div className="reply-meta">
+        <span>{response.careTitle ?? "給值班後的你"}</span>
+        <i aria-hidden="true" />
+      </div>
+
       <div className="chat-message">
         {response.message.map((line) => (
           <p key={line}>{line}</p>
@@ -48,16 +67,57 @@ export function ResponseCard({
       </div>
 
       <div className="support-strip" aria-label="櫃檯回信">
-        {isCrisis && <span>先不要一個人</span>}
-        <p>{response.praise}</p>
-        {isCrisis && <span>現在先做這件事</span>}
-        <p>{response.tinyAction}</p>
+        <div className="praise-ticket">
+          <span>{isCrisis ? "先不要一個人" : "今晚替你記一筆"}</span>
+          <p>{isCrisis ? response.praise : currentPraise}</p>
+          {!isCrisis && praiseNotes.length > 1 && (
+            <button type="button" onClick={() => setPraiseIndex((index) => index + 1)}>
+              再被看見一點
+            </button>
+          )}
+        </div>
+        <div className="next-breath">
+          <span>{isCrisis ? "現在先做這件事" : "下一口氣"}</span>
+          <p>{response.tinyAction}</p>
+        </div>
       </div>
 
-      {response.microTool && !isCrisis && (
+      {canShowFollowups && (
+        <div className="followups" aria-label="後續互動">
+          <button
+            type="button"
+            className={savedOnce ? "saved" : ""}
+            onClick={() => {
+              onSave();
+              setSavedOnce(true);
+            }}
+          >
+            {savedOnce ? "已收下" : "收下回信"}
+          </button>
+          {response.followupActions.map((action) => (
+            <button
+              type="button"
+              key={action}
+              className={activePanel === action ? "active" : ""}
+              onClick={() => onPanel(action)}
+            >
+              {actionLabels[action]}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {response.gentleQuestion && !isCrisis && (
+        <div className="gentle-question">
+          <span>留給等一下的你</span>
+          <p>{response.gentleQuestion}</p>
+        </div>
+      )}
+
+      {hasMicroTool && response.microTool && (
         <div className="micro-tool">
           <div>
-            <span>店裡陪你坐 {response.microTool.durationSeconds} 秒</span>
+            <span>櫃檯陪你坐 {response.microTool.durationSeconds} 秒</span>
             <h3>{response.microTool.title}</h3>
           </div>
           <div className="micro-progress" aria-hidden="true">
@@ -81,26 +141,15 @@ export function ResponseCard({
         </div>
       )}
 
-      {canShowFollowups && (
-        <div className="followups" aria-label="後續互動">
-          <button type="button" onClick={onSave}>
-            夾進口袋
-          </button>
-          {response.followupActions.map((action) => (
-            <button
-              type="button"
-              key={action}
-              className={activePanel === action ? "active" : ""}
-              onClick={() => onPanel(action)}
-            >
-              {actionLabels[action]}
-            </button>
-          ))}
-        </div>
-      )}
+      {response.closingLine && <p className="closing-line">{response.closingLine}</p>}
 
       {activePanel === "song" && response.song && (
-        <div className="feature-panel music-panel">
+        <div className="feature-panel music-panel" ref={panelRef}>
+          <div className="music-mark" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </div>
           <span>今晚櫃檯放這首</span>
           <h3>
             {response.song.title} · {response.song.artist}
@@ -110,7 +159,7 @@ export function ResponseCard({
       )}
 
       {activePanel === "card" && response.card && (
-        <div className="feature-panel card-panel">
+        <div className="feature-panel card-panel" ref={panelRef}>
           <div className="symbol-card" aria-hidden="true">
             <div />
           </div>
@@ -118,12 +167,12 @@ export function ResponseCard({
           <h3>{response.card.name}</h3>
           <p>{response.card.meaning}</p>
           <p>{response.card.reflection}</p>
-          <small>給今天一個角度，不替你決定答案。</small>
+          <small>娛樂與反思用，不是預測或專業建議。給今天一個角度，不替你決定答案。</small>
         </div>
       )}
 
       {activePanel === "astro" && response.astro && (
-        <div className="feature-panel astro-panel">
+        <div className="feature-panel astro-panel" ref={panelRef}>
           <div className="astro-mark" aria-hidden="true">
             <i />
           </div>
@@ -131,7 +180,7 @@ export function ResponseCard({
           {response.astro.lines.map((line) => (
             <p key={line}>{line}</p>
           ))}
-          <small>給今天一個角度，不替你決定答案。</small>
+          <small>娛樂與反思用，不是預測或專業建議。給今天一個角度，不替你決定答案。</small>
         </div>
       )}
     </section>

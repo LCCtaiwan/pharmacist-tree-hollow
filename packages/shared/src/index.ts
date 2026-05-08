@@ -63,7 +63,11 @@ export interface ConversationResponse {
   message: string[];
   empathy: string;
   praise: string;
+  praiseNotes?: string[];
   tinyAction: string;
+  careTitle?: string;
+  gentleQuestion?: string;
+  closingLine?: string;
   microTool?: MicroTool;
   followupActions: FollowupAction[];
   song?: SongRecommendation;

@@ -79,6 +79,7 @@ Required response sections:
 
 - A short reply that feels like someone read the note.
 - One concrete praise.
+- A second praise/reframe can be rotated in place without generating a new page.
 - One tiny action.
 - Actions: 收藏、再誇我一次、幫我點歌、抽一張牌。
 
@@ -86,6 +87,7 @@ Acceptance:
 
 - Response is short enough to read in one screen.
 - Praise mentions the user's situation when available.
+- Followup actions are visible before the 30-second tool is completed.
 - No generic forced positivity.
 
 ### 3. Daily Healing

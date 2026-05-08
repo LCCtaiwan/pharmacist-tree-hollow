@@ -1,10 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { buildResponse, detectScenario } from "./respond";
+import { buildResponse, detectScenario, detectScenarios } from "./respond";
 
 describe("respond", () => {
   it("detects healthcare staff scenarios", () => {
     expect(detectScenario("今天一直被問床位和缺藥，好煩")).toBe("shortage_pressure");
     expect(detectScenario("擔心三讀五對有漏掉")).toBe("interaction_worry");
+  });
+
+  it("keeps secondary pressure in normal replies", () => {
+    expect(detectScenarios("今天被家屬兇，還要一直補紀錄")).toEqual(["customer_conflict", "prescription_overload", "inventory_control"]);
+    const response = buildResponse("今天被家屬兇，還要一直補紀錄", "委屈");
+    expect(response.message[0]).toContain("一邊");
   });
 
   it("suppresses playful followups in crisis flow", () => {

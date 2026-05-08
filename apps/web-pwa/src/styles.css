@@ -95,6 +95,7 @@ button {
     radial-gradient(circle at 78% 22%, rgba(231, 182, 95, 0.18), transparent 7rem),
     linear-gradient(180deg, #0e2424 0%, #0a1b1b 58%, #071313 100%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 48px rgba(0, 0, 0, 0.16);
+  transition: height 420ms ease, opacity 420ms ease, margin 420ms ease;
 }
 
 .scene::before {
@@ -117,6 +118,39 @@ button {
   height: 1px;
   border-radius: 50%;
   background: linear-gradient(90deg, transparent, rgba(239, 211, 161, 0.18), transparent);
+}
+
+.night-rain {
+  position: absolute;
+  top: -18px;
+  width: 1px;
+  height: 60px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, transparent, rgba(169, 190, 208, 0.22), transparent);
+  transform: rotate(12deg);
+  animation: rainFall 4.8s linear infinite;
+}
+
+.rain-one {
+  left: 66%;
+}
+
+.rain-two {
+  left: 82%;
+  height: 48px;
+  opacity: 0.72;
+  animation-delay: 1.7s;
+}
+
+.counter-glow {
+  position: absolute;
+  right: 44px;
+  bottom: 50px;
+  width: 148px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(231, 182, 95, 0.16), transparent 70%);
+  filter: blur(2px);
 }
 
 .pharmacy-window {
@@ -163,6 +197,25 @@ button {
   border-radius: 9px 9px 4px 4px;
   background: rgba(241, 238, 220, 0.66);
   clip-path: polygon(24% 0, 76% 0, 100% 100%, 58% 84%, 50% 100%, 42% 84%, 0 100%);
+}
+
+.shelf-dot {
+  position: absolute;
+  bottom: 13px;
+  width: 6px;
+  height: 11px;
+  border-radius: 4px 4px 2px 2px;
+  background: rgba(241, 238, 220, 0.26);
+}
+
+.shelf-dot-one {
+  left: 20px;
+}
+
+.shelf-dot-two {
+  left: 32px;
+  height: 8px;
+  opacity: 0.72;
 }
 
 .shop-sign {
@@ -268,6 +321,22 @@ button {
   opacity: 0.56;
 }
 
+.paper-note {
+  position: absolute;
+  width: 26px;
+  height: 16px;
+  border-radius: 2px;
+  background: rgba(243, 241, 231, 0.6);
+  box-shadow: inset 0 -5px 0 rgba(239, 211, 161, 0.18);
+}
+
+.note-one {
+  left: 118px;
+  bottom: 62px;
+  transform: rotate(2deg);
+  opacity: 0.2;
+}
+
 .letter-slot {
   position: absolute;
   left: 94px;
@@ -367,6 +436,7 @@ button {
 .composer {
   padding: 12px;
   background: rgba(238, 232, 214, 0.085);
+  transition: padding 360ms ease, background 360ms ease;
 }
 
 .mood-row {
@@ -374,6 +444,7 @@ button {
   flex-wrap: wrap;
   gap: 8px;
   padding-bottom: 10px;
+  transition: opacity 260ms ease, max-height 320ms ease, padding 320ms ease;
 }
 
 .mood-row button,
@@ -434,6 +505,7 @@ textarea {
   color: var(--text);
   background: rgba(5, 15, 15, 0.72);
   line-height: 1.55;
+  transition: min-height 340ms ease;
 }
 
 textarea::placeholder {
@@ -450,6 +522,7 @@ textarea::placeholder {
   background: linear-gradient(180deg, #f0c66d, #dfa94f);
   font-weight: 700;
   font-size: 1rem;
+  transition: flex-basis 320ms ease, min-width 320ms ease;
 }
 
 .quiet-note {
@@ -507,14 +580,109 @@ textarea::placeholder {
   padding: 16px;
 }
 
+.app-shell-has-response .scene {
+  height: 132px;
+  margin-bottom: 10px;
+}
+
+.app-shell-has-response .scene::before {
+  height: 76px;
+}
+
+.app-shell-has-response .tree {
+  left: -66px;
+  bottom: -38px;
+  transform: scale(0.76);
+  transform-origin: left bottom;
+}
+
+.app-shell-has-response .pharmacy-window {
+  right: 14px;
+  bottom: 32px;
+  transform: scale(0.92);
+  transform-origin: right bottom;
+}
+
+.app-shell-has-response .shop-sign {
+  right: 34px;
+  top: 22px;
+}
+
+.app-shell-has-response .token {
+  left: 178px;
+  bottom: 76px;
+}
+
+.app-shell-has-response .letter-slot {
+  left: 78px;
+  bottom: 54px;
+}
+
+.app-shell-has-response .bag-one {
+  bottom: 36px;
+}
+
+.app-shell-has-response .bag-two {
+  bottom: 24px;
+}
+
+.app-shell-has-response .mood-row {
+  max-height: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.app-shell-has-response .composer {
+  padding: 10px;
+  background: rgba(238, 232, 214, 0.06);
+}
+
+.app-shell-has-response textarea {
+  min-height: 64px;
+}
+
+.app-shell-has-response .send-button {
+  flex-basis: 44px;
+  min-width: 44px;
+}
+
 .response-card-crisis {
   border-color: rgba(177, 104, 91, 0.44);
   background: rgba(83, 39, 35, 0.36);
 }
 
 .crisis-mode .scene {
-  height: 112px;
+  height: 82px;
   opacity: 0.72;
+}
+
+.crisis-mode .composer {
+  display: none;
+}
+
+.crisis-mode .reply-meta {
+  color: rgba(255, 217, 205, 0.92);
+}
+
+.reply-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: rgba(239, 211, 161, 0.82);
+  font-size: 0.84rem;
+}
+
+.reply-meta span {
+  flex: 0 0 auto;
+}
+
+.reply-meta i {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(239, 211, 161, 0.28), transparent);
 }
 
 .chat-message {
@@ -546,24 +714,35 @@ textarea::placeholder {
 
 .support-strip {
   display: grid;
-  gap: 8px;
-  margin-top: 14px;
-  padding: 0 0 0 13px;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 0 0 0 14px;
   border-left: 1px solid rgba(239, 211, 161, 0.24);
   animation: riseIn 520ms ease-out 80ms both;
 }
 
-.support-strip p {
-  color: rgba(243, 241, 231, 0.9);
+.praise-ticket,
+.next-breath {
+  position: relative;
 }
 
-.support-strip p + p {
-  color: rgba(243, 241, 231, 0.78);
+.praise-ticket::before,
+.next-breath::before {
+  content: "";
+  position: absolute;
+  left: -17px;
+  top: 0.65em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(239, 211, 161, 0.72);
+  box-shadow: 0 0 14px rgba(239, 211, 161, 0.22);
 }
 
 .support-strip span,
 .micro-tool span,
-.feature-panel span {
+.feature-panel span,
+.gentle-question span {
   display: block;
   margin-bottom: 5px;
   color: var(--apricot);
@@ -577,6 +756,34 @@ textarea::placeholder {
   margin: 0;
   color: var(--text);
   line-height: 1.65;
+}
+
+.praise-ticket p {
+  color: rgba(243, 241, 231, 0.95);
+}
+
+.next-breath p,
+.gentle-question p,
+.closing-line {
+  color: rgba(243, 241, 231, 0.78);
+}
+
+.praise-ticket button {
+  min-height: 32px;
+  margin-top: 9px;
+  padding: 0 10px;
+  border-radius: 999px;
+  color: #17211e;
+  background: rgba(239, 211, 161, 0.86);
+  font-size: 0.86rem;
+}
+
+.gentle-question {
+  margin-top: 14px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  background: rgba(155, 173, 140, 0.08);
+  animation: riseIn 560ms ease-out 130ms both;
 }
 
 .micro-tool {
@@ -668,6 +875,19 @@ textarea::placeholder {
   padding: 0 11px;
 }
 
+.followups button.saved {
+  color: #15211e;
+  background: rgba(155, 173, 140, 0.92);
+}
+
+.closing-line {
+  margin: 13px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid rgba(239, 211, 161, 0.1);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
 .feature-panel {
   position: relative;
   margin-top: 12px;
@@ -679,7 +899,10 @@ textarea::placeholder {
 }
 
 .music-panel::after {
-  content: "";
+  content: none;
+}
+
+.music-mark {
   position: absolute;
   right: 15px;
   top: 15px;
@@ -688,6 +911,43 @@ textarea::placeholder {
   border: 2px solid rgba(239, 211, 161, 0.42);
   border-radius: 50%;
   box-shadow: inset 0 0 0 10px rgba(239, 211, 161, 0.06);
+}
+
+.music-mark::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(239, 211, 161, 0.52);
+}
+
+.music-mark i {
+  position: absolute;
+  bottom: -7px;
+  width: 2px;
+  border-radius: 999px;
+  background: rgba(239, 211, 161, 0.56);
+  animation: meter 1.8s ease-in-out infinite;
+}
+
+.music-mark i:nth-child(1) {
+  left: 5px;
+  height: 10px;
+}
+
+.music-mark i:nth-child(2) {
+  left: 13px;
+  height: 14px;
+  animation-delay: 120ms;
+}
+
+.music-mark i:nth-child(3) {
+  left: 21px;
+  height: 8px;
+  animation-delay: 240ms;
 }
 
 .symbol-card {
@@ -801,6 +1061,21 @@ textarea::placeholder {
   }
 }
 
+@keyframes rainFall {
+  from {
+    translate: 0 -40px;
+    opacity: 0;
+  }
+  18%,
+  78% {
+    opacity: 1;
+  }
+  to {
+    translate: -28px 190px;
+    opacity: 0;
+  }
+}
+
 @keyframes depositLetter {
   0% {
     opacity: 1;
@@ -847,6 +1122,18 @@ textarea::placeholder {
   50% {
     opacity: 1;
     transform: translateY(-3px);
+  }
+}
+
+@keyframes meter {
+  0%,
+  100% {
+    transform: scaleY(0.72);
+    opacity: 0.42;
+  }
+  50% {
+    transform: scaleY(1.18);
+    opacity: 0.86;
   }
 }
 

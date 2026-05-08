@@ -6,13 +6,13 @@ import { buildResponse } from "./lib/respond";
 import "./styles.css";
 
 const moodOptions: Array<{ mood: MoodTag; label: string; note: string }> = [
-  { mood: "累", label: "熱湯", note: "累了" },
-  { mood: "委屈", label: "紙巾", note: "委屈" },
-  { mood: "煩", label: "苦茶", note: "煩" },
-  { mood: "空", label: "空碗", note: "空空的" },
-  { mood: "緊繃", label: "小火", note: "緊繃" },
-  { mood: "想哭", label: "雨傘", note: "想哭" },
-  { mood: "還可以", label: "白水", note: "還可以" }
+  { mood: "累", label: "累了", note: "熱湯" },
+  { mood: "委屈", label: "委屈", note: "紙巾" },
+  { mood: "煩", label: "煩", note: "苦茶" },
+  { mood: "空", label: "空空的", note: "空碗" },
+  { mood: "緊繃", label: "緊繃", note: "小火" },
+  { mood: "想哭", label: "想哭", note: "雨傘" },
+  { mood: "還可以", label: "還可以", note: "白水" }
 ];
 const savedKey = "pharmacist-tree-hollow:saved";
 const promptHints: Record<MoodTag, string> = {
@@ -77,7 +77,9 @@ export default function App() {
 
   function saveCurrent() {
     if (!response) return;
-    const text = [response.empathy, response.praise, response.tinyAction].join("\n");
+    const text = [response.careTitle, response.empathy, response.praiseNotes?.[0] ?? response.praise, response.tinyAction, response.closingLine]
+      .filter(Boolean)
+      .join("\n");
     const item: SavedItem = {
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
@@ -95,7 +97,7 @@ export default function App() {
   }
 
   return (
-    <main className={`app-shell ${response?.riskLevel === "crisis" ? "crisis-mode" : ""}`}>
+    <main className={`app-shell ${response ? "app-shell-has-response" : ""} ${response?.riskLevel === "crisis" ? "crisis-mode" : ""}`}>
       <header className="app-header">
         <div>
           <p>深夜值班櫃檯還亮著</p>
