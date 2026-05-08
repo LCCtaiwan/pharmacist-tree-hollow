@@ -447,7 +447,7 @@ button {
 .mood-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 7px;
   padding-bottom: 10px;
   transition: opacity 260ms ease, max-height 320ms ease, padding 320ms ease;
 }
@@ -464,25 +464,14 @@ button {
 }
 
 .mood-row button {
-  display: grid;
-  min-width: 72px;
-  padding: 7px 12px;
-  text-align: left;
+  min-width: auto;
+  padding: 0 12px;
+  text-align: center;
 }
 
 .mood-row button strong {
   font-weight: 650;
-  line-height: 1.12;
-}
-
-.mood-row button small {
-  margin-top: 2px;
-  color: rgba(243, 241, 231, 0.62);
-  font-size: 0.72rem;
-}
-
-.mood-row button.selected small {
-  color: rgba(21, 33, 30, 0.68);
+  line-height: 1;
 }
 
 .mood-row button.selected,

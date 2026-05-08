@@ -5,14 +5,14 @@ import { ResponseCard } from "./components/ResponseCard";
 import { buildResponse } from "./lib/respond";
 import "./styles.css";
 
-const moodOptions: Array<{ mood: MoodTag; label: string; note: string }> = [
-  { mood: "累", label: "累了", note: "熱湯" },
-  { mood: "委屈", label: "委屈", note: "紙巾" },
-  { mood: "煩", label: "煩", note: "苦茶" },
-  { mood: "空", label: "空空的", note: "空碗" },
-  { mood: "緊繃", label: "緊繃", note: "小火" },
-  { mood: "想哭", label: "想哭", note: "雨傘" },
-  { mood: "還可以", label: "還可以", note: "白水" }
+const moodOptions: Array<{ mood: MoodTag; label: string }> = [
+  { mood: "累", label: "累了" },
+  { mood: "委屈", label: "委屈" },
+  { mood: "煩", label: "煩" },
+  { mood: "空", label: "空空的" },
+  { mood: "緊繃", label: "緊繃" },
+  { mood: "想哭", label: "想哭" },
+  { mood: "還可以", label: "還可以" }
 ];
 const savedKey = "pharmacist-tree-hollow:saved";
 const promptHints: Record<MoodTag, string> = {
@@ -112,10 +112,9 @@ export default function App() {
               key={item.mood}
               className={mood === item.mood ? "selected" : ""}
               onClick={() => setMood(item.mood)}
-              aria-label={`${item.label}，${item.note}`}
+              aria-label={item.label}
             >
               <strong>{item.label}</strong>
-              <small>{item.note}</small>
             </button>
           ))}
         </div>
