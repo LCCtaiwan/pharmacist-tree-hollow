@@ -91,12 +91,10 @@ export default function App() {
   const mood: MoodTag = "累"; // 內部 default，不再由 NPC click 決定
   const [input, setInput] = useState("");
   const [response, setResponse] = useState<ConversationResponse | null>(null);
-  const [activePanel, setActivePanel] = useState<FollowupAction | null>(null);
   const [saved, setSaved] = useState<SavedItem[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const [isDepositing, setIsDepositing] = useState(false);
   const [isResponding, setIsResponding] = useState(false);
-  const [microActive, setMicroActive] = useState(false);
   const [activeStation, setActiveStation] = useState<StationType | null>(null);
   const [stationContent, setStationContent] = useState<StationContent>(null);
   const timersRef = useRef<number[]>([]);
@@ -157,6 +155,17 @@ export default function App() {
 
   const ventOpen = activeStation === "vent";
 
+  // 場景反應：station 同步觸發 scene 視覺
+  const microActive = activeStation === "breathing";
+  const sceneActivePanel: FollowupAction | null =
+    activeStation === "song"
+      ? "song"
+      : activeStation === "astro"
+        ? "astro"
+        : activeStation === "quote"
+          ? "card"
+          : null;
+
   function submit() {
     const trimmed = input.trim();
     timersRef.current.forEach((timer) => window.clearTimeout(timer));
@@ -165,9 +174,7 @@ export default function App() {
     setIsDepositing(true);
     setIsThinking(false);
     setIsResponding(false);
-    setMicroActive(false);
     setResponse(null);
-    setActivePanel(null);
 
     const depositingTimer = window.setTimeout(() => {
       setIsDepositing(false);
@@ -238,8 +245,6 @@ export default function App() {
     setIsThinking(false);
     setIsResponding(false);
     setResponse(null);
-    setActivePanel(null);
-    setMicroActive(false);
     setActiveStation(null);
     setStationContent(null);
     setInput("");
@@ -254,7 +259,7 @@ export default function App() {
     <main className={`app-shell ${showSceneEntry ? "app-shell-entry" : ""} ${response ? "app-shell-has-response" : ""} ${crisis ? "crisis-mode" : ""}`}>
       <WatercolorScene
         state={sceneState}
-        activePanel={activePanel}
+        activePanel={sceneActivePanel}
         microActive={microActive}
         savedCount={saved.length}
         crisis={Boolean(crisis)}
@@ -304,11 +309,8 @@ export default function App() {
         <div className="response-wrap" ref={responseRegionRef}>
           <ResponseCard
             response={response}
-            activePanel={activePanel}
-            onPanel={(panel) => setActivePanel((current) => (current === panel ? null : panel))}
             onSave={saveCurrent}
             onNewNote={resetConversation}
-            onMicroChange={setMicroActive}
           />
         </div>
       ) : isThinking ? (

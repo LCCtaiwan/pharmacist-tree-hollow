@@ -2025,3 +2025,158 @@ textarea::placeholder {
   font-family: "Noto Serif TC", serif;
   background: rgba(255, 250, 236, 0.85);
 }
+
+/* === Letter Card (response as handwritten letter) === */
+
+.letter-card {
+  position: relative;
+  margin: 8px 12px 12px;
+  padding: 28px 24px 24px;
+  border: 1px dashed rgba(58, 44, 30, 0.22);
+  border-radius: 4px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(229, 184, 161, 0.18), transparent 18rem),
+    rgba(245, 234, 208, 0.97);
+  box-shadow:
+    0 8px 28px rgba(106, 74, 44, 0.18),
+    inset 0 0 32px rgba(229, 184, 161, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  transform: rotate(-0.3deg);
+  animation: paperLand 480ms ease-out both;
+}
+
+.letter-card-crisis {
+  border-color: rgba(184, 92, 60, 0.42);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(184, 92, 60, 0.1), transparent 18rem),
+    rgba(245, 234, 208, 0.97);
+}
+
+.letter-header {
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed rgba(58, 44, 30, 0.16);
+}
+
+.letter-stamp {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 2px 11px;
+  border: 1px dashed rgba(201, 122, 74, 0.46);
+  border-radius: 999px;
+  background: rgba(255, 250, 236, 0.85);
+  color: var(--terracotta);
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.letter-card-crisis .letter-stamp {
+  border-color: var(--crisis-warm);
+  color: var(--crisis-warm);
+}
+
+.letter-subject {
+  margin: 0;
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
+  font-size: 1.12rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.letter-body {
+  font-family: "標楷體", "DFKai-SB", "BiauKaiHK", "STKaiti", "Kaiti TC", "AR PL UKai TW", "Klee One", "Noto Serif TC", serif;
+  font-size: 1.08rem;
+  line-height: 2.05;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.letter-body p {
+  margin: 0 0 14px;
+}
+
+.letter-body p:last-child {
+  margin-bottom: 0;
+}
+
+.letter-praise {
+  color: var(--terracotta);
+}
+
+.letter-action {
+  position: relative;
+  padding-left: 14px;
+}
+
+.letter-action::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: rgba(58, 44, 30, 0.4);
+}
+
+.letter-question {
+  padding-left: 14px;
+  border-left: 2px solid rgba(155, 184, 116, 0.4);
+  color: rgba(58, 44, 30, 0.84);
+  font-style: italic;
+}
+
+.letter-closing {
+  margin-top: 18px !important;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(58, 44, 30, 0.14);
+  color: rgba(58, 44, 30, 0.78);
+}
+
+.letter-cycle {
+  display: inline-block;
+  margin: -6px 0 14px;
+  padding: 2px 0;
+  border: none;
+  background: none;
+  color: var(--terracotta);
+  font-family: "Noto Sans TC", sans-serif;
+  font-size: 0.86rem;
+  text-decoration: underline wavy var(--terracotta);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  cursor: pointer;
+}
+
+.letter-cycle:hover {
+  color: var(--ink);
+  text-decoration-color: var(--ink);
+}
+
+.letter-footer {
+  margin-top: 22px;
+  text-align: right;
+}
+
+.letter-signature {
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.16em;
+  color: var(--ink-soft);
+}
+
+.letter-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px dashed rgba(58, 44, 30, 0.14);
+}
+
+.letter-actions .btn-text:disabled {
+  cursor: default;
+  color: var(--moss-deep);
+  text-decoration-color: var(--moss-deep);
+}
