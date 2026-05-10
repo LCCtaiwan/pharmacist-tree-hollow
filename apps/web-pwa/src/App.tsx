@@ -156,15 +156,14 @@ export default function App() {
   const ventOpen = activeStation === "vent";
 
   // 場景反應：station 同步觸發 scene 視覺
+  // quote station 已有專屬 grass-quote.png 視覺錨點，不再 mapping 到 card 避免雙紙條
   const microActive = activeStation === "breathing";
   const sceneActivePanel: FollowupAction | null =
     activeStation === "song"
       ? "song"
       : activeStation === "astro"
         ? "astro"
-        : activeStation === "quote"
-          ? "card"
-          : null;
+        : null;
 
   function submit() {
     const trimmed = input.trim();
