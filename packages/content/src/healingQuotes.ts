@@ -1,14 +1,14 @@
 import type { HealingQuote } from "@pharmacist-tree-hollow/shared";
+import { geminiQuotes } from "./quotes-gemini";
+import { codexQuotes } from "./quotes-codex";
 
 /**
- * 草地金句池
- * 100 句目標，分階段：
- * - v0.3（今天，30 句）：自寫 20 + 公領域 10
- * - v0.4：+書摘 20 + 影劇 30
- * - v0.5：+ 反饋微調
- * 由 Gemini subagent 草擬。
+ * 草地金句池 — 100 句
+ * - 基礎 30 句（v0.3）：自寫 original-001~020 + 公領域 public-001~010
+ * - Gemini 補強 40 句（v0.4）：書摘 book-001~020 + 自寫 original-021~040
+ * - Codex 補強 30 句（v0.4）：影劇 tv-001~017 + tv-cht-001~010 + movie-001~003
  */
-export const healingQuotes: HealingQuote[] = [
+const baseQuotes: HealingQuote[] = [
   {
     "id": "original-001",
     text: "今晚不是你不夠好，是今天責任太多。",
@@ -200,3 +200,5 @@ export const healingQuotes: HealingQuote[] = [
     language: "zh-Hant"
   }
 ];
+
+export const healingQuotes: HealingQuote[] = [...baseQuotes, ...geminiQuotes, ...codexQuotes];
