@@ -119,7 +119,8 @@ button {
 .micro-tool h3,
 .feature-panel h3 {
   font-family: "Noto Serif TC", "Source Han Serif TC", serif;
-  letter-spacing: 0.04em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
 }
 
 .app-header h1 {
@@ -207,28 +208,55 @@ button {
 }
 
 .scene-hotspot {
-  display: grid;
-  gap: 1px;
-  min-width: 58px;
-  padding: 6px 9px;
-  border: 1px solid rgba(58, 44, 30, 0.12);
-  border-radius: 999px;
-  color: var(--ink);
-  background: rgba(255, 250, 236, 0.72);
-  box-shadow: 0 8px 20px rgba(106, 74, 44, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: auto;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
   text-align: center;
   transform: translate(-50%, -50%);
+  cursor: pointer;
 }
 
 .scene-hotspot span {
-  color: rgba(106, 90, 68, 0.82);
-  font-size: 0.68rem;
-  line-height: 1.1;
+  padding: 1px 7px;
+  border: 1px dashed rgba(58, 44, 30, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 250, 236, 0.92);
+  color: rgba(58, 44, 30, 0.78);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .scene-hotspot strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  min-height: 38px;
+  padding: 6px 10px;
+  border: 1.5px solid var(--terracotta);
+  border-radius: 6px;
+  background: rgba(245, 234, 208, 0.88);
+  color: var(--terracotta);
+  font-family: "Noto Serif TC", serif;
+  font-weight: 700;
   font-size: 0.82rem;
-  line-height: 1.15;
+  letter-spacing: 0.04em;
+  box-shadow: inset 0 0 6px rgba(201, 122, 74, 0.18), 0 4px 10px rgba(106, 74, 44, 0.12);
+  filter: contrast(0.96);
+}
+
+.scene-hotspot:active strong {
+  transform: translateY(1px);
+  box-shadow: inset 0 0 6px rgba(201, 122, 74, 0.18), 0 2px 4px rgba(106, 74, 44, 0.18);
 }
 
 .scene-hotspot-hollow {
@@ -535,8 +563,8 @@ button {
 .response-card,
 .quiet-note,
 .saved-list {
-  border: 1px solid rgba(201, 122, 74, 0.22);
-  border-radius: 12px;
+  border: 1px dashed rgba(58, 44, 30, 0.22);
+  border-radius: 6px;
   background: rgba(245, 234, 208, 0.96);
   box-shadow: 0 16px 38px rgba(106, 74, 44, 0.18), 0 4px 12px rgba(106, 74, 44, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
@@ -563,14 +591,24 @@ button {
 }
 
 .composer-picked button {
-  min-height: 30px;
+  min-height: 36px;
   margin-left: auto;
-  padding: 0 10px;
-  border: 1px solid rgba(58, 44, 30, 0.12);
-  border-radius: 999px;
+  padding: 6px 4px;
+  border: none;
+  background: none;
+  color: var(--terracotta);
+  font-family: "Noto Sans TC", sans-serif;
+  font-weight: 500;
+  font-size: 0.92rem;
+  text-decoration: underline wavy var(--terracotta);
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1.5px;
+  cursor: pointer;
+}
+
+.composer-picked button:hover {
   color: var(--ink);
-  background: rgba(255, 250, 236, 0.58);
-  font-size: 0.82rem;
+  text-decoration-color: var(--ink);
 }
 
 .mood-row {
@@ -631,7 +669,7 @@ button {
 .mood-row button.selected,
 .followups button.active {
   color: #2c2418;
-  background: linear-gradient(180deg, rgba(240, 198, 109, 0.95), rgba(229, 184, 161, 0.74));
+  background: rgba(239, 224, 184, 0.94);
   box-shadow: 0 8px 20px rgba(201, 122, 74, 0.16);
 }
 
@@ -661,16 +699,26 @@ textarea::placeholder {
 }
 
 .send-button {
-  flex: 0 0 48px;
-  min-width: 48px;
-  min-height: 48px;
+  flex: 0 0 56px;
+  min-width: 56px;
+  min-height: 56px;
   align-self: stretch;
-  border-radius: 10px;
-  color: #2c2418;
-  background: linear-gradient(180deg, var(--highlight), var(--terracotta));
+  border: 1px dashed rgba(201, 122, 74, 0.45);
+  border-radius: 4px;
+  color: var(--terracotta);
+  background: rgba(239, 224, 184, 0.96);
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
   font-weight: 700;
-  font-size: 1rem;
-  transition: flex-basis 320ms ease, min-width 320ms ease;
+  font-size: 1.08rem;
+  letter-spacing: 0.06em;
+  box-shadow: 0 4px 10px rgba(106, 74, 44, 0.16);
+  transform: rotate(-0.6deg);
+  transition: transform 160ms ease, box-shadow 160ms ease, flex-basis 320ms ease, min-width 320ms ease;
+  cursor: pointer;
+}
+
+.send-button:active {
+  transform: rotate(0deg) translateY(1px);
 }
 
 .quiet-note {
@@ -814,7 +862,7 @@ textarea::placeholder {
   bottom: 8px;
   width: 2px;
   border-radius: 999px;
-  background: linear-gradient(180deg, var(--terracotta), rgba(155, 184, 116, 0.22));
+  background: rgba(201, 122, 74, 0.38);
 }
 
 .chat-message p {
@@ -960,8 +1008,8 @@ textarea::placeholder {
 }
 
 .micro-actions button:last-child {
-  color: #2c2418;
-  background: linear-gradient(180deg, rgba(240, 198, 109, 0.95), rgba(229, 184, 161, 0.74));
+  color: var(--terracotta);
+  background: rgba(239, 224, 184, 0.94);
 }
 
 .micro-actions button:disabled {
@@ -1041,7 +1089,8 @@ textarea::placeholder {
 
 .npc-button.active {
   border-color: var(--terracotta);
-  background: linear-gradient(180deg, rgba(240, 198, 109, 0.6), rgba(229, 184, 161, 0.5));
+  background: rgba(239, 224, 184, 0.92);
+  color: var(--ink);
   box-shadow: 0 6px 18px rgba(201, 122, 74, 0.22);
 }
 
@@ -1109,12 +1158,24 @@ textarea::placeholder {
 
 .new-note-button {
   width: 100%;
-  min-height: 42px;
+  min-height: 46px;
   margin-top: 12px;
-  border: 1px solid rgba(58, 44, 30, 0.12);
-  border-radius: 9px;
-  color: var(--ink);
-  background: rgba(255, 250, 236, 0.58);
+  padding: 10px 18px;
+  border: 1px dashed rgba(201, 122, 74, 0.45);
+  border-radius: 4px;
+  color: var(--terracotta);
+  background: rgba(239, 224, 184, 0.95);
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 10px rgba(106, 74, 44, 0.16);
+  transform: rotate(-0.4deg);
+  transition: transform 160ms ease;
+  cursor: pointer;
+}
+
+.new-note-button:active {
+  transform: rotate(0deg) translateY(1px);
 }
 
 .feature-panel {
@@ -1438,6 +1499,17 @@ textarea::placeholder {
   }
 }
 
+@keyframes paperLand {
+  from {
+    opacity: 0;
+    transform: rotate(-2deg) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-0.6deg) translateY(0);
+  }
+}
+
 @keyframes dotPulse {
   0%,
   100% {
@@ -1488,10 +1560,10 @@ textarea::placeholder {
   z-index: 5;
   margin: 8px 12px 12px;
   padding: 14px;
-  border: 1px solid rgba(201, 122, 74, 0.22);
-  border-radius: 12px;
+  border: 1px dashed rgba(58, 44, 30, 0.22);
+  border-radius: 6px;
   background: rgba(245, 234, 208, 0.96);
-  box-shadow: 0 16px 38px rgba(106, 74, 44, 0.18), 0 4px 12px rgba(106, 74, 44, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  box-shadow: 0 6px 18px rgba(106, 74, 44, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.45);
   animation: riseIn 320ms ease-out both;
 }
 
@@ -1516,19 +1588,30 @@ textarea::placeholder {
 
 .station-header strong {
   font-family: "Noto Serif TC", "Source Han Serif TC", serif;
+  font-weight: 600;
   font-size: 1.05rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   color: var(--ink);
 }
 
 .station-close {
   min-height: 36px;
-  padding: 0 12px;
-  border: 1px solid rgba(58, 44, 30, 0.16);
-  border-radius: 999px;
+  padding: 6px 4px;
+  border: none;
+  background: none;
+  color: var(--terracotta);
+  font-family: "Noto Sans TC", sans-serif;
+  font-weight: 500;
+  font-size: 0.92rem;
+  text-decoration: underline wavy var(--terracotta);
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1.5px;
+  cursor: pointer;
+}
+
+.station-close:hover {
   color: var(--ink);
-  background: rgba(255, 250, 236, 0.7);
-  font-size: 0.86rem;
+  text-decoration-color: var(--ink);
 }
 
 .station-body {
@@ -1555,8 +1638,9 @@ textarea::placeholder {
 .station-body article h3 {
   margin: 4px 0 8px;
   font-family: "Noto Serif TC", "Source Han Serif TC", serif;
+  font-weight: 600;
   font-size: 1.1rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   color: var(--ink);
 }
 
@@ -1577,14 +1661,18 @@ textarea::placeholder {
 }
 
 .station-actions button {
-  min-height: 38px;
-  padding: 0 14px;
-  border: 1px solid rgba(201, 122, 74, 0.28);
-  border-radius: 999px;
-  color: var(--ink);
-  background: rgba(255, 250, 236, 0.85);
-  font-size: 0.88rem;
-  transition: transform 160ms ease, box-shadow 160ms ease;
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 1px dashed rgba(201, 122, 74, 0.42);
+  border-radius: 4px;
+  background: rgba(239, 224, 184, 0.92);
+  color: var(--terracotta);
+  font-family: "Noto Serif TC", serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 10px rgba(106, 74, 44, 0.14);
+  cursor: pointer;
+  transition: transform 160ms ease;
 }
 
 .station-actions button:active {
@@ -1620,24 +1708,32 @@ textarea::placeholder {
 
 /* Astro station — healing tip block */
 .station-healing-tip {
-  margin-top: 12px;
-  padding: 10px 12px;
-  border: 1px solid rgba(155, 184, 116, 0.34);
-  border-radius: 10px;
-  background: rgba(155, 184, 116, 0.12);
+  position: relative;
+  margin-top: 16px;
+  padding: 12px 14px 12px 16px;
+  border: none;
+  border-left: 3px solid var(--moss-deep);
+  border-radius: 0;
+  background: rgba(155, 184, 116, 0.1);
 }
 
 .station-healing-tip span {
-  display: block;
-  margin-bottom: 4px;
+  display: inline-block;
+  margin-bottom: 6px;
+  padding: 1px 9px;
+  border: 1px dashed var(--moss-deep);
+  border-radius: 999px;
+  background: rgba(245, 234, 208, 0.92);
   color: var(--moss-deep);
-  font-size: 0.82rem;
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  font-family: "Noto Serif TC", serif;
 }
 
 .station-healing-tip p {
   margin: 0;
   color: var(--ink);
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 /* Saved station */
@@ -1749,8 +1845,8 @@ textarea::placeholder {
 }
 
 .station-breathing-actions button:last-child {
-  color: #2c2418;
-  background: linear-gradient(180deg, var(--highlight), rgba(229, 184, 161, 0.78));
+  color: var(--terracotta);
+  background: rgba(239, 224, 184, 0.94);
   border-color: rgba(201, 122, 74, 0.28);
 }
 
@@ -1758,4 +1854,119 @@ textarea::placeholder {
   cursor: default;
   color: rgba(106, 90, 68, 0.62);
   background: rgba(255, 250, 236, 0.4);
+}
+
+/* === Design System: Paper === */
+
+.paper-card {
+  position: relative;
+  border: 1px dashed rgba(58, 44, 30, 0.22);
+  border-radius: 6px;
+  background: rgba(245, 234, 208, 0.96);
+  box-shadow: 0 6px 18px rgba(106, 74, 44, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.paper-card-deckle::before {
+  content: "";
+  position: absolute;
+  inset: -2px -1% auto -1%;
+  height: 6px;
+  background:
+    radial-gradient(circle at 4% 100%, transparent 3px, rgba(245, 234, 208, 0.96) 4px),
+    radial-gradient(circle at 12% 100%, transparent 3px, rgba(245, 234, 208, 0.96) 4px),
+    radial-gradient(circle at 22% 100%, transparent 3px, rgba(245, 234, 208, 0.96) 4px),
+    rgba(245, 234, 208, 0.96);
+  background-size: 16px 6px;
+  background-repeat: repeat-x;
+}
+
+.paper-divider {
+  border: none;
+  height: 1px;
+  margin: 14px 0;
+  background-image: linear-gradient(90deg, rgba(58, 44, 30, 0.22) 50%, transparent 50%);
+  background-size: 6px 1px;
+  background-repeat: repeat-x;
+}
+
+.btn-paper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px dashed rgba(201, 122, 74, 0.45);
+  border-radius: 4px;
+  background: rgba(239, 224, 184, 0.95);
+  color: var(--terracotta);
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 10px rgba(106, 74, 44, 0.16);
+  transform: rotate(-0.6deg);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+  cursor: pointer;
+}
+
+.btn-paper:hover {
+  transform: rotate(-0.3deg) translateY(-1px);
+}
+
+.btn-paper:active {
+  transform: rotate(0deg) translateY(1px);
+  box-shadow: 0 2px 4px rgba(106, 74, 44, 0.18);
+}
+
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 6px 4px;
+  background: none;
+  border: none;
+  color: var(--terracotta);
+  font-family: "Noto Sans TC", "PingFang TC", sans-serif;
+  font-weight: 500;
+  font-size: 0.92rem;
+  text-decoration: underline wavy var(--terracotta);
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1.5px;
+  cursor: pointer;
+}
+
+.btn-text:hover {
+  text-decoration-color: var(--ink);
+  color: var(--ink);
+}
+
+.btn-stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  min-height: 38px;
+  padding: 6px 10px;
+  border: 1.5px solid var(--terracotta);
+  border-radius: 6px;
+  background: rgba(245, 234, 208, 0.85);
+  color: var(--terracotta);
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  box-shadow: inset 0 0 6px rgba(201, 122, 74, 0.18);
+  filter: contrast(0.96);
+  cursor: pointer;
+}
+
+.paper-tag {
+  display: inline-block;
+  padding: 1px 9px;
+  border: 1px dashed rgba(201, 122, 74, 0.42);
+  border-radius: 999px;
+  color: var(--terracotta);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  font-family: "Noto Serif TC", serif;
+  background: rgba(255, 250, 236, 0.85);
 }

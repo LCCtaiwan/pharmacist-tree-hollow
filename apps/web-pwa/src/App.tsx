@@ -267,7 +267,7 @@ export default function App() {
           <div className="composer-picked">
             <span>你點了</span>
             <strong>樹洞</strong>
-            <button type="button" onClick={closeStation}>
+            <button type="button" className="btn-text" onClick={closeStation}>
               回到底圖
             </button>
           </div>
