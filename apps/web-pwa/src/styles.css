@@ -2127,16 +2127,45 @@ textarea::placeholder {
   font-family: "標楷體", "DFKai-SB", "BiauKaiHK", "STKaiti", "Kaiti TC", "AR PL UKai TW", "Klee One", "Noto Serif TC", serif;
   font-size: 1.08rem;
   line-height: 2.05;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: var(--ink);
+  /* CJK 閱讀優化：自動 balance 換行、嚴格處理 punctuation、結尾標點掛邊 */
+  text-wrap: pretty;
+  line-break: strict;
+  hanging-punctuation: allow-end last;
+  word-break: normal;
 }
 
 .letter-body p {
-  margin: 0 0 14px;
+  margin: 0 0 20px;
+  text-wrap: pretty;
 }
 
 .letter-body p:last-child {
   margin-bottom: 0;
+}
+
+/* 段落間視覺呼吸：誇誇前面加空心點分隔 */
+.letter-praise {
+  position: relative;
+  margin-top: 28px;
+  padding-top: 18px;
+}
+
+.letter-praise::before {
+  content: "·  ·  ·";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(201, 122, 74, 0.5);
+  font-size: 0.85rem;
+  letter-spacing: 0.4em;
+  line-height: 1;
+}
+
+.letter-action {
+  margin-top: 22px;
 }
 
 .letter-praise {
