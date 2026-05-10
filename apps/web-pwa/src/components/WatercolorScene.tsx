@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import type { FollowupAction, MoodTag, StationType } from "@pharmacist-tree-hollow/shared";
+import type { FollowupAction, StationType } from "@pharmacist-tree-hollow/shared";
 
 export type SceneState = "idle" | "writing" | "thinking" | "depositing" | "responding";
 
 export interface WatercolorSceneProps {
-  mood: MoodTag;
   state: SceneState;
   activePanel: FollowupAction | null;
   microActive: boolean;
@@ -30,7 +29,6 @@ const sceneHotspots: Array<{
 ];
 
 export function WatercolorScene({
-  mood,
   state,
   activePanel,
   microActive,
@@ -41,22 +39,10 @@ export function WatercolorScene({
 }: WatercolorSceneProps) {
   const imageSrc = crisis ? "/art/scene-crisis.png" : "/art/scene-main.png";
   const [imageFailed, setImageFailed] = useState(false);
-  const [moodVisible, setMoodVisible] = useState(false);
 
   useEffect(() => {
     setImageFailed(false);
   }, [imageSrc]);
-
-  useEffect(() => {
-    setMoodVisible(false);
-    const frame = window.requestAnimationFrame(() => {
-      setMoodVisible(true);
-    });
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-    };
-  }, [mood]);
 
   return (
     <section
@@ -92,20 +78,6 @@ export function WatercolorScene({
             </button>
           ))}
         </div>
-      )}
-
-      {!showHotspots && (
-        <img
-          key={mood}
-          className="scene-mood-pet"
-          src={`/art/mood-${mood}.png`}
-          alt=""
-          aria-hidden="true"
-          style={{ opacity: moodVisible ? 0.85 : 0 }}
-          onError={(event) => {
-            event.currentTarget.style.display = "none";
-          }}
-        />
       )}
 
       {state === "writing" && <div className="scene-hollow-glow scene-hollow-glow-soft" aria-hidden="true" />}

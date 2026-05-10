@@ -253,7 +253,6 @@ export default function App() {
   return (
     <main className={`app-shell ${showSceneEntry ? "app-shell-entry" : ""} ${response ? "app-shell-has-response" : ""} ${crisis ? "crisis-mode" : ""}`}>
       <WatercolorScene
-        mood={mood}
         state={sceneState}
         activePanel={activePanel}
         microActive={microActive}
