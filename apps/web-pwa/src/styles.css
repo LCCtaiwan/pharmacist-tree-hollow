@@ -225,10 +225,15 @@ button {
 
 .scene-hotspot span {
   padding: 1px 7px;
-  border: 1px dashed rgba(58, 44, 30, 0.22);
+  border: none;
   border-radius: 999px;
-  background: rgba(255, 250, 236, 0.92);
-  color: rgba(58, 44, 30, 0.78);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 250, 236, 0.78) 0%,
+    rgba(255, 250, 236, 0.42) 70%,
+    transparent 100%
+  );
+  color: rgba(58, 44, 30, 0.7);
   font-size: 0.66rem;
   letter-spacing: 0.08em;
   line-height: 1.2;
@@ -239,24 +244,39 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 52px;
-  min-height: 38px;
-  padding: 6px 10px;
-  border: 1.5px solid var(--terracotta);
-  border-radius: 6px;
-  background: rgba(245, 234, 208, 0.88);
+  min-width: 56px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 999px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(239, 224, 184, 0.92) 0%,
+    rgba(239, 224, 184, 0.55) 55%,
+    transparent 100%
+  );
   color: var(--terracotta);
   font-family: "Noto Serif TC", serif;
-  font-weight: 700;
-  font-size: 0.82rem;
+  font-weight: 600;
+  font-size: 0.86rem;
   letter-spacing: 0.04em;
-  box-shadow: inset 0 0 6px rgba(201, 122, 74, 0.18), 0 4px 10px rgba(106, 74, 44, 0.12);
-  filter: contrast(0.96);
+  box-shadow: none;
+  filter: none;
+  transition: transform 200ms ease;
+}
+
+.scene-hotspot:hover strong,
+.scene-hotspot:focus-visible strong {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(239, 224, 184, 1) 0%,
+    rgba(239, 224, 184, 0.7) 60%,
+    transparent 100%
+  );
 }
 
 .scene-hotspot:active strong {
   transform: translateY(1px);
-  box-shadow: inset 0 0 6px rgba(201, 122, 74, 0.18), 0 2px 4px rgba(106, 74, 44, 0.18);
 }
 
 .scene-hotspot-hollow {
