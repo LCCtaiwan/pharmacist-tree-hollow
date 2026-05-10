@@ -348,7 +348,8 @@ button {
   object-fit: contain;
   transform: translate(-50%, -50%);
   z-index: 2;
-  filter: saturate(0.95);
+  mix-blend-mode: multiply;
+  filter: saturate(0.95) contrast(1.05);
 }
 
 @media (max-width: 380px) {
