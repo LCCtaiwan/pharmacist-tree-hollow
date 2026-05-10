@@ -262,26 +262,56 @@ button {
   letter-spacing: 0.04em;
   box-shadow: none;
   filter: none;
+  animation: hotspotBreath 4.2s ease-in-out infinite;
   transition: transform 200ms ease;
+}
+
+@keyframes hotspotBreath {
+  0%, 100% {
+    opacity: 0.82;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* sequential stagger so 7 NPCs ripple one-by-one */
+.scene-hotspot-hollow strong { animation-delay: 0s; }
+.scene-hotspot-owl strong { animation-delay: 0.6s; }
+.scene-hotspot-stars strong { animation-delay: 1.2s; }
+.scene-hotspot-house strong { animation-delay: 1.8s; }
+.scene-hotspot-meadow strong { animation-delay: 2.4s; }
+.scene-hotspot-flowers strong { animation-delay: 3s; }
+.scene-hotspot-nest strong { animation-delay: 3.6s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-hotspot strong {
+    animation: none;
+  }
 }
 
 .scene-hotspot:hover strong,
 .scene-hotspot:focus-visible strong {
+  animation-play-state: paused;
   background: radial-gradient(
     ellipse at center,
     rgba(239, 224, 184, 1) 0%,
     rgba(239, 224, 184, 0.7) 60%,
     transparent 100%
   );
+  opacity: 1;
+  transform: scale(1.05);
 }
 
 .scene-hotspot:active strong {
-  transform: translateY(1px);
+  transform: scale(1.02) translateY(1px);
 }
 
 .scene-hotspot-hollow {
-  left: 33%;
-  top: 52%;
+  left: 24%;
+  top: 60%;
 }
 
 .scene-hotspot-nest {
@@ -290,8 +320,8 @@ button {
 }
 
 .scene-hotspot-owl {
-  left: 49%;
-  top: 28%;
+  left: 40%;
+  top: 33%;
 }
 
 .scene-hotspot-stars {

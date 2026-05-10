@@ -76,7 +76,6 @@ export function WatercolorScene({
 
       {showHotspots && onStationSelect && (
         <div className="scene-entry-layer" aria-label="點一個物件，做不同的事">
-          <p>先點一個物件</p>
           {sceneHotspots.map((hotspot) => (
             <button
               type="button"
