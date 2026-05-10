@@ -315,7 +315,7 @@ button {
 
 .scene-hotspot-hollow {
   left: 24%;
-  top: 72%;
+  top: 65%;
 }
 
 .scene-hotspot-nest {
@@ -382,8 +382,9 @@ button {
   object-fit: contain;
   transform: translate(-50%, -50%);
   z-index: 2;
+  opacity: 0.55;
   mix-blend-mode: multiply;
-  filter: saturate(0.95) contrast(1.05);
+  filter: blur(0.3px) saturate(0.75) contrast(0.95) brightness(1.06);
 }
 
 @media (max-width: 380px) {
