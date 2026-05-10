@@ -205,27 +205,6 @@ export default function App() {
             回到底圖
           </button>
         </div>
-        <div className="mood-row" aria-label="今晚想點什麼">
-          {moodOptions.map((item) => (
-            <button
-              type="button"
-              key={item.mood}
-              className={mood === item.mood ? "selected" : ""}
-              onClick={() => setMood(item.mood)}
-              aria-label={item.label}
-            >
-              <img
-                src={`/art/mood-${item.mood}.png`}
-                alt=""
-                aria-hidden="true"
-                onError={(event) => {
-                  event.currentTarget.style.display = "none";
-                }}
-              />
-              <strong>{item.label}</strong>
-            </button>
-          ))}
-        </div>
 
         <div className="input-row">
           <textarea
