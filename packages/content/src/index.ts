@@ -7,6 +7,9 @@ import type {
   SongRecommendation
 } from "@pharmacist-tree-hollow/shared";
 
+export { reflectionQuestions } from "./reflectionQuestions";
+export { healingQuotes } from "./healingQuotes";
+
 export const microTools: MicroTool[] = [
   {
     id: "customer-boundary",
@@ -85,46 +88,102 @@ export const healingCards: HealingCard[] = [
 
 export const astroCards: AstroReflectionCard[] = [
   {
-    id: "saturn-boundary",
+    id: "astro-saturn",
     name: "土星的邊界",
     scenarioTags: ["shortage_pressure", "inventory_control", "team_doubt"],
-    lines: ["你不用替所有混亂負責。", "先把能確認的確認好，", "剩下的，交回流程和團隊。"]
+    lines: ["你不用替所有混亂負責。", "先把能確認的確認好，", "剩下的，交回流程和團隊。"],
+    healingTip: "列出今晚確認過的3件事，提醒自己有把關。"
   },
   {
-    id: "moon-water",
+    id: "astro-moon",
     name: "月亮的水面",
     scenarioTags: ["customer_conflict", "unseen_effort", "after_shift"],
-    lines: ["今天有些委屈不必馬上整理好。", "先讓它安靜地浮著，", "你不需要現在就變得很堅強。"]
+    lines: ["今天有些委屈不必馬上整理好。", "先讓它安靜地浮著，", "你不需要現在就變得很堅強。"],
+    healingTip: "夜班後先不回高責任訊息，睡醒再處理。"
   },
   {
-    id: "mercury-message",
+    id: "astro-mercury",
     name: "水星的訊息",
     scenarioTags: ["customer_conflict", "team_doubt"],
-    lines: ["你已經說明得很努力。", "有些誤會需要時間消化，", "不是每一句話都要立刻修好。"]
+    lines: ["你已經說明得很努力。", "有些誤會需要時間消化，", "不是每一句話都要立刻修好。"],
+    healingTip: "把難回的話先寫草稿，交班後再發。"
   },
   {
-    id: "mars-pause",
+    id: "astro-mars",
     name: "火星的停頓",
     scenarioTags: ["customer_conflict", "prescription_overload"],
-    lines: ["怒氣來的時候，先不要急著處理它。", "慢一拍，", "你就多一點空間保護自己。"]
+    lines: ["怒氣來的時候，先不要急著處理它。", "慢一拍，", "你就多一點空間保護自己。"],
+    healingTip: "先喝水離開櫃台30秒，再回到流程。"
   },
   {
-    id: "jupiter-light",
+    id: "astro-jupiter",
     name: "木星的小燈",
     scenarioTags: ["pgy_pressure", "not_professional"],
-    lines: ["你不是一開始就要什麼都會。", "今天學到的一點點，", "也會慢慢變成你的底氣。"]
+    lines: ["你不是一開始就要什麼都會。", "今天學到的一點點，", "也會慢慢變成你的底氣。"],
+    healingTip: "下班前記一個今天學到的藥名或流程。"
   },
   {
-    id: "venus-care",
+    id: "astro-venus",
     name: "金星的照顧",
     scenarioTags: ["night_shift", "after_shift", "unseen_effort"],
-    lines: ["照顧別人很久的人，", "也需要被溫柔地放回自己身上。", "今晚先不要再責備自己。"]
+    lines: ["照顧別人很久的人，", "也需要被溫柔地放回自己身上。", "今晚先不要再責備自己。"],
+    healingTip: "夜班後先吃點東西，再檢討今天。"
   },
   {
-    id: "rahu-fog",
+    id: "astro-rahu",
     name: "羅喉的霧",
     scenarioTags: ["shortage_pressure", "prescription_overload", "interaction_worry"],
-    lines: ["霧很厚的時候，先不要判斷整條路。", "看清楚腳下這一步，", "就已經夠了。"]
+    lines: ["霧很厚的時候，先不要判斷整條路。", "看清楚腳下這一步，", "就已經夠了。"],
+    healingTip: "霧很厚時只查下一張處方，不想全部。"
+  },
+  {
+    id: "astro-sun",
+    name: "太陽",
+    scenarioTags: ["pgy_pressure", "not_professional", "after_shift"],
+    lines: ["有些光不是大聲發亮。", "它只是讓你在忙亂裡，還記得一個清楚的方向。", "今天你也替安全留了一盞燈。"],
+    healingTip: "交班前寫下今天照亮過的一個病人安全點。"
+  },
+  {
+    id: "astro-neptune",
+    name: "海王",
+    scenarioTags: ["night_shift", "after_shift", "interaction_worry"],
+    lines: ["夜裡的念頭像潮水，會把小事推得很遠。", "先不用追到海的盡頭。", "讓它退一點，你再回來看。"],
+    healingTip: "夜班後把反覆擔心寫成一句，再關燈。"
+  },
+  {
+    id: "astro-uranus",
+    name: "天王",
+    scenarioTags: ["team_doubt", "prescription_overload", "pgy_pressure"],
+    lines: ["被打斷的節奏，不代表你失去能力。", "有時候清醒，是從承認混亂開始。", "你可以重新排列下一步。"],
+    healingTip: "流程被打斷時，先重排下一個可確認步驟。"
+  },
+  {
+    id: "astro-pluto",
+    name: "冥王",
+    scenarioTags: ["leaving_thought", "team_doubt", "interaction_worry"],
+    lines: ["有些重，不是今晚就能變輕。", "但你願意看見它，已經不是被它拖著走。", "深處也會慢慢換氣。"],
+    healingTip: "把最重的擔心交給一位可信任同事確認。"
+  },
+  {
+    id: "astro-beidou",
+    name: "北斗",
+    scenarioTags: ["pgy_pressure", "not_professional", "night_shift"],
+    lines: ["迷路時，不必一次看完整片天空。", "找一個穩定的點就好。", "它會陪你把班走完。"],
+    healingTip: "輪班前先標出今天唯一必守的安全準則。"
+  },
+  {
+    id: "astro-weaver",
+    name: "織女",
+    scenarioTags: ["unseen_effort", "inventory_control", "after_shift"],
+    lines: ["有些專業像細線，安靜地穿過一天。", "沒有人看見每一針，", "但缺口真的被你補上了。"],
+    healingTip: "把今天默默補上的一格庫存記下來。"
+  },
+  {
+    id: "astro-meteor",
+    name: "流星",
+    scenarioTags: ["unseen_effort", "night_shift", "after_shift"],
+    lines: ["有些努力只亮一下，然後就被下一件事蓋過。", "可是它亮過。", "你看見了，就不算完全消失。"],
+    healingTip: "記下今天沒人說謝謝的一個小細節。"
   }
 ];
 

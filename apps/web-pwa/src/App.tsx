@@ -1,29 +1,38 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { ConversationResponse, FollowupAction, MoodTag } from "@pharmacist-tree-hollow/shared";
+import type {
+  AstroReflectionCard,
+  ConversationResponse,
+  FollowupAction,
+  HealingQuote,
+  MicroTool,
+  MoodTag,
+  ReflectionQuestion,
+  SongRecommendation,
+  StationType
+} from "@pharmacist-tree-hollow/shared";
+import {
+  astroCards,
+  healingQuotes,
+  microTools,
+  reflectionQuestions,
+  songs
+} from "@pharmacist-tree-hollow/content";
 import { WatercolorScene } from "./components/WatercolorScene";
 import type { SceneState } from "./components/WatercolorScene";
 import { ResponseCard } from "./components/ResponseCard";
 import { buildResponse } from "./lib/respond";
 import "./styles.css";
 
-const moodOptions: Array<{ mood: MoodTag; label: string }> = [
-  { mood: "累", label: "累了" },
-  { mood: "委屈", label: "委屈" },
-  { mood: "煩", label: "煩" },
-  { mood: "空", label: "空空的" },
-  { mood: "緊繃", label: "緊繃" },
-  { mood: "想哭", label: "想哭" },
-  { mood: "還可以", label: "還可以" }
-];
 const savedKey = "pharmacist-tree-hollow:saved";
-const promptHints: Record<MoodTag, string> = {
-  累: "寫給今晚值班後的自己：哪一幕最耗電？",
-  委屈: "把那句卡在心裡的話投進來。",
-  煩: "今晚最想從值班櫃檯帶走哪一件煩事？",
-  空: "如果現在心裡很空，留一張白紙也可以。",
-  緊繃: "哪個細節讓你下班後還不敢放鬆？",
-  想哭: "差點哭出來的那一刻，先放在這裡。",
-  還可以: "今天還算撐住的一小段，也可以寫下來。"
+
+const ventPlaceholder = "今晚想說什麼？把卡在心裡的話投進來。一句也好。";
+
+const stationCopy: Record<Exclude<StationType, "vent" | "saved">, { object: string; verb: string; cycleLabel: string }> = {
+  reflection: { object: "枝頭的貓頭鷹", verb: "想一下", cycleLabel: "換一題" },
+  song: { object: "小屋的收音機", verb: "聽一首", cycleLabel: "換一首" },
+  astro: { object: "天上的星光", verb: "抽一張", cycleLabel: "換一張" },
+  breathing: { object: "搖晃的花草", verb: "喘口氣", cycleLabel: "換一個" },
+  quote: { object: "草地上的紙條", verb: "讀一句", cycleLabel: "換一句" }
 };
 
 interface SavedItem {
@@ -41,8 +50,45 @@ function loadSaved(): SavedItem[] {
   }
 }
 
+function pickRandom<T>(arr: readonly T[]): T | null {
+  if (!arr || arr.length === 0) return null;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+type StationContent =
+  | { type: "reflection"; data: ReflectionQuestion }
+  | { type: "song"; data: SongRecommendation }
+  | { type: "astro"; data: AstroReflectionCard }
+  | { type: "breathing"; data: MicroTool }
+  | { type: "quote"; data: HealingQuote }
+  | null;
+
+function pickStationContent(station: StationType): StationContent {
+  if (station === "reflection") {
+    const data = pickRandom(reflectionQuestions);
+    return data ? { type: "reflection", data } : null;
+  }
+  if (station === "song") {
+    const data = pickRandom(songs);
+    return data ? { type: "song", data } : null;
+  }
+  if (station === "astro") {
+    const data = pickRandom(astroCards);
+    return data ? { type: "astro", data } : null;
+  }
+  if (station === "breathing") {
+    const data = pickRandom(microTools);
+    return data ? { type: "breathing", data } : null;
+  }
+  if (station === "quote") {
+    const data = pickRandom(healingQuotes);
+    return data ? { type: "quote", data } : null;
+  }
+  return null;
+}
+
 export default function App() {
-  const [mood, setMood] = useState<MoodTag>("累");
+  const mood: MoodTag = "累"; // 內部 default，不再由 NPC click 決定
   const [input, setInput] = useState("");
   const [response, setResponse] = useState<ConversationResponse | null>(null);
   const [activePanel, setActivePanel] = useState<FollowupAction | null>(null);
@@ -51,10 +97,12 @@ export default function App() {
   const [isDepositing, setIsDepositing] = useState(false);
   const [isResponding, setIsResponding] = useState(false);
   const [microActive, setMicroActive] = useState(false);
-  const [composerOpen, setComposerOpen] = useState(false);
+  const [activeStation, setActiveStation] = useState<StationType | null>(null);
+  const [stationContent, setStationContent] = useState<StationContent>(null);
   const timersRef = useRef<number[]>([]);
   const responseRegionRef = useRef<HTMLDivElement | null>(null);
   const composerRef = useRef<HTMLElement | null>(null);
+  const stationRef = useRef<HTMLElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
@@ -80,21 +128,21 @@ export default function App() {
   }, [response]);
 
   useEffect(() => {
-    if (!composerOpen || response) return;
+    if (!activeStation || response) return;
 
     const frame = window.requestAnimationFrame(() => {
-      composerRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-      textareaRef.current?.focus({ preventScroll: true });
+      if (activeStation === "vent") {
+        composerRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+        textareaRef.current?.focus({ preventScroll: true });
+      } else {
+        stationRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
     });
 
     return () => {
       window.cancelAnimationFrame(frame);
     };
-  }, [composerOpen, response]);
-
-  const currentHint = useMemo(() => {
-    return promptHints[mood];
-  }, [mood]);
+  }, [activeStation, response]);
 
   const crisis = response?.riskLevel === "crisis";
   const sceneState: SceneState = isDepositing
@@ -106,6 +154,8 @@ export default function App() {
         : input.trim().length > 0
           ? "writing"
           : "idle";
+
+  const ventOpen = activeStation === "vent";
 
   function submit() {
     const trimmed = input.trim();
@@ -142,9 +192,22 @@ export default function App() {
     timersRef.current.push(depositingTimer);
   }
 
-  function selectSceneMood(nextMood: MoodTag) {
-    setMood(nextMood);
-    setComposerOpen(true);
+  function selectStation(station: StationType) {
+    setActiveStation(station);
+    setStationContent(pickStationContent(station));
+  }
+
+  function cycleStationContent() {
+    if (!activeStation || activeStation === "vent" || activeStation === "saved") return;
+    setStationContent(pickStationContent(activeStation));
+  }
+
+  function closeStation() {
+    setActiveStation(null);
+    setStationContent(null);
+    if (ventOpen) {
+      setInput("");
+    }
   }
 
   function saveCurrent() {
@@ -177,11 +240,15 @@ export default function App() {
     setResponse(null);
     setActivePanel(null);
     setMicroActive(false);
-    setComposerOpen(false);
+    setActiveStation(null);
+    setStationContent(null);
     setInput("");
   }
 
-  const showSceneEntry = !composerOpen && !response && !isThinking && !isDepositing && !isResponding;
+  const showSceneEntry = !activeStation && !response && !isThinking && !isDepositing && !isResponding;
+
+  const ventActive = ventOpen && !response;
+  const otherStationActive = Boolean(activeStation && activeStation !== "vent");
 
   return (
     <main className={`app-shell ${showSceneEntry ? "app-shell-entry" : ""} ${response ? "app-shell-has-response" : ""} ${crisis ? "crisis-mode" : ""}`}>
@@ -193,33 +260,45 @@ export default function App() {
         savedCount={saved.length}
         crisis={Boolean(crisis)}
         showHotspots={showSceneEntry}
-        onMoodSelect={selectSceneMood}
+        onStationSelect={selectStation}
       />
 
-      {composerOpen && !response && (
-      <section className="composer" aria-label="樹洞輸入" ref={composerRef}>
-        <div className="composer-picked">
-          <span>你點了</span>
-          <strong>{moodOptions.find((item) => item.mood === mood)?.label ?? mood}</strong>
-          <button type="button" onClick={() => setComposerOpen(false)}>
-            回到底圖
-          </button>
-        </div>
+      {ventActive && (
+        <section className="composer" aria-label="樹洞輸入" ref={composerRef}>
+          <div className="composer-picked">
+            <span>你點了</span>
+            <strong>樹洞</strong>
+            <button type="button" onClick={closeStation}>
+              回到底圖
+            </button>
+          </div>
 
-        <div className="input-row">
-          <textarea
-            ref={textareaRef}
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-            placeholder={currentHint}
-            rows={3}
-            aria-label="寫一張投進深夜櫃檯的紙條"
-          />
-          <button type="button" className="send-button" onClick={submit} aria-label="送進樹洞">
-            投
-          </button>
-        </div>
-      </section>
+          <div className="input-row">
+            <textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              placeholder={ventPlaceholder}
+              rows={3}
+              aria-label="寫一張投進深夜櫃檯的紙條"
+            />
+            <button type="button" className="send-button" onClick={submit} aria-label="送進樹洞">
+              投
+            </button>
+          </div>
+        </section>
+      )}
+
+      {otherStationActive && activeStation && activeStation !== "vent" && (
+        <StationView
+          station={activeStation}
+          content={stationContent}
+          saved={saved}
+          onCycle={cycleStationContent}
+          onClose={closeStation}
+          onClearSaved={clearSaved}
+          stationRef={stationRef}
+        />
       )}
 
       {response ? (
@@ -242,29 +321,177 @@ export default function App() {
             <i />
           </div>
         </section>
-      ) : composerOpen ? (
-        <section className="quiet-note quiet-note-dynamic" key={mood}>
+      ) : ventActive ? (
+        <section className="quiet-note quiet-note-dynamic">
           <p>不用寫完整。</p>
           <span>一句話也可以，樹洞會先收著。</span>
         </section>
       ) : null}
+    </main>
+  );
+}
 
-      {saved.length > 0 && (
-        <section className="saved-list">
-          <div className="saved-heading">
-            <h2>收下的句子</h2>
-            <button type="button" onClick={clearSaved}>
-              清除
+interface StationViewProps {
+  station: Exclude<StationType, "vent">;
+  content: StationContent;
+  saved: SavedItem[];
+  onCycle: () => void;
+  onClose: () => void;
+  onClearSaved: () => void;
+  stationRef: React.RefObject<HTMLElement | null>;
+}
+
+function StationView({ station, content, saved, onCycle, onClose, onClearSaved, stationRef }: StationViewProps) {
+  return (
+    <section className={`station-panel station-${station}`} aria-label="場景小站" ref={stationRef}>
+      {station === "saved" ? (
+        <>
+          <div className="station-header">
+            <div>
+              <span>你點了</span>
+              <strong>小窩</strong>
+            </div>
+            <button type="button" className="station-close" onClick={onClose}>
+              回到底圖
             </button>
           </div>
-          {saved.map((item) => (
-            <article key={item.id}>
-              <span>{item.mood}</span>
-              <p>{item.text}</p>
-            </article>
-          ))}
-        </section>
+          <div className="station-body">
+            {saved.length === 0 ? (
+              <p className="station-empty">小窩還是空的。從樹洞收下幾張紙條再回來看看吧。</p>
+            ) : (
+              <>
+                <div className="station-saved-meta">
+                  <span>共 {saved.length} 張收下的紙條</span>
+                  <button type="button" className="station-saved-clear" onClick={onClearSaved}>
+                    清除
+                  </button>
+                </div>
+                <div className="station-saved-list">
+                  {saved.map((item) => (
+                    <article key={item.id}>
+                      <span>{item.mood}</span>
+                      <p>{item.text}</p>
+                    </article>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="station-header">
+            <div>
+              <span>你點了</span>
+              <strong>{stationCopy[station].object}</strong>
+            </div>
+            <button type="button" className="station-close" onClick={onClose}>
+              回到底圖
+            </button>
+          </div>
+          <div className="station-body">
+            {content?.type === "reflection" && (
+              <article className="station-reflection-card">
+                <span className="station-tag">想一下</span>
+                <p>{content.data.text}</p>
+                <small>看了就走也行。不用回答。</small>
+              </article>
+            )}
+
+            {content?.type === "song" && (
+              <article className="station-song-card">
+                <span className="station-tag">今晚櫃檯放這首</span>
+                <h3>
+                  {content.data.title} · {content.data.artist}
+                </h3>
+                <p>{content.data.reason}</p>
+              </article>
+            )}
+
+            {content?.type === "astro" && (
+              <article className="station-astro-card">
+                <span className="station-tag">抽到的是</span>
+                <h3>{content.data.name}</h3>
+                {content.data.lines.map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
+                {content.data.healingTip && (
+                  <div className="station-healing-tip">
+                    <span>今晚療癒</span>
+                    <p>{content.data.healingTip}</p>
+                  </div>
+                )}
+                <small>娛樂與反思用，不是預測或專業建議。</small>
+              </article>
+            )}
+
+            {content?.type === "breathing" && (
+              <BreathingMicro tool={content.data} />
+            )}
+
+            {content?.type === "quote" && (
+              <article className="station-quote-card">
+                <span className="station-tag">今晚櫃檯抄一句</span>
+                <blockquote>{content.data.text}</blockquote>
+                {content.data.attribution && <small>— {content.data.attribution}</small>}
+              </article>
+            )}
+
+            {!content && <p className="station-empty">這裡還在準備中。</p>}
+          </div>
+          {content && (
+            <div className="station-actions">
+              <button type="button" onClick={onCycle}>
+                {stationCopy[station].cycleLabel}
+              </button>
+            </div>
+          )}
+        </>
       )}
-    </main>
+    </section>
+  );
+}
+
+function BreathingMicro({ tool }: { tool: MicroTool }) {
+  const [step, setStep] = useState(0);
+  const [done, setDone] = useState(false);
+  const stepCount = Math.max(tool.steps.length, 1);
+
+  useEffect(() => {
+    setStep(0);
+    setDone(false);
+  }, [tool.id]);
+
+  function advance() {
+    if (step >= tool.steps.length - 1) {
+      setDone(true);
+      return;
+    }
+    setStep((current) => current + 1);
+  }
+
+  return (
+    <article className="station-breathing-card">
+      <span className="station-tag">櫃檯陪你坐 {tool.durationSeconds} 秒</span>
+      <h3>{tool.title}</h3>
+      <div className="station-breathing-progress" aria-hidden="true">
+        <i style={{ width: `${done ? 100 : ((step + 1) / stepCount) * 100}%` }} />
+      </div>
+      {done ? (
+        <p className="station-breathing-complete">{tool.completionText}</p>
+      ) : (
+        <p className="station-breathing-step">{tool.steps[step]}</p>
+      )}
+      <div className="station-breathing-actions">
+        {!done && (
+          <button type="button" onClick={() => setDone(true)}>
+            先跳過
+          </button>
+        )}
+        <button type="button" onClick={done ? undefined : advance} disabled={done}>
+          {done ? "坐一下就好" : step >= tool.steps.length - 1 ? "收尾" : "下一句"}
+        </button>
+      </div>
+    </article>
   );
 }

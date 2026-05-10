@@ -13,7 +13,8 @@ describe("content pools", () => {
 
   it("contains the agreed MVP micro tools and astro cards", () => {
     expect(microTools).toHaveLength(5);
-    expect(astroCards).toHaveLength(7);
+    expect(astroCards).toHaveLength(14);
+    expect(astroCards.every((card) => typeof card.healingTip === "string" && card.healingTip.length > 0)).toBe(true);
     expect(healingCards.length).toBeGreaterThanOrEqual(5);
   });
 

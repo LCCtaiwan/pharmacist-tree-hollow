@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { FollowupAction, MoodTag } from "@pharmacist-tree-hollow/shared";
+import type { FollowupAction, MoodTag, StationType } from "@pharmacist-tree-hollow/shared";
 
 export type SceneState = "idle" | "writing" | "thinking" | "depositing" | "responding";
 
@@ -11,17 +11,22 @@ export interface WatercolorSceneProps {
   savedCount: number;
   crisis: boolean;
   showHotspots?: boolean;
-  onMoodSelect?: (mood: MoodTag) => void;
+  onStationSelect?: (station: StationType) => void;
 }
 
-const sceneHotspots: Array<{ mood: MoodTag; label: string; object: string; className: string }> = [
-  { mood: "累", label: "累了", object: "樹洞", className: "scene-hotspot-hollow" },
-  { mood: "委屈", label: "委屈", object: "小窩", className: "scene-hotspot-nest" },
-  { mood: "煩", label: "煩", object: "枝頭", className: "scene-hotspot-owl" },
-  { mood: "空", label: "空空的", object: "星光", className: "scene-hotspot-stars" },
-  { mood: "緊繃", label: "緊繃", object: "花草", className: "scene-hotspot-flowers" },
-  { mood: "想哭", label: "想哭", object: "小屋", className: "scene-hotspot-house" },
-  { mood: "還可以", label: "還可以", object: "草地", className: "scene-hotspot-meadow" }
+const sceneHotspots: Array<{
+  station: StationType;
+  label: string;
+  object: string;
+  className: string;
+}> = [
+  { station: "vent", label: "說一說", object: "樹洞", className: "scene-hotspot-hollow" },
+  { station: "saved", label: "看回顧", object: "小窩", className: "scene-hotspot-nest" },
+  { station: "reflection", label: "想一下", object: "枝頭", className: "scene-hotspot-owl" },
+  { station: "astro", label: "抽一張", object: "星光", className: "scene-hotspot-stars" },
+  { station: "breathing", label: "喘口氣", object: "花草", className: "scene-hotspot-flowers" },
+  { station: "song", label: "聽一首", object: "小屋", className: "scene-hotspot-house" },
+  { station: "quote", label: "讀一句", object: "草地", className: "scene-hotspot-meadow" }
 ];
 
 export function WatercolorScene({
@@ -32,7 +37,7 @@ export function WatercolorScene({
   savedCount,
   crisis,
   showHotspots = false,
-  onMoodSelect
+  onStationSelect
 }: WatercolorSceneProps) {
   const imageSrc = crisis ? "/art/scene-crisis.png" : "/art/scene-main.png";
   const [imageFailed, setImageFailed] = useState(false);
@@ -71,15 +76,15 @@ export function WatercolorScene({
         <img className="scene-bg" src={imageSrc} alt="" aria-hidden="true" onError={() => setImageFailed(true)} />
       )}
 
-      {showHotspots && onMoodSelect && (
-        <div className="scene-entry-layer" aria-label="先點一個物件">
+      {showHotspots && onStationSelect && (
+        <div className="scene-entry-layer" aria-label="點一個物件，做不同的事">
           <p>先點一個物件</p>
           {sceneHotspots.map((hotspot) => (
             <button
               type="button"
-              key={hotspot.mood}
+              key={hotspot.station}
               className={`scene-hotspot ${hotspot.className}`}
-              onClick={() => onMoodSelect(hotspot.mood)}
+              onClick={() => onStationSelect(hotspot.station)}
               aria-label={`點${hotspot.object}：${hotspot.label}`}
             >
               <span>{hotspot.object}</span>
