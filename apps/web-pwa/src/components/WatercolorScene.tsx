@@ -62,6 +62,18 @@ export function WatercolorScene({
         <img className="scene-bg" src={imageSrc} alt="" aria-hidden="true" onError={() => setImageFailed(true)} />
       )}
 
+      {!crisis && (
+        <img
+          className="scene-grass-note"
+          src="/art/grass-quote.png"
+          alt=""
+          aria-hidden="true"
+          onError={(event) => {
+            event.currentTarget.style.display = "none";
+          }}
+        />
+      )}
+
       {showHotspots && onStationSelect && (
         <div className="scene-entry-layer" aria-label="點一個物件，做不同的事">
           <p>先點一個物件</p>

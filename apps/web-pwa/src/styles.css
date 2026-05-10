@@ -311,7 +311,7 @@ button {
 
 .scene-hotspot-meadow {
   left: 65%;
-  top: 76%;
+  top: 78%;
 }
 
 .scene-fallback {
@@ -334,9 +334,28 @@ button {
 .scene-saved-shelf,
 .scene-window-music,
 .scene-tree-card,
-.scene-stars {
+.scene-stars,
+.scene-grass-note {
   position: absolute;
   pointer-events: none;
+}
+
+.scene-grass-note {
+  left: 65%;
+  top: 84%;
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  filter: saturate(0.95);
+}
+
+@media (max-width: 380px) {
+  .scene-grass-note {
+    width: 86px;
+    height: 86px;
+  }
 }
 
 .scene-mood-pet {
