@@ -31,6 +31,7 @@
 
 ## Completed Work
 
+- 2026-05-10: Fixed Web PWA interaction flow after deployed UI feedback: separated watercolor scene from the input controls, made normal followup choices visible immediately after a response, changed followups into full-width action rows with explanatory text, and auto-scrolls to response/focus panels.
 - Created project-local `AGENTS.md`。
 - Created `docs/SDD.md`。
 - Created `docs/product-plan.md`。
@@ -80,6 +81,8 @@ M1 Web App MVP implemented locally, but UI 美術方向被使用者退回。即�
 6. 監督者人工檢查 375px 行動裝置視覺。
 
 ## Verification Status
+
+pass: 2026-05-10 UI flow fix passed `npm test`, `npm run build`, and Playwright checks at 1280x720 and 390x844. Verified first screen no longer overlays controls on the background image, followup options are visible immediately, and clicking `紙籤盒` scrolls the panel into view without manual scrolling.
 
 pass: AGENTS, SDD, concept options, MVP spec, game concept, product plan and worktree skeleton were inspected for product scope, safety boundaries, MVP order and internal consistency.
 

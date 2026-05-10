@@ -79,11 +79,13 @@ button {
   position: relative;
   width: 100%;
   max-width: 480px;
-  height: 100dvh;
-  min-height: 680px;
+  min-height: 100dvh;
   margin: 0 auto;
-  overflow: hidden;
+  overflow-x: hidden;
+  padding-bottom: max(14px, env(safe-area-inset-bottom));
   color: var(--ink);
+  display: flex;
+  flex-direction: column;
 }
 
 .app-header {
@@ -132,12 +134,20 @@ button {
 }
 
 .scene-watercolor {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  height: clamp(420px, 62dvh, 620px);
+  min-height: 420px;
+  flex: 0 0 auto;
   overflow: hidden;
   background:
     radial-gradient(circle at 50% 12%, rgba(240, 198, 109, 0.25), transparent 17rem),
     var(--paper);
+  border-bottom: 1px solid rgba(58, 44, 30, 0.1);
+}
+
+.app-shell-has-response .scene-watercolor {
+  height: clamp(160px, 24dvh, 240px);
+  min-height: 160px;
 }
 
 .scene-watercolor-breathing {
@@ -423,30 +433,35 @@ button {
 .response-card,
 .quiet-note,
 .saved-list {
-  border: 1px solid var(--line);
+  border: 1px solid rgba(201, 122, 74, 0.22);
   border-radius: 12px;
-  background: rgba(245, 234, 208, 0.88);
-  box-shadow: 0 12px 34px rgba(163, 116, 82, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.32);
+  background: rgba(245, 234, 208, 0.96);
+  box-shadow: 0 16px 38px rgba(106, 74, 44, 0.18), 0 4px 12px rgba(106, 74, 44, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .composer,
 .app-shell-has-response .composer {
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: max(12px, env(safe-area-inset-bottom));
+  position: relative;
   z-index: 5;
-  padding: 10px;
+  margin: 10px 12px 0;
+  padding: 9px;
 }
 
 .mood-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
+  flex-wrap: nowrap;
+  gap: 8px;
   max-height: none;
-  padding-bottom: 10px;
-  overflow: visible;
+  margin: 0 -2px;
+  padding: 0 2px 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
   transition: opacity 260ms ease, max-height 320ms ease, padding 320ms ease;
+}
+
+.mood-row::-webkit-scrollbar {
+  display: none;
 }
 
 .mood-row button,
@@ -461,21 +476,22 @@ button {
 }
 
 .mood-row button {
-  flex: 1 0 calc(25% - 7px);
+  flex: 0 0 74px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 4px;
   min-width: 0;
-  min-height: 56px;
-  padding: 6px 4px;
+  min-height: 42px;
+  padding: 5px 8px;
+  scroll-snap-align: start;
   text-align: center;
 }
 
 .mood-row button img {
-  width: 26px;
-  height: 26px;
+  width: 21px;
+  height: 21px;
   object-fit: contain;
 }
 
@@ -503,11 +519,11 @@ textarea {
   flex: 1 1 auto;
   width: auto;
   min-width: 0;
-  min-height: 96px;
+  min-height: 72px;
   resize: vertical;
   border: 1px solid rgba(58, 44, 30, 0.16);
   border-radius: 10px;
-  padding: 14px;
+  padding: 12px;
   color: var(--ink);
   background: rgba(255, 250, 236, 0.68);
   line-height: 1.7;
@@ -532,14 +548,16 @@ textarea::placeholder {
 }
 
 .quiet-note {
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: calc(max(12px, env(safe-area-inset-bottom)) + var(--composer-clearance));
+  position: relative;
   z-index: 4;
+  margin: 0 12px;
   padding: 13px 14px;
   color: var(--ink-soft);
   line-height: 1.7;
+}
+
+.quiet-note-dynamic {
+  display: none;
 }
 
 .quiet-note p {
@@ -586,19 +604,16 @@ textarea::placeholder {
 }
 
 .response-card {
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: max(12px, env(safe-area-inset-bottom));
+  position: relative;
   z-index: 6;
-  max-height: min(62dvh, 540px);
-  overflow-y: auto;
+  max-height: none;
+  overflow: visible;
   overscroll-behavior: contain;
   padding: 14px;
 }
 
 .response-card-aftercare {
-  max-height: min(72dvh, 610px);
+  max-height: none;
 }
 
 .response-card-crisis {
@@ -616,6 +631,11 @@ textarea::placeholder {
 
 .app-shell-has-response .composer {
   display: none;
+}
+
+.response-wrap {
+  margin: 12px;
+  scroll-margin-top: 12px;
 }
 
 .app-shell-has-response textarea {
@@ -836,10 +856,10 @@ textarea::placeholder {
 
 .aftercare {
   margin-top: 14px;
-  padding: 11px 12px;
+  padding: 14px;
   border: 1px solid rgba(58, 44, 30, 0.1);
   border-radius: 10px;
-  background: rgba(239, 224, 184, 0.44);
+  background: rgba(239, 224, 184, 0.78);
   animation: riseIn 360ms ease-out both;
 }
 
@@ -852,17 +872,20 @@ textarea::placeholder {
   display: block;
   margin-bottom: 9px;
   color: var(--ink-soft);
-  font-size: 0.82rem;
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
 .followups {
-  display: flex;
+  display: grid;
   gap: 8px;
-  flex-wrap: wrap;
+  grid-template-columns: 1fr;
 }
 
 .followups button {
-  padding: 0 11px;
+  width: 100%;
+  padding: 9px 11px;
+  text-align: left;
 }
 
 .followups button.saved {
@@ -872,16 +895,51 @@ textarea::placeholder {
 
 .npc-row {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 }
 
 .npc-button {
   display: grid;
-  grid-template-columns: 24px 1fr;
+  grid-template-columns: 28px 1fr;
   align-items: center;
   gap: 8px;
-  min-height: 46px;
+  min-height: 58px;
+  padding: 10px 14px;
+  border: 1px solid rgba(201, 122, 74, 0.28);
+  border-radius: 12px;
+  background: rgba(255, 250, 236, 0.92);
+  box-shadow: 0 4px 12px rgba(163, 116, 82, 0.1);
   text-align: left;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.npc-button.active {
+  border-color: var(--terracotta);
+  background: linear-gradient(180deg, rgba(240, 198, 109, 0.6), rgba(229, 184, 161, 0.5));
+  box-shadow: 0 6px 18px rgba(201, 122, 74, 0.22);
+}
+
+.npc-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(163, 116, 82, 0.18);
+}
+
+.npc-button span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.npc-button strong {
+  font-size: 0.98rem;
+  line-height: 1.25;
+}
+
+.npc-button small {
+  color: rgba(106, 90, 68, 0.78);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  white-space: normal;
 }
 
 .npc-button i {
@@ -908,6 +966,11 @@ textarea::placeholder {
 
 .npc-light i {
   background: var(--highlight);
+}
+
+.npc-save i {
+  border: 2px solid rgba(110, 138, 85, 0.36);
+  background: rgba(155, 184, 116, 0.54);
 }
 
 .closing-line {
@@ -1282,7 +1345,10 @@ textarea::placeholder {
     gap: 6px;
   }
 
-  .mood-row button { flex-direction: column; min-height: 52px; }
+  .mood-row button {
+    flex-basis: 70px;
+    min-height: 42px;
+  }
 
   .mood-row button strong {
     font-size: 0.8rem;

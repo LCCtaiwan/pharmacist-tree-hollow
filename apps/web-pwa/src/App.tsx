@@ -52,6 +52,7 @@ export default function App() {
   const [isResponding, setIsResponding] = useState(false);
   const [microActive, setMicroActive] = useState(false);
   const timersRef = useRef<number[]>([]);
+  const responseRegionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setSaved(loadSaved());
@@ -62,6 +63,18 @@ export default function App() {
       timersRef.current.forEach((timer) => window.clearTimeout(timer));
     };
   }, []);
+
+  useEffect(() => {
+    if (!response) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      responseRegionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
+  }, [response]);
 
   const currentHint = useMemo(() => {
     return promptHints[mood];
@@ -195,14 +208,16 @@ export default function App() {
       </section>
 
       {response ? (
-        <ResponseCard
-          response={response}
-          activePanel={activePanel}
-          onPanel={(panel) => setActivePanel((current) => (current === panel ? null : panel))}
-          onSave={saveCurrent}
-          onNewNote={resetConversation}
-          onMicroChange={setMicroActive}
-        />
+        <div className="response-wrap" ref={responseRegionRef}>
+          <ResponseCard
+            response={response}
+            activePanel={activePanel}
+            onPanel={(panel) => setActivePanel((current) => (current === panel ? null : panel))}
+            onSave={saveCurrent}
+            onNewNote={resetConversation}
+            onMicroChange={setMicroActive}
+          />
+        </div>
       ) : isThinking ? (
         <section className="quiet-note quiet-note-thinking" aria-live="polite">
           <p>櫃檯後面的人正在讀你的紙條。</p>
