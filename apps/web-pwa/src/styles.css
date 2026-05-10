@@ -224,6 +224,9 @@ button {
 }
 
 .scene-hotspot span {
+  /* Option A: 完全隱藏物件名（樹洞/枝頭/...）。要切回 Option B 把 display: none 移除，
+     並把 opacity 改成 0.5、font-size 改 0.6rem 即可。*/
+  display: none;
   padding: 1px 7px;
   border: none;
   border-radius: 999px;
