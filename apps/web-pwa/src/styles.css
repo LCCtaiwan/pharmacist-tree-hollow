@@ -261,19 +261,20 @@ button {
   font-size: 0.86rem;
   letter-spacing: 0.04em;
   box-shadow: none;
-  filter: none;
-  animation: hotspotBreath 4.2s ease-in-out infinite;
+  animation: hotspotBreath 3.6s ease-in-out infinite;
   transition: transform 200ms ease;
 }
 
 @keyframes hotspotBreath {
   0%, 100% {
-    opacity: 0.82;
-    transform: scale(1);
+    opacity: 0.78;
+    transform: scale(0.94) translateY(0);
+    filter: drop-shadow(0 0 0px rgba(201, 122, 74, 0));
   }
   50% {
     opacity: 1;
-    transform: scale(1.05);
+    transform: scale(1.14) translateY(-4px);
+    filter: drop-shadow(0 4px 16px rgba(201, 122, 74, 0.55));
   }
 }
 
