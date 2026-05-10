@@ -1,0 +1,12 @@
+{
+  "name": "藥師樹洞",
+  "short_name": "藥師樹洞",
+  "description": "給藥師的水彩樹洞，安靜地把今天放下。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5ead0",
+  "theme_color": "#c97a4a",
+  "icons": [
+    { "src": "/art/letter-paper.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
