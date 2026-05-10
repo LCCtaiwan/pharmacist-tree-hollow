@@ -431,7 +431,7 @@ function StationView({ station, content, saved, onCycle, onClose, onClearSaved, 
 
             {content?.type === "quote" && (
               <article className="station-quote-card">
-                <span className="station-tag">今晚櫃檯抄一句</span>
+                <span className="station-tag">紙條上寫著</span>
                 <blockquote>{content.data.text}</blockquote>
                 {content.data.attribution && <small>— {content.data.attribution}</small>}
               </article>
