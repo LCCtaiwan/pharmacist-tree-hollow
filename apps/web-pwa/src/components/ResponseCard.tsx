@@ -86,7 +86,8 @@ export function ResponseCard({
         <i aria-hidden="true" />
       </div>
 
-      <div className="chat-message">
+      <div className="chat-message" aria-label="樹洞回你">
+        <span className="chat-message-tag">{isCrisis ? "先聽見你" : "樹洞回你"}</span>
         {response.message.map((line) => (
           <p key={line}>{line}</p>
         ))}
@@ -94,11 +95,11 @@ export function ResponseCard({
 
       <div className="support-strip" aria-label="櫃檯回信">
         <div className="praise-ticket">
-          <span>{isCrisis ? "先不要一個人" : "今晚替你記一筆"}</span>
+          <span>{isCrisis ? "先不要一個人" : "誇誇你"}</span>
           <p>{isCrisis ? response.praise : currentPraise}</p>
           {!isCrisis && praiseNotes.length > 1 && (
             <button type="button" onClick={() => setPraiseIndex((index) => index + 1)}>
-              再被看見一點
+              再誇我一句
             </button>
           )}
         </div>
