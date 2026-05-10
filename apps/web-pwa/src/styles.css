@@ -261,7 +261,7 @@ button {
   font-size: 0.86rem;
   letter-spacing: 0.04em;
   box-shadow: none;
-  animation: hotspotBreath 3.6s ease-in-out infinite;
+  animation: hotspotBreath 5.4s ease-in-out infinite;
   transition: transform 200ms ease;
 }
 
@@ -278,14 +278,14 @@ button {
   }
 }
 
-/* sequential stagger so 7 NPCs ripple one-by-one */
+/* sequential stagger so 7 NPCs ripple one-by-one (5.4s cycle ÷ 7 ≈ 0.77s per slot) */
 .scene-hotspot-hollow strong { animation-delay: 0s; }
-.scene-hotspot-owl strong { animation-delay: 0.6s; }
-.scene-hotspot-stars strong { animation-delay: 1.2s; }
-.scene-hotspot-house strong { animation-delay: 1.8s; }
-.scene-hotspot-meadow strong { animation-delay: 2.4s; }
-.scene-hotspot-flowers strong { animation-delay: 3s; }
-.scene-hotspot-nest strong { animation-delay: 3.6s; }
+.scene-hotspot-owl strong { animation-delay: 0.77s; }
+.scene-hotspot-stars strong { animation-delay: 1.54s; }
+.scene-hotspot-house strong { animation-delay: 2.31s; }
+.scene-hotspot-meadow strong { animation-delay: 3.08s; }
+.scene-hotspot-flowers strong { animation-delay: 3.85s; }
+.scene-hotspot-nest strong { animation-delay: 4.62s; }
 
 @media (prefers-reduced-motion: reduce) {
   .scene-hotspot strong {
