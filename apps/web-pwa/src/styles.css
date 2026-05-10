@@ -315,7 +315,7 @@ button {
 
 .scene-hotspot-hollow {
   left: 24%;
-  top: 60%;
+  top: 72%;
 }
 
 .scene-hotspot-nest {
@@ -335,7 +335,7 @@ button {
 
 .scene-hotspot-flowers {
   left: 38%;
-  top: 90%;
+  top: 80%;
 }
 
 .scene-hotspot-house {
@@ -345,7 +345,7 @@ button {
 
 .scene-hotspot-meadow {
   left: 76%;
-  top: 80%;
+  top: 72%;
 }
 
 .scene-fallback {
@@ -376,7 +376,7 @@ button {
 
 .scene-grass-note {
   left: 76%;
-  top: 88%;
+  top: 80%;
   width: 110px;
   height: 110px;
   object-fit: contain;
