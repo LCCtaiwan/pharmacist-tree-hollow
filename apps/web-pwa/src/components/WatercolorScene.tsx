@@ -62,7 +62,7 @@ export function WatercolorScene({
         <img className="scene-bg" src={imageSrc} alt="" aria-hidden="true" onError={() => setImageFailed(true)} />
       )}
 
-      {!crisis && (
+      {!crisis && showHotspots && (
         <img
           className="scene-grass-note"
           src="/art/grass-quote.png"
