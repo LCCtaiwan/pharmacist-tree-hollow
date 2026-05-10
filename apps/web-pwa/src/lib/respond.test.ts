@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { buildResponse, detectScenario, detectScenarios } from "./respond";
 
 describe("respond", () => {
-  it("detects healthcare staff scenarios", () => {
-    expect(detectScenario("今天一直被問床位和缺藥，好煩")).toBe("shortage_pressure");
+  it("detects pharmacist scenarios", () => {
+    expect(detectScenario("今天一直被問替代藥和缺藥，好煩")).toBe("shortage_pressure");
     expect(detectScenario("擔心三讀五對有漏掉")).toBe("interaction_worry");
   });
 

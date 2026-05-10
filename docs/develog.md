@@ -2,7 +2,16 @@
 
 ## Current Project Goal
 
-建立「醫護樹洞」的第一版產品規劃與開發骨架。產品目標是讓醫護人員能透過 Web App 與後續 LINE Bot 快速得到舒壓、同理、具體誇誇、療癒內容、點歌與娛樂型抽牌。藥師仍是第一批重點情境，但文案不再只鎖定藥師。
+建立「藥師樹洞」的第一版產品規劃與開發骨架。產品目標是讓藥師能透過 Web App 與後續 LINE Bot 快速得到舒壓、同理、具體誇誇、療癒內容、點歌與娛樂型抽牌。
+
+## 2026-05-09 Pivot — 定位回歸 + 視覺重設計
+
+決策來源：使用者，2026-05-09 監督檢查時下達。
+
+- **定位回歸**：取消「醫護樹洞」擴大方向，產品定位回到原本的「藥師樹洞」。所有「醫護」、「醫護人員」、「醫護情境」相關文案改回藥師專屬。理由：原始 SDD/AGENTS/MVP_SPEC 都鎖藥師情境，前一版自行擴大未經授權，且擴大後內容變得泛用、失去藥師情境感。
+- **視覺重設計**：拒絕現行「深夜暗綠+琥珀黃 CSS 拼貼場景」，改採 **DESERTOPIA + 解憂雜貨店** 風格的水彩生態圖。新策略文件見 [docs/art-direction.md](art-direction.md)。
+- **美術生成**：Codex 撰寫圖片生成腳本（OpenAI Images API）作為 fallback。
+- **2026-05-09 update**：改採 **Codex CLI 內建 image-2** 為首選，由 Codex 直接生成 22 張資產，使用者不需另外申請 OPENAI_API_KEY。`scripts/generate-art.ts` 改為備援腳本。
 
 ## Stack Direction
 
@@ -18,7 +27,7 @@
 - 不收集病人個資或處方資訊。
 - 危機語句必須導向立即求助資源。
 - 塔羅與算命只能作為娛樂與反思工具，不宣稱準確預測。
-- 語氣要貼近醫護情境，避免泛用雞湯。
+- 語氣要貼近藥師情境，避免泛用雞湯。
 
 ## Completed Work
 
@@ -57,17 +66,18 @@
 
 ## Current Checkpoint
 
-M1 Web App MVP implemented locally. Current UI checkpoint is a full-screen healing-room prototype rather than a stacked page layout。
+M1 Web App MVP implemented locally, but UI 美術方向被使用者退回。即將進行 2026-05-09 pivot：藥師定位回歸 + 水彩生態圖重設計。
 
-## Recommended Next Step
+## Recommended Next Step（2026-05-09 之後）
 
-Prepare MVP for invite pilot:
+執行 [docs/art-direction.md](art-direction.md) 規劃：
 
-1. Review app copy with 3-5 healthcare staff scenarios, including nurse, pharmacist, PGY/NPGY and night-shift examples。
-2. Add anonymous event collection only after privacy wording is final。
-3. Deploy Web PWA to a temporary Vercel/Netlify URL。
-4. Run invite pilot with 20-50 users。
-5. Collect anonymous ratings for 有被理解 and 有醫護感。
+1. Codex 把所有 `醫護` 殘留文字改回藥師（包含 docs、source、HTML title、shop sign、aria-label、respond.ts 中一處 praise 文案）。
+2. Codex 撰寫 `scripts/generate-art.ts` 圖片生成腳本（OpenAI Images API），預設 dry-run 印 prompt。
+3. 使用者執行生成腳本，把資產落地到 `apps/web-pwa/public/art/`。
+4. Codex 重構 `styles.css` color tokens、`NightPharmacyScene.tsx` → `WatercolorScene.tsx` 改用 PNG 資產。
+5. Codex 執行 `npm test` 與 `npm run build` 驗證。
+6. 監督者人工檢查 375px 行動裝置視覺。
 
 ## Verification Status
 

@@ -1,13 +1,13 @@
 # Content Package
 
-Curated content for 醫護樹洞.
+Curated content for 藥師樹洞.
 
 ## Content Types
 
 - Self-written healing lines.
 - Licensed or public-domain quote metadata.
 - Song recommendation metadata.
-- Tarot or custom healthcare-healing card meanings.
+- Tarot or custom pharmacist-healing card meanings.
 - Grounding and breathing exercises.
 
 ## Rules

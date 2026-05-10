@@ -1,4 +1,4 @@
-# Game Concept: 醫護樹洞
+# Game Concept: 藥師樹洞
 
 ## Concept
 
@@ -6,7 +6,7 @@
 
 ## Design Goal
 
-醫護人員打開後，不需要學規則、不需要競爭、不需要完成任務，只要做一個很小的互動就能得到被理解的感覺。
+藥師打開後，不需要學規則、不需要競爭、不需要完成任務，只要做一個很小的互動就能得到被理解的感覺。
 
 ## Core Loop
 
@@ -20,7 +20,7 @@
 
 ## Setting
 
-夜晚的值班櫃檯或醫院側門旁，有一棵安靜的樹。樹洞裡會收下今天沒有地方放的情緒。場景要有醫護身份線索，但不能像醫療後台或考試平台。
+夜晚的值班櫃檯或醫院側門旁，有一棵安靜的樹。樹洞裡會收下今天沒有地方放的情緒。場景要有藥師身份線索，但不能像醫療後台或考試平台。
 
 Visual motifs:
 
@@ -28,7 +28,7 @@ Visual motifs:
 - 暖色窗光。
 - 紙條或小紙袋形狀的 token。
 - 星光。
-- 白袍掛在椅背。
+- 木造藥局小窗與藥草園。
 - 安靜的工作台或值班櫃檯遠景。
 
 Avoid:
@@ -97,7 +97,7 @@ Rules:
 
 ### MVP Mode
 
-- Single CSS-built late-night healthcare counter tree hollow scene.
+- Single watercolor pharmacy tree hollow scene.
 - Tree hollow text input.
 - Response card.
 - Visual token generation.
@@ -138,7 +138,7 @@ For more game-like version:
 
 - The first interaction is usable within 30 seconds.
 - The scene feels calm, not childish or clinical.
-- The scene reads as late-night healthcare counter tree hollow, not a generic forest.
+- The scene reads as pharmacy tree hollow, not a generic forest.
 - Visual tokens do not expose the user's original text.
 - No failure state.
 - No streak, ranking or pressure loop.
@@ -151,7 +151,7 @@ Before integrating generated art or sprites:
 
 - Check route/path readability if a map exists.
 - Check HUD-safe space.
-- Check subject identity as 醫護樹洞.
+- Check subject identity as 藥師樹洞.
 - Check no watermarks or copied copyrighted assets.
 - Check no embedded text contamination.
 - Check no patient, prescription, chart or identifiable workplace imagery.

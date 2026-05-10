@@ -12,13 +12,15 @@ export function ResponseCard({
   activePanel,
   onPanel,
   onSave,
-  onNewNote
+  onNewNote,
+  onMicroChange
 }: {
   response: ConversationResponse;
   activePanel: FollowupAction | null;
   onPanel: (panel: FollowupAction) => void;
   onSave: () => void;
   onNewNote: () => void;
+  onMicroChange?: (active: boolean) => void;
 }) {
   const isCrisis = response.riskLevel === "crisis";
   const [microStep, setMicroStep] = useState(0);
@@ -43,6 +45,10 @@ export function ResponseCard({
     setShowAftercare(false);
     setShowMicroTool(false);
   }, [response]);
+
+  useEffect(() => {
+    onMicroChange?.(showMicroTool && !microDone);
+  }, [microDone, onMicroChange, showMicroTool]);
 
   useEffect(() => {
     if (!activePanel) return;

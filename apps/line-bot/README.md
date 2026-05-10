@@ -1,6 +1,6 @@
 # LINE Bot App
 
-Second-phase daily companion entry for 醫護樹洞.
+Second-phase daily companion entry for 藥師樹洞.
 
 ## Responsibility
 

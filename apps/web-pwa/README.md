@@ -1,6 +1,6 @@
 # Web PWA
 
-Primary MVP and 驗收 interface for 醫護樹洞.
+Primary MVP and 驗收 interface for 藥師樹洞.
 
 ## Responsibility
 

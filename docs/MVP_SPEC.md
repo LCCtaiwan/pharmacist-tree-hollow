@@ -2,11 +2,11 @@
 
 ## MVP Name
 
-醫護樹洞 Web App MVP
+藥師樹洞 Web App MVP
 
 ## MVP Goal
 
-做出一個手機優先的 Web App，讓醫護人員在 30 秒內完成一次舒壓互動：
+做出一個手機優先的 Web App，讓藥師在 30 秒內完成一次舒壓互動：
 
 1. 選心情或輸入一句話。
 2. 收到具體同理與誇誇。
@@ -19,7 +19,7 @@ MVP 完成時必須符合：
 - 使用者打開首頁，不需要看教學就知道可以輸入心情。
 - 首次互動可在 30 秒內完成。
 - 回覆包含同理、具體誇誇、一個小步驟。
-- 至少 12 組醫護工作情境有對應品質良好的回覆。
+- 至少 12 組藥師工作情境有對應品質良好的回覆。
 - 危機語句會進安全流程。
 - 不輸出醫療診斷、心理診斷、處方建議。
 - 塔羅或抽牌明確標示為娛樂與反思。
@@ -54,20 +54,20 @@ Purpose:
 
 Required elements:
 
-- App title: 醫護樹洞。
+- App title: 藥師樹洞。
 - Small status line: 深夜櫃檯還亮著。
 - Mood chips: 熱湯、紙巾、苦茶、空碗、小火、雨傘、白水。
 - Text input: 「寫一張投進深夜櫃檯的紙條」。
 - Primary action: send icon button.
 - Secondary actions: 誇誇我、抽牌、點歌、喘口氣。
-- Visual: late-night healthcare counter tree hollow scene built with CSS/HTML first.
+- Visual: watercolor pharmacy tree hollow scene using prepared image assets.
 
 Acceptance:
 
 - Mobile first viewport can use without scrolling for the first interaction.
 - Text input and send action are obvious.
 - No giant landing page.
-- The first screen reads as 醫護樹洞, not a generic forest app, medical admin tool or exam platform.
+- The first screen reads as 藥師樹洞, not a generic forest app, medical admin tool or exam platform.
 
 ### 2. Response Card
 
@@ -119,7 +119,7 @@ Required elements:
 - Section label: 給這一刻一首歌。
 - Song title.
 - Artist.
-- One or two short lines explaining why this song fits the current healthcare work context.
+- One or two short lines explaining why this song fits the current pharmacist work context.
 - Optional external search link later.
 
 Acceptance:
@@ -229,18 +229,18 @@ The app should feel calm, mature and low-stimulation. It should not look like a 
 
 Mobile first screen order:
 
-1. App title: 醫護樹洞。
+1. App title: 藥師樹洞。
 2. Status line: 深夜櫃檯還亮著。
-3. CSS late-night healthcare counter tree hollow scene.
+3. Watercolor pharmacy tree hollow scene.
 4. Mood chips.
 5. Text input and send icon button.
 6. Small secondary action row only if it does not compete with the input.
 
 The text input and send action are the priority. Decoration must not make the first interaction harder.
 
-### CSS Scene Elements
+### Watercolor Scene Elements
 
-The home scene should be built with CSS/HTML first. Required motifs:
+The home scene should use a prepared watercolor PNG as the primary visual. Required motifs:
 
 - Tree hollow.
 - Warm late-night counter or station window light.
@@ -295,8 +295,8 @@ Do not use fast flashes, distracting particles, forced game effects or pressure 
 
 MVP required:
 
-- CSS late-night healthcare counter tree hollow scene.
-- CSS token animation.
+- Watercolor pharmacy tree hollow scene.
+- Subtle letter toss animation.
 - Symbolic visuals for card and astro surfaces.
 
 MVP does not do:
@@ -309,7 +309,7 @@ Optional V2:
 
 - Seven pre-generated mood atmosphere images.
 - Seven pre-generated astro card images.
-- Ten to twenty-two pre-generated healthcare healing card images.
+- Ten to twenty-two pre-generated pharmacist healing card images.
 
 All generated art must pass inspection before integration:
 
@@ -322,17 +322,17 @@ All generated art must pass inspection before integration:
 
 ## Content Requirements
 
-### Healthcare Staff Scenarios
+### Pharmacist Scenarios
 
 MVP test set must include:
 
 - 被病人、民眾或家屬兇。
 - 工作量很多趕不完。
 - 擔心核對、給藥、處方或照護細節漏掉。
-- 被醫師、護理師、藥師、同事或主管質疑。
-- PGY/NPGY/實習或考核壓力。
+- 被同事、前輩或主管質疑。
+- PGY 藥師考核壓力。
 - 夜班或輪班疲憊。
-- 一直被問資源限制、缺藥、床位或流程問題。
+- 一直被問資源限制、缺藥、替代藥或流程問題。
 - 交班、紀錄、管制品項、庫存或稽核壓力。
 - 想離職。
 - 覺得自己不夠專業。
@@ -344,7 +344,7 @@ MVP test set must include:
 Good:
 
 ```text
-今天你不是單純在忙，你是在高壓裡一直替安全和照護把關。先把肩膀放下來，喝一口水，讓自己從值班那個節奏退回來十秒。
+今天你不是單純在忙，你是在高壓裡一直替用藥安全和品質把關。先把肩膀放下來，喝一口水，讓自己從值班那個節奏退回來十秒。
 ```
 
 Bad:
@@ -421,6 +421,6 @@ packages/content
 - `pass`: Crisis input does not receive normal playful response.
 - `pass`: Patient-specific medication input is refused safely.
 - `pass`: Mobile layout is visually calm, readable and usable at 375px width.
-- `pass`: Home screen clearly signals late-night healthcare counter tree hollow, not generic forest or backend UI.
+- `pass`: Home screen clearly signals pharmacy tree hollow, not generic forest or backend UI.
 - `pass`: Crisis flow reduces decorative elements and prioritizes help text.
 - `pass`: Saved items persist locally.

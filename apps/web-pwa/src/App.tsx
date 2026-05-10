@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ConversationResponse, FollowupAction, MoodTag } from "@pharmacist-tree-hollow/shared";
-import { NightPharmacyScene } from "./components/NightPharmacyScene";
+import { WatercolorScene } from "./components/WatercolorScene";
+import type { SceneState } from "./components/WatercolorScene";
 import { ResponseCard } from "./components/ResponseCard";
 import { buildResponse } from "./lib/respond";
 import "./styles.css";
@@ -48,31 +49,68 @@ export default function App() {
   const [saved, setSaved] = useState<SavedItem[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const [isDepositing, setIsDepositing] = useState(false);
-  const thinkingTimer = useRef<number | null>(null);
+  const [isResponding, setIsResponding] = useState(false);
+  const [microActive, setMicroActive] = useState(false);
+  const timersRef = useRef<number[]>([]);
 
   useEffect(() => {
     setSaved(loadSaved());
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      timersRef.current.forEach((timer) => window.clearTimeout(timer));
+    };
   }, []);
 
   const currentHint = useMemo(() => {
     return promptHints[mood];
   }, [mood]);
 
+  const crisis = response?.riskLevel === "crisis";
+  const sceneState: SceneState = isDepositing
+    ? "depositing"
+    : isThinking
+      ? "thinking"
+      : isResponding
+        ? "responding"
+        : input.trim().length > 0
+          ? "writing"
+          : "idle";
+
   function submit() {
     const trimmed = input.trim();
-    if (thinkingTimer.current) {
-      window.clearTimeout(thinkingTimer.current);
-    }
-    setIsThinking(true);
+    timersRef.current.forEach((timer) => window.clearTimeout(timer));
+    timersRef.current = [];
+
     setIsDepositing(true);
+    setIsThinking(false);
+    setIsResponding(false);
+    setMicroActive(false);
     setResponse(null);
     setActivePanel(null);
-    thinkingTimer.current = window.setTimeout(() => {
-      const result = buildResponse(trimmed || `今天覺得${mood}`, mood);
-      setResponse(result);
-      setIsThinking(false);
+
+    const depositingTimer = window.setTimeout(() => {
       setIsDepositing(false);
-    }, 860);
+      setIsThinking(true);
+
+      const thinkingTimer = window.setTimeout(() => {
+        setIsThinking(false);
+        const result = buildResponse(trimmed || `今天覺得${mood}`, mood);
+        setResponse(result);
+        setIsResponding(true);
+
+        const respondingTimer = window.setTimeout(() => {
+          setIsResponding(false);
+        }, 600);
+
+        timersRef.current.push(respondingTimer);
+      }, 260);
+
+      timersRef.current.push(thinkingTimer);
+    }, 600);
+
+    timersRef.current.push(depositingTimer);
   }
 
   function saveCurrent() {
@@ -97,14 +135,27 @@ export default function App() {
   }
 
   function resetConversation() {
+    timersRef.current.forEach((timer) => window.clearTimeout(timer));
+    timersRef.current = [];
+    setIsDepositing(false);
+    setIsThinking(false);
+    setIsResponding(false);
     setResponse(null);
     setActivePanel(null);
+    setMicroActive(false);
     setInput("");
   }
 
   return (
-    <main className={`app-shell ${response ? "app-shell-has-response" : ""} ${response?.riskLevel === "crisis" ? "crisis-mode" : ""}`}>
-      <NightPharmacyScene mood={mood} quiet={response?.riskLevel === "crisis"} depositing={isDepositing} />
+    <main className={`app-shell ${response ? "app-shell-has-response" : ""} ${crisis ? "crisis-mode" : ""}`}>
+      <WatercolorScene
+        mood={mood}
+        state={sceneState}
+        activePanel={activePanel}
+        microActive={microActive}
+        savedCount={saved.length}
+        crisis={Boolean(crisis)}
+      />
 
       <section className="composer" aria-label="樹洞輸入">
         <div className="mood-row" aria-label="今晚想點什麼">
@@ -116,6 +167,14 @@ export default function App() {
               onClick={() => setMood(item.mood)}
               aria-label={item.label}
             >
+              <img
+                src={`/art/mood-${item.mood}.png`}
+                alt=""
+                aria-hidden="true"
+                onError={(event) => {
+                  event.currentTarget.style.display = "none";
+                }}
+              />
               <strong>{item.label}</strong>
             </button>
           ))}
@@ -142,6 +201,7 @@ export default function App() {
           onPanel={(panel) => setActivePanel((current) => (current === panel ? null : panel))}
           onSave={saveCurrent}
           onNewNote={resetConversation}
+          onMicroChange={setMicroActive}
         />
       ) : isThinking ? (
         <section className="quiet-note quiet-note-thinking" aria-live="polite">
