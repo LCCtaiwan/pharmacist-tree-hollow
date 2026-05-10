@@ -400,7 +400,7 @@ function StationView({ station, content, saved, onCycle, onClose, onClearSaved, 
 
             {content?.type === "song" && (
               <article className="station-song-card">
-                <span className="station-tag">今晚櫃檯放這首</span>
+                <span className="station-tag">窗口傳來這首</span>
                 <h3>
                   {content.data.title} · {content.data.artist}
                 </h3>
@@ -472,7 +472,7 @@ function BreathingMicro({ tool }: { tool: MicroTool }) {
 
   return (
     <article className="station-breathing-card">
-      <span className="station-tag">櫃檯陪你坐 {tool.durationSeconds} 秒</span>
+      <span className="station-tag">花草陪你坐 {tool.durationSeconds} 秒</span>
       <h3>{tool.title}</h3>
       <div className="station-breathing-progress" aria-hidden="true">
         <i style={{ width: `${done ? 100 : ((step + 1) / stepCount) * 100}%` }} />

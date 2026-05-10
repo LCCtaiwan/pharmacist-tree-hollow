@@ -118,7 +118,7 @@ export function WatercolorScene({
         />
       )}
 
-      {savedCount > 0 && (
+      {showHotspots && savedCount > 0 && (
         <div className="scene-saved-shelf" aria-hidden="true">
           {Array.from({ length: Math.min(savedCount, 8) }).map((_, index) => (
             <i key={index} className="scene-saved-note" />
