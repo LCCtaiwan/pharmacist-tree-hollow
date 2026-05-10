@@ -10,9 +10,30 @@ export interface WatercolorSceneProps {
   microActive: boolean;
   savedCount: number;
   crisis: boolean;
+  showHotspots?: boolean;
+  onMoodSelect?: (mood: MoodTag) => void;
 }
 
-export function WatercolorScene({ mood, state, activePanel, microActive, savedCount, crisis }: WatercolorSceneProps) {
+const sceneHotspots: Array<{ mood: MoodTag; label: string; object: string; className: string }> = [
+  { mood: "累", label: "累了", object: "樹洞", className: "scene-hotspot-hollow" },
+  { mood: "委屈", label: "委屈", object: "小窩", className: "scene-hotspot-nest" },
+  { mood: "煩", label: "煩", object: "枝頭", className: "scene-hotspot-owl" },
+  { mood: "空", label: "空空的", object: "星光", className: "scene-hotspot-stars" },
+  { mood: "緊繃", label: "緊繃", object: "花草", className: "scene-hotspot-flowers" },
+  { mood: "想哭", label: "想哭", object: "小屋", className: "scene-hotspot-house" },
+  { mood: "還可以", label: "還可以", object: "草地", className: "scene-hotspot-meadow" }
+];
+
+export function WatercolorScene({
+  mood,
+  state,
+  activePanel,
+  microActive,
+  savedCount,
+  crisis,
+  showHotspots = false,
+  onMoodSelect
+}: WatercolorSceneProps) {
   const imageSrc = crisis ? "/art/scene-crisis.png" : "/art/scene-main.png";
   const [imageFailed, setImageFailed] = useState(false);
   const [moodVisible, setMoodVisible] = useState(false);
@@ -36,6 +57,7 @@ export function WatercolorScene({ mood, state, activePanel, microActive, savedCo
     <section
       className={[
         "scene-watercolor",
+        showHotspots ? "scene-watercolor-entry" : "",
         crisis ? "scene-watercolor-crisis" : "",
         microActive && !crisis ? "scene-watercolor-breathing" : ""
       ]
@@ -49,17 +71,37 @@ export function WatercolorScene({ mood, state, activePanel, microActive, savedCo
         <img className="scene-bg" src={imageSrc} alt="" aria-hidden="true" onError={() => setImageFailed(true)} />
       )}
 
-      <img
-        key={mood}
-        className="scene-mood-pet"
-        src={`/art/mood-${mood}.png`}
-        alt=""
-        aria-hidden="true"
-        style={{ opacity: moodVisible ? 0.85 : 0 }}
-        onError={(event) => {
-          event.currentTarget.style.display = "none";
-        }}
-      />
+      {showHotspots && onMoodSelect && (
+        <div className="scene-entry-layer" aria-label="先點一個物件">
+          <p>先點一個物件</p>
+          {sceneHotspots.map((hotspot) => (
+            <button
+              type="button"
+              key={hotspot.mood}
+              className={`scene-hotspot ${hotspot.className}`}
+              onClick={() => onMoodSelect(hotspot.mood)}
+              aria-label={`點${hotspot.object}：${hotspot.label}`}
+            >
+              <span>{hotspot.object}</span>
+              <strong>{hotspot.label}</strong>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {!showHotspots && (
+        <img
+          key={mood}
+          className="scene-mood-pet"
+          src={`/art/mood-${mood}.png`}
+          alt=""
+          aria-hidden="true"
+          style={{ opacity: moodVisible ? 0.85 : 0 }}
+          onError={(event) => {
+            event.currentTarget.style.display = "none";
+          }}
+        />
+      )}
 
       {state === "writing" && <div className="scene-hollow-glow scene-hollow-glow-soft" aria-hidden="true" />}
       {state === "thinking" && <div className="scene-hollow-glow scene-hollow-glow-thinking" aria-hidden="true" />}

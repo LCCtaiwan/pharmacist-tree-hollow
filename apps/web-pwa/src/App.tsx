@@ -51,8 +51,11 @@ export default function App() {
   const [isDepositing, setIsDepositing] = useState(false);
   const [isResponding, setIsResponding] = useState(false);
   const [microActive, setMicroActive] = useState(false);
+  const [composerOpen, setComposerOpen] = useState(false);
   const timersRef = useRef<number[]>([]);
   const responseRegionRef = useRef<HTMLDivElement | null>(null);
+  const composerRef = useRef<HTMLElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     setSaved(loadSaved());
@@ -75,6 +78,19 @@ export default function App() {
       window.cancelAnimationFrame(frame);
     };
   }, [response]);
+
+  useEffect(() => {
+    if (!composerOpen || response) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      composerRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+      textareaRef.current?.focus({ preventScroll: true });
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
+  }, [composerOpen, response]);
 
   const currentHint = useMemo(() => {
     return promptHints[mood];
@@ -126,6 +142,11 @@ export default function App() {
     timersRef.current.push(depositingTimer);
   }
 
+  function selectSceneMood(nextMood: MoodTag) {
+    setMood(nextMood);
+    setComposerOpen(true);
+  }
+
   function saveCurrent() {
     if (!response) return;
     const text = [response.careTitle, response.empathy, response.praiseNotes?.[0] ?? response.praise, response.tinyAction, response.closingLine]
@@ -156,11 +177,14 @@ export default function App() {
     setResponse(null);
     setActivePanel(null);
     setMicroActive(false);
+    setComposerOpen(false);
     setInput("");
   }
 
+  const showSceneEntry = !composerOpen && !response && !isThinking && !isDepositing && !isResponding;
+
   return (
-    <main className={`app-shell ${response ? "app-shell-has-response" : ""} ${crisis ? "crisis-mode" : ""}`}>
+    <main className={`app-shell ${showSceneEntry ? "app-shell-entry" : ""} ${response ? "app-shell-has-response" : ""} ${crisis ? "crisis-mode" : ""}`}>
       <WatercolorScene
         mood={mood}
         state={sceneState}
@@ -168,9 +192,19 @@ export default function App() {
         microActive={microActive}
         savedCount={saved.length}
         crisis={Boolean(crisis)}
+        showHotspots={showSceneEntry}
+        onMoodSelect={selectSceneMood}
       />
 
-      <section className="composer" aria-label="樹洞輸入">
+      {composerOpen && !response && (
+      <section className="composer" aria-label="樹洞輸入" ref={composerRef}>
+        <div className="composer-picked">
+          <span>你點了</span>
+          <strong>{moodOptions.find((item) => item.mood === mood)?.label ?? mood}</strong>
+          <button type="button" onClick={() => setComposerOpen(false)}>
+            回到底圖
+          </button>
+        </div>
         <div className="mood-row" aria-label="今晚想點什麼">
           {moodOptions.map((item) => (
             <button
@@ -195,6 +229,7 @@ export default function App() {
 
         <div className="input-row">
           <textarea
+            ref={textareaRef}
             value={input}
             onChange={(event) => setInput(event.target.value)}
             placeholder={currentHint}
@@ -206,6 +241,7 @@ export default function App() {
           </button>
         </div>
       </section>
+      )}
 
       {response ? (
         <div className="response-wrap" ref={responseRegionRef}>
@@ -227,12 +263,12 @@ export default function App() {
             <i />
           </div>
         </section>
-      ) : (
+      ) : composerOpen ? (
         <section className="quiet-note quiet-note-dynamic" key={mood}>
           <p>不用寫完整。</p>
           <span>一句話也可以，樹洞會先收著。</span>
         </section>
-      )}
+      ) : null}
 
       {saved.length > 0 && (
         <section className="saved-list">

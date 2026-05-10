@@ -88,6 +88,10 @@ button {
   flex-direction: column;
 }
 
+.app-shell-entry {
+  justify-content: flex-start;
+}
+
 .app-header {
   position: absolute;
   left: 18px;
@@ -145,6 +149,14 @@ button {
   border-bottom: 1px solid rgba(58, 44, 30, 0.1);
 }
 
+.scene-watercolor-entry {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 2 / 3;
+  border-bottom: 0;
+}
+
 .app-shell-has-response .scene-watercolor {
   height: clamp(160px, 24dvh, 240px);
   min-height: 160px;
@@ -163,6 +175,95 @@ button {
   display: block;
   filter: saturate(0.92) brightness(1.02);
   opacity: 0.96;
+}
+
+.scene-watercolor-entry .scene-bg {
+  object-fit: contain;
+}
+
+.scene-entry-layer,
+.scene-hotspot {
+  position: absolute;
+}
+
+.scene-entry-layer {
+  inset: 0;
+  z-index: 3;
+}
+
+.scene-entry-layer > p {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  margin: 0;
+  padding: 7px 12px;
+  border: 1px solid rgba(58, 44, 30, 0.14);
+  border-radius: 999px;
+  color: rgba(58, 44, 30, 0.78);
+  background: rgba(255, 250, 236, 0.74);
+  box-shadow: 0 8px 20px rgba(106, 74, 44, 0.12);
+  font-size: 0.86rem;
+  transform: translateX(-50%);
+}
+
+.scene-hotspot {
+  display: grid;
+  gap: 1px;
+  min-width: 58px;
+  padding: 6px 9px;
+  border: 1px solid rgba(58, 44, 30, 0.12);
+  border-radius: 999px;
+  color: var(--ink);
+  background: rgba(255, 250, 236, 0.72);
+  box-shadow: 0 8px 20px rgba(106, 74, 44, 0.12);
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.scene-hotspot span {
+  color: rgba(106, 90, 68, 0.82);
+  font-size: 0.68rem;
+  line-height: 1.1;
+}
+
+.scene-hotspot strong {
+  font-size: 0.82rem;
+  line-height: 1.15;
+}
+
+.scene-hotspot-hollow {
+  left: 33%;
+  top: 52%;
+}
+
+.scene-hotspot-nest {
+  left: 17%;
+  top: 81%;
+}
+
+.scene-hotspot-owl {
+  left: 49%;
+  top: 28%;
+}
+
+.scene-hotspot-stars {
+  left: 74%;
+  top: 14%;
+}
+
+.scene-hotspot-flowers {
+  left: 50%;
+  top: 88%;
+}
+
+.scene-hotspot-house {
+  left: 77%;
+  top: 63%;
+}
+
+.scene-hotspot-meadow {
+  left: 65%;
+  top: 76%;
 }
 
 .scene-fallback {
@@ -445,6 +546,30 @@ button {
   z-index: 5;
   margin: 10px 12px 0;
   padding: 9px;
+}
+
+.composer-picked {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+.composer-picked strong {
+  color: var(--ink);
+}
+
+.composer-picked button {
+  min-height: 30px;
+  margin-left: auto;
+  padding: 0 10px;
+  border: 1px solid rgba(58, 44, 30, 0.12);
+  border-radius: 999px;
+  color: var(--ink);
+  background: rgba(255, 250, 236, 0.58);
+  font-size: 0.82rem;
 }
 
 .mood-row {

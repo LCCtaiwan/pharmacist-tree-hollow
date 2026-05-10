@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import type { ConversationResponse, FollowupAction } from "@pharmacist-tree-hollow/shared";
 
-const actionLabels: Record<FollowupAction, string> = {
-  song: "收音機",
-  card: "紙籤盒",
-  astro: "窗邊星光"
+const actionCopy: Record<FollowupAction, { title: string; detail: string }> = {
+  song: { title: "收音機", detail: "聽一首適合現在的歌" },
+  card: { title: "紙籤盒", detail: "抽一張反思用的小紙籤" },
+  astro: { title: "窗邊星光", detail: "看一段今日狀態提醒" }
 };
 
 export function ResponseCard({
@@ -27,7 +27,7 @@ export function ResponseCard({
   const [microDone, setMicroDone] = useState(false);
   const [praiseIndex, setPraiseIndex] = useState(0);
   const [savedOnce, setSavedOnce] = useState(false);
-  const [showAftercare, setShowAftercare] = useState(false);
+  const [showAftercare, setShowAftercare] = useState(response.followupActions.length > 0);
   const [showMicroTool, setShowMicroTool] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const microSteps = response.microTool?.steps ?? [];
@@ -42,7 +42,7 @@ export function ResponseCard({
     setMicroDone(false);
     setPraiseIndex(0);
     setSavedOnce(false);
-    setShowAftercare(false);
+    setShowAftercare(response.followupActions.length > 0);
     setShowMicroTool(false);
   }, [response]);
 
@@ -53,7 +53,7 @@ export function ResponseCard({
   useEffect(() => {
     if (!activePanel) return;
     window.setTimeout(() => {
-      panelRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      panelRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
     }, 40);
   }, [activePanel]);
 
@@ -116,17 +116,21 @@ export function ResponseCard({
 
       {canShowFollowups && showAftercare && (
         <div className="aftercare" aria-label="可以繼續留下的方式">
-          <span>不用做完，選一個就好</span>
+          <span>接著可以選一個，不用做完</span>
           <div className="followups npc-row">
             <button
               type="button"
-              className={savedOnce ? "saved" : ""}
+              className={`npc-button npc-save ${savedOnce ? "saved" : ""}`}
               onClick={() => {
                 onSave();
                 setSavedOnce(true);
               }}
             >
-              {savedOnce ? "已收下" : "收下回信"}
+              <i aria-hidden="true" />
+              <span>
+                <strong>{savedOnce ? "已收下" : "收下回信"}</strong>
+                <small>{savedOnce ? "已放進回顧清單" : "把這段回信放進回顧"}</small>
+              </span>
             </button>
             {hasMicroTool && (
               <button
@@ -135,20 +139,30 @@ export function ResponseCard({
                 onClick={showThirtySeconds}
               >
                 <i aria-hidden="true" />
-                <span>小燈</span>
+                <span>
+                  <strong>小燈</strong>
+                  <small>30 秒跟著句子喘口氣</small>
+                </span>
               </button>
             )}
-            {response.followupActions.map((action) => (
-              <button
-                type="button"
-                key={action}
-                className={`npc-button npc-${action} ${activePanel === action ? "active" : ""}`}
-                onClick={() => selectPanel(action)}
-              >
-                <i aria-hidden="true" />
-                <span>{actionLabels[action]}</span>
-              </button>
-            ))}
+            {response.followupActions.map((action) => {
+              const copy = actionCopy[action];
+
+              return (
+                <button
+                  type="button"
+                  key={action}
+                  className={`npc-button npc-${action} ${activePanel === action ? "active" : ""}`}
+                  onClick={() => selectPanel(action)}
+                >
+                  <i aria-hidden="true" />
+                  <span>
+                    <strong>{copy.title}</strong>
+                    <small>{copy.detail}</small>
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
           {showMicroTool && hasMicroTool && response.microTool && (
