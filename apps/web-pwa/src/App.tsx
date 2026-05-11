@@ -327,7 +327,9 @@ export default function App() {
   const sceneMounted = appPhase === "scene" || isSceneRevealing;
 
   return (
-    <main className={`app-shell app-shell-${appPhase} ${isSceneRevealing ? "app-shell-scene-revealing" : ""} ${showSceneEntry ? "app-shell-entry" : ""} ${response ? "app-shell-has-response" : ""} ${crisis ? "crisis-mode" : ""}`}>
+    <>
+      <div className="page-backdrop" aria-hidden="true" />
+      <main className={`app-shell app-shell-${appPhase} ${isSceneRevealing ? "app-shell-scene-revealing" : ""} ${showSceneEntry ? "app-shell-entry" : ""} ${response ? "app-shell-has-response" : ""} ${crisis ? "crisis-mode" : ""}`}>
       {sceneMounted && (
         <div className={`scene-reveal ${isSceneRevealing ? "scene-reveal-entering" : "scene-reveal-ready"}`}>
           <WatercolorScene
@@ -423,7 +425,8 @@ export default function App() {
           <span>一句話也可以，樹洞會先收著。</span>
         </section>
       ) : null}
-    </main>
+      </main>
+    </>
   );
 }
 

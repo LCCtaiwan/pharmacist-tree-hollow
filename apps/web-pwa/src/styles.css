@@ -1,7 +1,7 @@
 :root {
   color: #3a2c1e;
   background: #f5ead0;
-  font-family: "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
+  font-family: "Noto Serif TC", "Source Han Serif TC", "PingFang TC", "Songti TC", serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -42,17 +42,41 @@
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  overflow-x: hidden;
-  color: var(--ink);
+html {
   background:
     radial-gradient(circle at 18% 14%, rgba(229, 184, 161, 0.35), transparent 18rem),
     radial-gradient(circle at 78% 2%, rgba(200, 216, 168, 0.38), transparent 16rem),
     radial-gradient(circle at 52% 78%, rgba(227, 210, 161, 0.48), transparent 22rem),
     var(--paper);
+}
+
+body {
+  position: relative;
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--ink);
+  background: transparent;
+}
+
+/* 桌面：模糊水彩底圖鋪滿視窗（C 方案） */
+.page-backdrop {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .page-backdrop {
+    display: block;
+    position: fixed;
+    inset: -60px;
+    z-index: 0;
+    pointer-events: none;
+    background: url("/art/scene-main.png") center / cover no-repeat;
+    filter: blur(12px) saturate(1.1) brightness(1.08);
+    opacity: 0.65;
+    transform: scale(1.12);
+  }
 }
 
 body::before {
@@ -77,8 +101,9 @@ button {
 
 .app-shell {
   position: relative;
+  z-index: 1;
   width: 100%;
-  max-width: 480px;
+  max-width: min(92vw, 600px);
   min-height: 100dvh;
   margin: 0 auto;
   overflow-x: hidden;
@@ -86,6 +111,18 @@ button {
   color: var(--ink);
   display: flex;
   flex-direction: column;
+  background: rgba(245, 234, 208, 0.78);
+  backdrop-filter: blur(6px) saturate(1.04);
+  box-shadow: 0 12px 48px rgba(78, 60, 36, 0.14);
+}
+
+@media (max-width: 600px) {
+  .app-shell {
+    max-width: 100%;
+    background: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
 }
 
 .app-shell-entry {
@@ -792,7 +829,7 @@ button {
   border: none;
   background: none;
   color: var(--terracotta);
-  font-family: "Noto Sans TC", sans-serif;
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
   font-weight: 500;
   font-size: 0.92rem;
   text-decoration: underline wavy var(--terracotta);
@@ -1883,7 +1920,7 @@ textarea::placeholder {
   border: none;
   background: none;
   color: var(--terracotta);
-  font-family: "Noto Sans TC", sans-serif;
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
   font-weight: 500;
   font-size: 0.92rem;
   text-decoration: underline wavy var(--terracotta);
@@ -2208,7 +2245,7 @@ textarea::placeholder {
   background: none;
   border: none;
   color: var(--terracotta);
-  font-family: "Noto Sans TC", "PingFang TC", sans-serif;
+  font-family: "Noto Serif TC", "Source Han Serif TC", "PingFang TC", serif;
   font-weight: 500;
   font-size: 0.92rem;
   text-decoration: underline wavy var(--terracotta);
@@ -2397,7 +2434,7 @@ textarea::placeholder {
   border: none;
   background: none;
   color: var(--terracotta);
-  font-family: "Noto Sans TC", sans-serif;
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
   font-size: 0.86rem;
   text-decoration: underline wavy var(--terracotta);
   text-underline-offset: 4px;
