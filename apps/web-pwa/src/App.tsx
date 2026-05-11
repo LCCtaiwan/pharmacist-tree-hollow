@@ -97,6 +97,10 @@ type StationContent =
   | { type: "quote"; data: HealingQuote }
   | null;
 
+function getAstroCardImagePath(card: AstroReflectionCard): string {
+  return `/art/${card.id}.png`;
+}
+
 function pickStationContent(station: StationType): StationContent {
   if (station === "reflection") {
     const data = pickRandom(reflectionQuestions);
@@ -132,9 +136,13 @@ export default function App() {
   const [isThinking, setIsThinking] = useState(false);
   const [isDepositing, setIsDepositing] = useState(false);
   const [isResponding, setIsResponding] = useState(false);
+  const [isAstroCardVisible, setIsAstroCardVisible] = useState(true);
+  const [isAstroCycling, setIsAstroCycling] = useState(false);
   const [activeStation, setActiveStation] = useState<StationType | null>(null);
   const [stationContent, setStationContent] = useState<StationContent>(null);
   const timersRef = useRef<number[]>([]);
+  const astroCycleTimerRef = useRef<number | null>(null);
+  const astroUnlockTimerRef = useRef<number | null>(null);
   const responseRegionRef = useRef<HTMLDivElement | null>(null);
   const composerRef = useRef<HTMLElement | null>(null);
   const stationRef = useRef<HTMLElement | null>(null);
@@ -181,6 +189,8 @@ export default function App() {
   useEffect(() => {
     return () => {
       timersRef.current.forEach((timer) => window.clearTimeout(timer));
+      if (astroCycleTimerRef.current) window.clearTimeout(astroCycleTimerRef.current);
+      if (astroUnlockTimerRef.current) window.clearTimeout(astroUnlockTimerRef.current);
     };
   }, []);
 
@@ -270,16 +280,42 @@ export default function App() {
   }
 
   function selectStation(station: StationType) {
+    if (astroCycleTimerRef.current) window.clearTimeout(astroCycleTimerRef.current);
+    if (astroUnlockTimerRef.current) window.clearTimeout(astroUnlockTimerRef.current);
+    setIsAstroCycling(false);
+    setIsAstroCardVisible(true);
     setActiveStation(station);
     setStationContent(pickStationContent(station));
   }
 
   function cycleStationContent() {
     if (!activeStation || activeStation === "vent" || activeStation === "saved") return;
+
+    if (activeStation === "astro") {
+      if (isAstroCycling) return;
+      if (astroCycleTimerRef.current) window.clearTimeout(astroCycleTimerRef.current);
+      if (astroUnlockTimerRef.current) window.clearTimeout(astroUnlockTimerRef.current);
+
+      setIsAstroCycling(true);
+      setIsAstroCardVisible(false);
+      astroCycleTimerRef.current = window.setTimeout(() => {
+        setStationContent(pickStationContent(activeStation));
+        setIsAstroCardVisible(true);
+        astroUnlockTimerRef.current = window.setTimeout(() => {
+          setIsAstroCycling(false);
+        }, 400);
+      }, 200);
+      return;
+    }
+
     setStationContent(pickStationContent(activeStation));
   }
 
   function closeStation() {
+    if (astroCycleTimerRef.current) window.clearTimeout(astroCycleTimerRef.current);
+    if (astroUnlockTimerRef.current) window.clearTimeout(astroUnlockTimerRef.current);
+    setIsAstroCycling(false);
+    setIsAstroCardVisible(true);
     setActiveStation(null);
     setStationContent(null);
     if (ventOpen) {
@@ -311,6 +347,10 @@ export default function App() {
   function resetConversation() {
     timersRef.current.forEach((timer) => window.clearTimeout(timer));
     timersRef.current = [];
+    if (astroCycleTimerRef.current) window.clearTimeout(astroCycleTimerRef.current);
+    if (astroUnlockTimerRef.current) window.clearTimeout(astroUnlockTimerRef.current);
+    setIsAstroCycling(false);
+    setIsAstroCardVisible(true);
     setIsDepositing(false);
     setIsThinking(false);
     setIsResponding(false);
@@ -395,6 +435,8 @@ export default function App() {
           station={activeStation}
           content={stationContent}
           saved={saved}
+          isAstroCardVisible={isAstroCardVisible}
+          isAstroCycling={isAstroCycling}
           onCycle={cycleStationContent}
           onClose={closeStation}
           onClearSaved={clearSaved}
@@ -434,13 +476,17 @@ interface StationViewProps {
   station: Exclude<StationType, "vent">;
   content: StationContent;
   saved: SavedItem[];
+  isAstroCardVisible: boolean;
+  isAstroCycling: boolean;
   onCycle: () => void;
   onClose: () => void;
   onClearSaved: () => void;
   stationRef: React.RefObject<HTMLElement | null>;
 }
 
-function StationView({ station, content, saved, onCycle, onClose, onClearSaved, stationRef }: StationViewProps) {
+function StationView({ station, content, saved, isAstroCardVisible, isAstroCycling, onCycle, onClose, onClearSaved, stationRef }: StationViewProps) {
+  const [failedAstroImageIds, setFailedAstroImageIds] = useState<Record<string, true>>({});
+
   return (
     <section className={`station-panel station-${station}`} aria-label="場景小站" ref={stationRef}>
       {station === "saved" ? (
@@ -508,12 +554,32 @@ function StationView({ station, content, saved, onCycle, onClose, onClearSaved, 
             )}
 
             {content?.type === "astro" && (
-              <article className="station-astro-card">
-                <span className="station-tag">抽到的是</span>
-                <h3>{content.data.name}</h3>
-                {content.data.lines.map((line) => (
-                  <p key={line}>{line}</p>
-                ))}
+              <article className={`station-astro-card ${isAstroCardVisible ? "station-astro-card-visible" : "station-astro-card-hidden"}`}>
+                <div className="station-astro-card-art">
+                  {failedAstroImageIds[content.data.id] ? (
+                    <div className="station-astro-card-fallback" role="img" aria-label={`${content.data.name}卡牌正在準備中`}>
+                      <span aria-hidden="true">✦</span>
+                      <p>卡牌正在準備中</p>
+                      <span aria-hidden="true">✦</span>
+                    </div>
+                  ) : (
+                    <img
+                      src={getAstroCardImagePath(content.data)}
+                      alt={`${content.data.name}卡面`}
+                      loading="eager"
+                      onError={() => {
+                        setFailedAstroImageIds((current) => ({ ...current, [content.data.id]: true }));
+                      }}
+                    />
+                  )}
+                </div>
+                <div className="station-astro-reading">
+                  <span className="station-tag">抽到的是</span>
+                  <h3>{content.data.name}</h3>
+                  {content.data.lines.map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
+                </div>
                 {content.data.healingTip && (
                   <div className="station-healing-tip">
                     <span>今晚療癒</span>
@@ -540,7 +606,7 @@ function StationView({ station, content, saved, onCycle, onClose, onClearSaved, 
           </div>
           {content && (
             <div className="station-actions">
-              <button type="button" onClick={onCycle}>
+              <button type="button" onClick={onCycle} disabled={station === "astro" && isAstroCycling}>
                 {stationCopy[station].cycleLabel}
               </button>
             </div>
