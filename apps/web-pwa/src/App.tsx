@@ -637,8 +637,13 @@ function BreathingMicro({ tool }: { tool: MicroTool }) {
 
   return (
     <article className="station-breathing-card">
-      <span className="station-tag">花草陪你坐 {tool.durationSeconds} 秒</span>
-      <h3>{tool.title}</h3>
+      <div className="station-tag-row">
+        <span className="station-tag">跟著做・{tool.durationSeconds} 秒專注</span>
+        <span className="station-step-counter">
+          {done ? `${stepCount} / ${stepCount}` : `${step + 1} / ${stepCount}`}
+        </span>
+      </div>
+      <h3 className="station-breathing-title">{tool.title}</h3>
       <div className="station-breathing-progress" aria-hidden="true">
         <i style={{ width: `${done ? 100 : ((step + 1) / stepCount) * 100}%` }} />
       </div>
@@ -654,7 +659,7 @@ function BreathingMicro({ tool }: { tool: MicroTool }) {
           </button>
         )}
         <button type="button" onClick={done ? undefined : advance} disabled={done}>
-          {done ? "坐一下就好" : step >= tool.steps.length - 1 ? "收尾" : "下一句"}
+          {done ? "坐一下就好" : step >= tool.steps.length - 1 ? "最後一步" : "下一步"}
         </button>
       </div>
     </article>
