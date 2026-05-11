@@ -1,9 +1,15 @@
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 
 describe("App scene entry", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("starts from clickable scene objects before showing the note composer", () => {
+    vi.stubGlobal("location", { search: "?skipIntro=1" });
+
     const html = renderToStaticMarkup(<App />);
 
     expect(html).toContain("點樹洞：說一說");

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import type {
   AstroReflectionCard,
   ConversationResponse,
@@ -24,8 +25,13 @@ import { buildResponse } from "./lib/respond";
 import "./styles.css";
 
 const savedKey = "pharmacist-tree-hollow:saved";
+const introSeenKey = "pharmacist-tree-hollow:hasSeenIntro";
 
 const ventPlaceholder = "今晚想說什麼？把卡在心裡的話投進來。一句也好。";
+const introLines = ["燈亮著，紙攤著。", "椅子留著你的位置。", "不用敲門，輕輕推就好。"];
+
+type AppPhase = "splash" | "intro" | "scene";
+type IntroFlow = "full" | "repeat" | "skip";
 
 const stationCopy: Record<Exclude<StationType, "vent" | "saved">, { object: string; verb: string; cycleLabel: string }> = {
   reflection: { object: "枝頭的貓頭鷹", verb: "想一下", cycleLabel: "換一題" },
@@ -47,6 +53,34 @@ function loadSaved(): SavedItem[] {
     return JSON.parse(localStorage.getItem(savedKey) ?? "[]") as SavedItem[];
   } catch {
     return [];
+  }
+}
+
+function getIntroFlow(): IntroFlow {
+  try {
+    if (typeof location !== "undefined" && new URLSearchParams(location.search).get("skipIntro") === "1") {
+      return "skip";
+    }
+
+    if (typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return "skip";
+    }
+
+    if (typeof localStorage !== "undefined" && localStorage.getItem(introSeenKey) === "1") {
+      return "repeat";
+    }
+  } catch {
+    return "full";
+  }
+
+  return "full";
+}
+
+function markIntroSeen() {
+  try {
+    localStorage.setItem(introSeenKey, "1");
+  } catch {
+    // localStorage can be unavailable in private or server-like environments.
   }
 }
 
@@ -88,6 +122,9 @@ function pickStationContent(station: StationType): StationContent {
 }
 
 export default function App() {
+  const [introFlow] = useState<IntroFlow>(() => getIntroFlow());
+  const [appPhase, setAppPhase] = useState<AppPhase>(() => (introFlow === "skip" ? "scene" : "splash"));
+  const [isSceneRevealing, setIsSceneRevealing] = useState(false);
   const mood: MoodTag = "累"; // 內部 default，不再由 NPC click 決定
   const [input, setInput] = useState("");
   const [response, setResponse] = useState<ConversationResponse | null>(null);
@@ -106,6 +143,40 @@ export default function App() {
   useEffect(() => {
     setSaved(loadSaved());
   }, []);
+
+  useEffect(() => {
+    if (introFlow === "skip") return;
+
+    if (introFlow === "repeat") {
+      const timer = window.setTimeout(() => {
+        setAppPhase("scene");
+      }, 500);
+
+      return () => {
+        window.clearTimeout(timer);
+      };
+    }
+
+    const splashTimer = window.setTimeout(() => {
+      setAppPhase("intro");
+    }, 1200);
+
+    const revealTimer = window.setTimeout(() => {
+      setIsSceneRevealing(true);
+    }, 3500);
+
+    const sceneTimer = window.setTimeout(() => {
+      markIntroSeen();
+      setAppPhase("scene");
+      setIsSceneRevealing(false);
+    }, 4500);
+
+    return () => {
+      window.clearTimeout(splashTimer);
+      window.clearTimeout(revealTimer);
+      window.clearTimeout(sceneTimer);
+    };
+  }, [introFlow]);
 
   useEffect(() => {
     return () => {
@@ -253,18 +324,41 @@ export default function App() {
 
   const ventActive = ventOpen && !response;
   const otherStationActive = Boolean(activeStation && activeStation !== "vent");
+  const sceneMounted = appPhase === "scene" || isSceneRevealing;
 
   return (
-    <main className={`app-shell ${showSceneEntry ? "app-shell-entry" : ""} ${response ? "app-shell-has-response" : ""} ${crisis ? "crisis-mode" : ""}`}>
-      <WatercolorScene
-        state={sceneState}
-        activePanel={sceneActivePanel}
-        microActive={microActive}
-        savedCount={saved.length}
-        crisis={Boolean(crisis)}
-        showHotspots={showSceneEntry}
-        onStationSelect={selectStation}
-      />
+    <main className={`app-shell app-shell-${appPhase} ${isSceneRevealing ? "app-shell-scene-revealing" : ""} ${showSceneEntry ? "app-shell-entry" : ""} ${response ? "app-shell-has-response" : ""} ${crisis ? "crisis-mode" : ""}`}>
+      {sceneMounted && (
+        <div className={`scene-reveal ${isSceneRevealing ? "scene-reveal-entering" : "scene-reveal-ready"}`}>
+          <WatercolorScene
+            state={sceneState}
+            activePanel={sceneActivePanel}
+            microActive={microActive}
+            savedCount={saved.length}
+            crisis={Boolean(crisis)}
+            showHotspots={appPhase === "scene" && showSceneEntry}
+            onStationSelect={selectStation}
+          />
+        </div>
+      )}
+
+      {appPhase === "splash" && (
+        <section className={`intro-screen splash-screen ${introFlow === "repeat" ? "splash-screen-quick" : ""}`} aria-label="藥師樹洞開場">
+          <h1>藥師樹洞</h1>
+        </section>
+      )}
+
+      {appPhase === "intro" && (
+        <section className={`intro-screen intro-lines-screen ${isSceneRevealing ? "intro-lines-screen-exiting" : ""}`} aria-label="開頭引言">
+          <div className="intro-lines" aria-live="polite">
+            {introLines.map((line, index) => (
+              <p key={line} style={{ "--intro-line-index": index } as CSSProperties}>
+                {line}
+              </p>
+            ))}
+          </div>
+        </section>
+      )}
 
       {ventActive && (
         <section className="composer" aria-label="樹洞輸入" ref={composerRef}>

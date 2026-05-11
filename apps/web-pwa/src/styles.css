@@ -92,6 +92,88 @@ button {
   justify-content: flex-start;
 }
 
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: var(--ink);
+  background: #fbf8f2;
+}
+
+.splash-screen {
+  animation: splashScreenFade 1200ms ease-in-out both;
+}
+
+.splash-screen-quick {
+  animation-duration: 500ms;
+}
+
+.splash-screen h1 {
+  margin: 0;
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
+  font-size: clamp(2rem, 9vw, 3.15rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-align: center;
+  animation: splashTitleIn 900ms ease-out both;
+}
+
+.splash-screen-quick h1 {
+  animation-duration: 420ms;
+}
+
+.intro-lines-screen {
+  text-align: center;
+}
+
+.intro-lines-screen-exiting {
+  animation: introScreenExit 500ms ease-out both;
+}
+
+.intro-lines {
+  position: relative;
+  width: min(82vw, 420px);
+  min-height: 4.8rem;
+  display: grid;
+  place-items: center;
+}
+
+.intro-lines p {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  color: rgba(58, 44, 30, 0.88);
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
+  font-size: clamp(1.24rem, 4.8vw, 1.78rem);
+  font-weight: 500;
+  line-height: 1.8;
+  letter-spacing: 0.1em;
+  text-wrap: pretty;
+  opacity: 0;
+  animation: introLineFade 700ms ease-in-out both;
+  animation-delay: calc(var(--intro-line-index) * 760ms);
+}
+
+.scene-reveal {
+  position: relative;
+  width: 100%;
+}
+
+.scene-reveal-entering {
+  opacity: 0;
+  pointer-events: none;
+  animation: sceneRevealIn 1000ms ease-out both;
+}
+
+.scene-reveal-ready {
+  opacity: 1;
+}
+
 .app-header {
   position: absolute;
   left: 18px;
@@ -291,6 +373,12 @@ button {
 .scene-hotspot-nest strong { animation-delay: 4.62s; }
 
 @media (prefers-reduced-motion: reduce) {
+  .intro-screen,
+  .intro-screen *,
+  .scene-reveal-entering {
+    animation: none;
+  }
+
   .scene-hotspot strong {
     animation: none;
   }
@@ -1565,6 +1653,63 @@ textarea::placeholder {
   }
   50% {
     opacity: 1;
+  }
+}
+
+@keyframes splashScreenFade {
+  0%,
+  78% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes splashTitleIn {
+  from {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes introLineFade {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  22%,
+  74% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes introScreenExit {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes sceneRevealIn {
+  from {
+    opacity: 0;
+    filter: saturate(0.9) brightness(1.08);
+  }
+  to {
+    opacity: 1;
+    filter: saturate(1) brightness(1);
   }
 }
 
