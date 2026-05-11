@@ -370,7 +370,7 @@ export default function App() {
             <span>你點了</span>
             <strong>樹洞</strong>
             <button type="button" className="btn-text" onClick={closeStation}>
-              回到底圖
+              看看別處
             </button>
           </div>
 
@@ -451,7 +451,7 @@ function StationView({ station, content, saved, onCycle, onClose, onClearSaved, 
               <strong>小窩</strong>
             </div>
             <button type="button" className="station-close" onClick={onClose}>
-              回到底圖
+              看看別處
             </button>
           </div>
           <div className="station-body">
@@ -485,7 +485,7 @@ function StationView({ station, content, saved, onCycle, onClose, onClearSaved, 
               <strong>{stationCopy[station].object}</strong>
             </div>
             <button type="button" className="station-close" onClick={onClose}>
-              回到底圖
+              看看別處
             </button>
           </div>
           <div className="station-body">
