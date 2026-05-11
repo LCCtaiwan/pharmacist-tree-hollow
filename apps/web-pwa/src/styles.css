@@ -104,11 +104,11 @@ button {
 }
 
 .splash-screen {
-  animation: splashScreenFade 1200ms ease-in-out both;
+  animation: splashScreenFade 1800ms ease-in-out both;
 }
 
 .splash-screen-quick {
-  animation-duration: 500ms;
+  animation-duration: 700ms;
 }
 
 .splash-screen h1 {
@@ -118,11 +118,11 @@ button {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-align: center;
-  animation: splashTitleIn 900ms ease-out both;
+  animation: splashTitleIn 1300ms ease-out both;
 }
 
 .splash-screen-quick h1 {
-  animation-duration: 420ms;
+  animation-duration: 520ms;
 }
 
 .intro-lines-screen {
@@ -155,8 +155,40 @@ button {
   letter-spacing: 0.1em;
   text-wrap: pretty;
   opacity: 0;
-  animation: introLineFade 700ms ease-in-out both;
-  animation-delay: calc(var(--intro-line-index) * 760ms);
+  animation: introLineFade 1900ms ease-in-out both;
+  animation-delay: calc(var(--intro-line-index) * 1700ms);
+}
+
+.intro-ink-dot {
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 40% 40%,
+    rgba(78, 60, 36, 0.42) 0%,
+    rgba(78, 60, 36, 0.22) 38%,
+    transparent 72%
+  );
+  filter: blur(3px);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.4);
+  animation: introInkBloom 1100ms ease-out both;
+}
+
+.intro-ink-dot-1 {
+  left: 38%;
+  animation-delay: 1450ms;
+}
+
+.intro-ink-dot-2 {
+  left: 62%;
+  width: 24px;
+  height: 24px;
+  animation-delay: 3150ms;
 }
 
 .scene-reveal {
@@ -167,7 +199,7 @@ button {
 .scene-reveal-entering {
   opacity: 0;
   pointer-events: none;
-  animation: sceneRevealIn 1000ms ease-out both;
+  animation: sceneRevealIn 1400ms ease-out both;
 }
 
 .scene-reveal-ready {
@@ -1699,6 +1731,21 @@ textarea::placeholder {
   }
   to {
     opacity: 0;
+  }
+}
+
+@keyframes introInkBloom {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+  35% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.45);
   }
 }
 

@@ -159,17 +159,17 @@ export default function App() {
 
     const splashTimer = window.setTimeout(() => {
       setAppPhase("intro");
-    }, 1200);
+    }, 1800);
 
     const revealTimer = window.setTimeout(() => {
       setIsSceneRevealing(true);
-    }, 3500);
+    }, 7700);
 
     const sceneTimer = window.setTimeout(() => {
       markIntroSeen();
       setAppPhase("scene");
       setIsSceneRevealing(false);
-    }, 4500);
+    }, 9100);
 
     return () => {
       window.clearTimeout(splashTimer);
@@ -356,6 +356,8 @@ export default function App() {
                 {line}
               </p>
             ))}
+            <span className="intro-ink-dot intro-ink-dot-1" aria-hidden="true" />
+            <span className="intro-ink-dot intro-ink-dot-2" aria-hidden="true" />
           </div>
         </section>
       )}
