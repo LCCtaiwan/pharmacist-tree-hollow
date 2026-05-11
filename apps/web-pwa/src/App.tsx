@@ -377,7 +377,7 @@ export default function App() {
               onChange={(event) => setInput(event.target.value)}
               placeholder={ventPlaceholder}
               rows={3}
-              aria-label="寫一張投進深夜櫃檯的紙條"
+              aria-label="寫一張投進樹洞的紙條"
             />
             <button type="button" className="send-button" onClick={submit} aria-label="送進樹洞">
               投
@@ -408,7 +408,7 @@ export default function App() {
         </div>
       ) : isThinking ? (
         <section className="quiet-note quiet-note-thinking" aria-live="polite">
-          <p>櫃檯後面的人正在讀你的紙條。</p>
+          <p>樹洞那頭有人正在讀你的紙條。</p>
           <div className="thinking-dots" aria-hidden="true">
             <i />
             <i />

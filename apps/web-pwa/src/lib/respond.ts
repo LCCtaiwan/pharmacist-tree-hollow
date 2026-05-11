@@ -62,7 +62,7 @@ function contextCopy(
       praiseNotes: ["你沒有把對方的情緒丟回去，這很難。", "你把說明留在流程裡，沒有讓場面失控。", "你剛剛其實是在替現場守住一點安全距離。"],
       tinyAction: "先把肩膀放下來，讓剛剛那個聲音離你遠一點。",
       gentleQuestion: "那句最刺的話，現在可不可以先不用放在自己身上？",
-      closingLine: "今晚先把那個聲音留在櫃檯外面。"
+      closingLine: "今晚先把那個聲音留在門外。"
     },
     prescription_overload: {
       careTitle: "事情一直進來的夜晚",
@@ -171,7 +171,7 @@ function contextCopy(
       praise: "你已經把很多責任撐到交班線以後，這不容易。",
       praiseNotes: ["你已經把能交的交出去了，這本身就很不容易。", "今天撐到這裡，不是理所當然。", "你不是還不夠努力，是已經努力太久了。"],
       tinyAction: "先慢慢吐一口氣，把今天留在今天。",
-      gentleQuestion: "如果把今天留在櫃檯上，最想先放下哪一幕？",
+      gentleQuestion: "如果把今天放在門口，最想先放下哪一幕？",
       closingLine: "今晚不用再值第二個班了。"
     }
   };

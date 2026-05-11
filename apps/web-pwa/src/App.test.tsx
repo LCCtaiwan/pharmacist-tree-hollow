@@ -17,5 +17,6 @@ describe("App scene entry", () => {
     expect(html).toContain("點小屋：聽一首");
     expect(html).toContain("點草地：讀一句");
     expect(html).not.toContain("寫一張投進深夜櫃檯的紙條");
+    expect(html).not.toContain("櫃檯");
   });
 });
