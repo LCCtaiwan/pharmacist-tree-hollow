@@ -2613,3 +2613,108 @@ textarea::placeholder {
   color: var(--moss-deep);
   text-decoration-color: var(--moss-deep);
 }
+
+/* Crisis card — 1925 / 1995 / 1980 專業資源 */
+.crisis-card {
+  width: min(100%, 540px);
+  margin: 0 auto;
+  padding: 24px 22px 22px;
+  border: 1px solid rgba(184, 92, 60, 0.32);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(229, 184, 161, 0.32), transparent 60%),
+    rgba(255, 250, 236, 0.92);
+  box-shadow: 0 14px 32px rgba(184, 92, 60, 0.16);
+}
+
+.crisis-card-header {
+  margin-bottom: 12px;
+}
+
+.crisis-card-stamp {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid rgba(184, 92, 60, 0.42);
+  border-radius: 999px;
+  color: var(--crisis-warm);
+  font-family: "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+}
+
+.crisis-card-subject {
+  margin: 10px 0 0;
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: var(--ink);
+}
+
+.crisis-card-hold {
+  margin: 0 0 12px;
+  font-family: "Source Han Sans TC", "Noto Sans TC", system-ui, sans-serif;
+  color: var(--ink);
+  line-height: 1.85;
+}
+
+.crisis-card-prompt {
+  margin: 14px 0 14px;
+  color: rgba(58, 44, 30, 0.78);
+  font-size: 0.94rem;
+  line-height: 1.7;
+}
+
+.crisis-card-hotlines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.crisis-card-hotline-link {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(184, 92, 60, 0.26);
+  border-radius: 8px;
+  background: rgba(255, 250, 236, 0.78);
+  color: var(--ink);
+  text-decoration: none;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.crisis-card-hotline-link:hover {
+  background: rgba(239, 224, 184, 0.78);
+  border-color: rgba(184, 92, 60, 0.46);
+}
+
+.crisis-card-hotline-number {
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--crisis-warm);
+  letter-spacing: 0.08em;
+}
+
+.crisis-card-hotline-meta {
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+.crisis-card-signoff {
+  margin: 18px 0 0;
+  text-align: right;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+}
+
+.crisis-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(58, 44, 30, 0.14);
+}
