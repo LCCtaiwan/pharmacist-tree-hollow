@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.7.0",
+    "@vercel/node": "^5.8.0",
     "@vitejs/plugin-react": "^5.1.1",
     "dotenv": "^16.4.7",
     "openai": "^4.104.0",
