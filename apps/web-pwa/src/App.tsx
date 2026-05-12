@@ -23,6 +23,7 @@ import { WatercolorScene } from "./components/WatercolorScene";
 import type { SceneState } from "./components/WatercolorScene";
 import { CrisisCard } from "./components/CrisisCard";
 import { ResponseCard } from "./components/ResponseCard";
+import { hasUsedLetterToday, markLetterSent } from "./lib/daily-limit";
 import { requestAILetter } from "./lib/letter-client";
 import { staticToAILetter } from "./lib/letter-adapter";
 import { buildResponse } from "./lib/respond";
@@ -153,6 +154,7 @@ export default function App() {
   const [input, setInput] = useState("");
   const [response, setResponse] = useState<AILetterResponse | null>(null);
   const [saved, setSaved] = useState<SavedItem[]>([]);
+  const [dailyLimitReached, setDailyLimitReached] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const [isDepositing, setIsDepositing] = useState(false);
   const [isResponding, setIsResponding] = useState(false);
@@ -173,6 +175,10 @@ export default function App() {
 
   useEffect(() => {
     setSaved(loadSaved());
+  }, []);
+
+  useEffect(() => {
+    setDailyLimitReached(hasUsedLetterToday());
   }, []);
 
   useEffect(() => {
@@ -278,6 +284,8 @@ export default function App() {
         : null;
 
   async function submit() {
+    if (dailyLimitReached) return;
+
     const trimmed = input.trim();
     timersRef.current.forEach((timer) => window.clearTimeout(timer));
     timersRef.current = [];
@@ -306,6 +314,8 @@ export default function App() {
       if (safety.riskLevel === "crisis") {
         const staticCrisis = buildResponse(userText, mood);
         letter = staticToAILetter({ ...staticCrisis, riskLevel: "crisis" });
+        markLetterSent();
+        setDailyLimitReached(true);
       } else {
         const safeText = redactSensitiveText(userText);
         const result = await requestAILetter(safeText, mood);
@@ -313,6 +323,10 @@ export default function App() {
       }
 
       setResponse(letter);
+      if (safety.riskLevel !== "crisis") {
+        markLetterSent();
+        setDailyLimitReached(true);
+      }
       setIsThinking(false);
       setIsResponding(true);
 
@@ -475,6 +489,12 @@ export default function App() {
             </button>
           </div>
 
+          {dailyLimitReached && (
+            <p className="daily-limit-notice">
+              今晚的紙條已經投了。明天燈還會亮著。
+            </p>
+          )}
+
           <div className="input-row">
             <textarea
               ref={textareaRef}
@@ -482,9 +502,10 @@ export default function App() {
               onChange={(event) => setInput(event.target.value)}
               placeholder={ventPlaceholder}
               rows={3}
+              disabled={dailyLimitReached}
               aria-label="寫一張投進樹洞的紙條"
             />
-            <button type="button" className="send-button" onClick={submit} aria-label="送進樹洞">
+            <button type="button" className="send-button" onClick={submit} disabled={dailyLimitReached} aria-label="送進樹洞">
               投
             </button>
           </div>
