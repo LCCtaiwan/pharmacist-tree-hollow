@@ -683,7 +683,6 @@ function BreathingMicro({ tool }: { tool: MicroTool }) {
           {done ? `${stepCount} / ${stepCount}` : `${step + 1} / ${stepCount}`}
         </span>
       </div>
-      <h3 className="station-breathing-title">{tool.title}</h3>
       <div className="station-breathing-progress" aria-hidden="true">
         <i style={{ width: `${done ? 100 : ((step + 1) / stepCount) * 100}%` }} />
       </div>
