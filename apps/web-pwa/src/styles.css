@@ -2556,10 +2556,10 @@ textarea::placeholder {
 }
 
 .letter-body {
-  font-family: "標楷體", "DFKai-SB", "BiauKaiHK", "STKaiti", "Kaiti TC", "AR PL UKai TW", "Klee One", "Noto Serif TC", serif;
-  font-size: 1.08rem;
-  line-height: 2.05;
-  letter-spacing: 0.05em;
+  font-family: "Source Han Sans TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  font-size: 1.06rem;
+  line-height: 1.95;
+  letter-spacing: 0.04em;
   color: var(--ink);
   /* CJK 閱讀優化：自動 balance 換行、嚴格處理 punctuation、結尾標點掛邊 */
   text-wrap: pretty;
