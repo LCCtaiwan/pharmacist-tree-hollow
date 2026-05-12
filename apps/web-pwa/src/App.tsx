@@ -550,6 +550,19 @@ function StationView({
   stationRef
 }: StationViewProps) {
   const [failedAstroImageIds, setFailedAstroImageIds] = useState<Record<string, true>>({});
+  const [astroImageRetries, setAstroImageRetries] = useState<Record<string, number>>({});
+
+  const MAX_IMAGE_RETRIES = 2;
+
+  function handleAstroImageError(cardId: string) {
+    setAstroImageRetries((current) => {
+      const attempts = (current[cardId] ?? 0) + 1;
+      if (attempts > MAX_IMAGE_RETRIES) {
+        setFailedAstroImageIds((failed) => ({ ...failed, [cardId]: true }));
+      }
+      return { ...current, [cardId]: attempts };
+    });
+  }
   const hasAstroSpread = station === "astro" && astroSpreadCards.length === 3;
 
   return (
@@ -639,12 +652,12 @@ function StationView({
                           </div>
                         ) : (
                           <img
-                            src={getAstroCardImagePath(card.id)}
+                            key={`${card.id}-${astroImageRetries[card.id] ?? 0}`}
+                            src={`${getAstroCardImagePath(card.id)}${astroImageRetries[card.id] ? `?r=${astroImageRetries[card.id]}` : ""}`}
                             alt={`${card.name}卡面`}
                             loading="eager"
-                            onError={() => {
-                              setFailedAstroImageIds((current) => ({ ...current, [card.id]: true }));
-                            }}
+                            decoding="async"
+                            onError={() => handleAstroImageError(card.id)}
                           />
                         )}
                       </div>
