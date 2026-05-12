@@ -1,6 +1,5 @@
 import type {
   AstroReflectionCard,
-  HealingCard,
   MicroTool,
   MoodTag,
   ScenarioTag,
@@ -50,39 +49,6 @@ export const microTools: MicroTool[] = [
     durationSeconds: 30,
     steps: ["把肩膀往下放。", "心裡說：今天已經交到流程裡。", "讓身體先離開值班的速度。"],
     completionText: "下班後還想著工作很正常，但你可以慢慢回到自己。"
-  }
-];
-
-export const healingCards: HealingCard[] = [
-  {
-    id: "boundary",
-    name: "邊界",
-    meaning: "不是所有情緒都該由你承擔。",
-    reflection: "這件事裡，有哪一小塊其實可以交回流程或團隊？"
-  },
-  {
-    id: "handoff",
-    name: "交班",
-    meaning: "有些重量可以交出去，不必整晚背著。",
-    reflection: "今天哪件事已經完成到可以暫時放下？"
-  },
-  {
-    id: "small-light",
-    name: "小燈",
-    meaning: "你已經做了足夠多的確認。",
-    reflection: "剛剛哪一個確認動作，其實是在守住安全？"
-  },
-  {
-    id: "temperance",
-    name: "節制",
-    meaning: "今天不用把所有人的期待都接住。",
-    reflection: "哪件事做到七十分，就已經可以先過關？"
-  },
-  {
-    id: "deep-breath",
-    name: "深呼吸",
-    meaning: "先讓身體知道，現在不是急診鈴響。",
-    reflection: "你可以先把哪一個部位放鬆十秒？"
   }
 ];
 
@@ -261,6 +227,42 @@ export const songs: SongRecommendation[] = songSeeds.map(([title, artist, langua
   timing,
   reason
 }));
+
+const combinedReadingCopy: Array<[ScenarioTag, string]> = [
+  ["after_shift", "今晚整體都在『下班還沒回家』的階段。"],
+  ["unseen_effort", "今晚的關鍵字是『被看見』，先讓自己看見自己。"],
+  ["pgy_pressure", "今晚特別跟 PGY 的不安有關，慢慢來，路還長。"],
+  ["not_professional", "『不夠專業』的念頭今晚比較大聲，先聽，不必信。"],
+  ["night_shift", "夜班的節奏在卡今晚的整體，先讓身體落地。"],
+  ["customer_conflict", "白天那段對話，今晚還在你身上沒散，可以慢慢放下。"],
+  ["prescription_overload", "今晚的重量是『太多事一起來』，先收一格就好。"],
+  ["shortage_pressure", "短缺的壓力今晚還在，但不是一個人扛的事。"],
+  ["team_doubt", "團隊裡的不確定今晚還在搖晃，先回到自己的腳步。"],
+  ["interaction_worry", "今晚對交互作用的擔心比較大，先信任你查過的部分。"],
+  ["inventory_control", "今晚的『管控感』比較緊，已經做的就足夠交班。"],
+  ["leaving_thought", "『要不要走』的念頭今晚浮起來了，不必今晚就答。"]
+];
+
+export function getCombinedReading(cards: AstroReflectionCard[]): string {
+  const counts = new Map<ScenarioTag, number>();
+
+  for (const card of cards) {
+    for (const tag of card.scenarioTags) {
+      counts.set(tag, (counts.get(tag) ?? 0) + 1);
+    }
+  }
+
+  let best: { tag: ScenarioTag; count: number; text: string } | null = null;
+  for (const [tag, text] of combinedReadingCopy) {
+    const count = counts.get(tag) ?? 0;
+    if (count < 2) continue;
+    if (!best || count > best.count) {
+      best = { tag, count, text };
+    }
+  }
+
+  return best?.text ?? "今晚是雜的，雜也是一種真實。";
+}
 
 export function pickByScenario<T extends { scenarioTags: ScenarioTag[] }>(
   items: T[],

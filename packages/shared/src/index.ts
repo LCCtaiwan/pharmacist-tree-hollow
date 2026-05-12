@@ -47,13 +47,6 @@ export interface SongRecommendation {
   reason: string;
 }
 
-export interface HealingCard {
-  id: string;
-  name: string;
-  meaning: string;
-  reflection: string;
-}
-
 export interface AstroReflectionCard {
   id: string;
   name: string;
@@ -93,6 +86,5 @@ export interface ConversationResponse {
   microTool?: MicroTool;
   followupActions: FollowupAction[];
   song?: SongRecommendation;
-  card?: HealingCard;
   astro?: AstroReflectionCard;
 }

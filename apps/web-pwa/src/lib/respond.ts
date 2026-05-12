@@ -1,6 +1,6 @@
 import { classifySafety } from "@pharmacist-tree-hollow/ai-safety";
-import { astroCards, healingCards, microTools, pickByScenario, songs } from "@pharmacist-tree-hollow/content";
-import type { ConversationResponse, MoodTag, ScenarioTag } from "@pharmacist-tree-hollow/shared";
+import { astroCards, microTools, pickByScenario, songs } from "@pharmacist-tree-hollow/content";
+import type { AstroReflectionCard, ConversationResponse, MoodTag, ScenarioTag } from "@pharmacist-tree-hollow/shared";
 
 const scenarioKeywords: Array<{ tag: ScenarioTag; words: string[] }> = [
   { tag: "customer_conflict", words: ["客人", "民眾", "病人", "患者", "家屬", "罵", "兇", "客訴", "奧客", "投訴"] },
@@ -16,6 +16,16 @@ const scenarioKeywords: Array<{ tag: ScenarioTag; words: string[] }> = [
   { tag: "unseen_effort", words: ["沒人看見", "沒有人看見", "不被看見", "明明很努力"] },
   { tag: "after_shift", words: ["下班", "回家", "還在想", "放不下"] }
 ];
+
+const moodScenarioHints: Record<MoodTag, ScenarioTag[]> = {
+  累: ["after_shift", "night_shift", "prescription_overload"],
+  委屈: ["customer_conflict", "unseen_effort", "team_doubt"],
+  煩: ["customer_conflict", "shortage_pressure", "prescription_overload"],
+  空: ["after_shift", "night_shift", "leaving_thought"],
+  緊繃: ["interaction_worry", "inventory_control", "pgy_pressure"],
+  想哭: ["unseen_effort", "customer_conflict", "after_shift"],
+  還可以: ["unseen_effort", "after_shift", "pgy_pressure"]
+};
 
 export function detectScenario(input: string): ScenarioTag {
   return detectScenarios(input)[0] ?? "after_shift";
@@ -225,7 +235,8 @@ export function buildResponse(input: string, mood: MoodTag): ConversationRespons
       gentleQuestion: "如果不提可識別資料，這件事最壓住你的是哪一段？",
       closingLine: "你的感受可以留下，個資不用留在這裡。",
       microTool: pickByScenario(microTools, scenario, 0),
-      followupActions: ["song", "card", "astro"]
+      followupActions: ["song", "astro"],
+      astro: pickAstroForReply(mood, scenarios)
     };
   }
 
@@ -237,14 +248,28 @@ export function buildResponse(input: string, mood: MoodTag): ConversationRespons
     ...baseCopy,
     message: secondaryLine ? [secondaryLine, ...baseCopy.message.slice(0, 1)] : baseCopy.message,
     microTool: pickByScenario(microTools, scenario, 0),
-    followupActions: ["song", "card", "astro"],
+    followupActions: ["song", "astro"],
     song: pickSong(mood, scenario),
-    card: pickByScenario(healingCards.map((card) => ({ ...card, scenarioTags: [scenario] })), scenario, 0),
-    astro: pickByScenario(astroCards, scenario, 0)
+    astro: pickAstroForReply(mood, scenarios)
   };
 }
 
 export function pickSong(mood: MoodTag, scenario: ScenarioTag) {
   const byScenarioAndMood = songs.find((song) => song.scenarioTags.includes(scenario) && song.moodTags.includes(mood));
   return byScenarioAndMood ?? pickByScenario(songs, scenario, 0);
+}
+
+export function pickAstroForReply(mood: MoodTag, scenarios: ScenarioTag[]): AstroReflectionCard {
+  const scenarioSet = new Set(scenarios);
+  const moodHints = moodScenarioHints[mood];
+  const moodSet = new Set(moodHints);
+
+  const scored = astroCards.map((card, index) => {
+    const scenarioScore = card.scenarioTags.filter((tag) => scenarioSet.has(tag)).length * 3;
+    const moodScore = card.scenarioTags.filter((tag) => moodSet.has(tag)).length;
+    return { card, index, score: scenarioScore + moodScore };
+  });
+
+  scored.sort((a, b) => b.score - a.score || a.index - b.index);
+  return scored[0]?.card ?? astroCards[0];
 }

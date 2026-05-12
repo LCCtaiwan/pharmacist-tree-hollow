@@ -58,6 +58,13 @@ export function ResponseCard({
         {response.closingLine && (
           <p className="letter-closing">{response.closingLine}</p>
         )}
+
+        {response.astro?.healingTip && !isCrisis && (
+          <aside className="letter-astro-tip" aria-label="信中的小貼">
+            <span>信中的小貼</span>
+            <p>{response.astro.healingTip}</p>
+          </aside>
+        )}
       </div>
 
       <footer className="letter-footer">

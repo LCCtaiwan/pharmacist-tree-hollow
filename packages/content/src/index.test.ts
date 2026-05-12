@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { astroCards, healingCards, microTools, songs } from "./index";
+import { astroCards, getCombinedReading, microTools, songs } from "./index";
 
 describe("content pools", () => {
   it("contains exactly 50 MVP song recommendations", () => {
@@ -15,10 +15,17 @@ describe("content pools", () => {
     expect(microTools).toHaveLength(5);
     expect(astroCards).toHaveLength(14);
     expect(astroCards.every((card) => typeof card.healingTip === "string" && card.healingTip.length > 0)).toBe(true);
-    expect(healingCards.length).toBeGreaterThanOrEqual(5);
   });
 
   it("uses short astro card text", () => {
     expect(astroCards.every((card) => card.lines.length >= 2 && card.lines.length <= 4)).toBe(true);
+  });
+
+  it("builds a combined astro reading from repeated scenario tags", () => {
+    expect(getCombinedReading([astroCards[1], astroCards[5], astroCards[13]])).toBe("今晚整體都在『下班還沒回家』的階段。");
+  });
+
+  it("falls back when three astro cards have no repeated scenario tag", () => {
+    expect(getCombinedReading([astroCards[0], astroCards[3], astroCards[4]])).toBe("今晚是雜的，雜也是一種真實。");
   });
 });

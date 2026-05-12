@@ -31,6 +31,7 @@
 
 ## Completed Work
 
+- 2026-05-12: Integrated reply healing tips into `astroCards`, removed legacy healing card data/art (5 PNGs), and replaced the astro station single-card draw with a three-card past/present/next spread. Per A 方案 minimalism: removed per-card reflective lines, healingTip, position prompts, and combined reading — astro is now image-only ("看圖、感受。不必對應字面解釋。"). Differentiates the three reflective stations: 枝頭=文字、花草=動作、星光=圖像.
 - 2026-05-10: Fixed Web PWA interaction flow after deployed UI feedback: separated watercolor scene from the input controls, made normal followup choices visible immediately after a response, changed followups into full-width action rows with explanatory text, and auto-scrolls to response/focus panels.
 - 2026-05-10 revision: First screen still showed too little of the watercolor background, so the scene was enlarged and the mood controls were compressed into a single horizontal row.
 - 2026-05-10 entry flow revision: First screen now shows the full watercolor scene with clickable object hotspots. The note composer renders only after the user clicks a scene object.
@@ -83,6 +84,8 @@ M1 Web App MVP implemented locally, but UI 美術方向被使用者退回。即�
 6. 監督者人工檢查 375px 行動裝置視覺。
 
 ## Verification Status
+
+pass: 2026-05-12 astro v0.5 passed `npx tsc -p tsconfig.json --noEmit`, `npm run build`, and `npm test`. Vitest now excludes `.claude/**` temporary worktrees so tests run only against the project source.
 
 pass: 2026-05-10 UI flow fix passed `npm test`, `npm run build`, and Playwright checks at 1280x720 and 390x844. Verified first screen no longer overlays controls on the background image, followup options are visible immediately, and clicking `紙籤盒` scrolls the panel into view without manual scrolling.
 

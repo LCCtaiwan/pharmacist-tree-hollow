@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildResponse, detectScenario, detectScenarios } from "./respond";
+import { buildResponse, detectScenario, detectScenarios, pickAstroForReply } from "./respond";
 
 describe("respond", () => {
   it("detects pharmacist scenarios", () => {
@@ -20,16 +20,23 @@ describe("respond", () => {
     expect(response.microTool).toBeUndefined();
   });
 
-  it("does not provide song or card actions for medical boundary flow", () => {
+  it("does not provide song or astro actions for medical boundary flow", () => {
     const response = buildResponse("這個病人處方劑量要不要調整？", "緊繃");
     expect(response.riskLevel).toBe("medical_boundary");
     expect(response.followupActions).toHaveLength(0);
   });
 
-  it("builds normal response with micro tool and followups", () => {
+  it("builds normal response with micro tool, followups, and an astro healing tip", () => {
     const response = buildResponse("今天被家屬兇，還要一直補紀錄", "委屈");
     expect(response.riskLevel).toBe("normal");
     expect(response.microTool?.id).toBe("customer-boundary");
-    expect(response.followupActions).toEqual(["song", "card", "astro"]);
+    expect(response.followupActions).toEqual(["song", "astro"]);
+    expect(response.astro?.healingTip).toBeTruthy();
+    expect("card" in response).toBe(false);
+  });
+
+  it("matches reply astro cards by scenario and mood hints", () => {
+    const card = pickAstroForReply("緊繃", ["interaction_worry"]);
+    expect(card.scenarioTags).toContain("interaction_worry");
   });
 });

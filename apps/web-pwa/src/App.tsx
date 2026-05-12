@@ -13,7 +13,6 @@ import type {
 } from "@pharmacist-tree-hollow/shared";
 import {
   astroCards,
-  getCombinedReading,
   healingQuotes,
   microTools,
   reflectionQuestions,
@@ -33,12 +32,11 @@ const introLines = ["燈亮著，紙攤著。", "椅子留著你的位置。", "
 
 type AppPhase = "splash" | "intro" | "scene";
 type IntroFlow = "full" | "repeat" | "skip";
-type AstroMode = "single" | "spread";
 
 const stationCopy: Record<Exclude<StationType, "vent" | "saved">, { object: string; verb: string; cycleLabel: string }> = {
   reflection: { object: "枝頭的貓頭鷹", verb: "想一下", cycleLabel: "換一題" },
   song: { object: "小屋的收音機", verb: "聽一首", cycleLabel: "換一首" },
-  astro: { object: "天上的星光", verb: "抽一張", cycleLabel: "換一張" },
+  astro: { object: "天上的星光", verb: "抽三張", cycleLabel: "換一組" },
   breathing: { object: "搖晃的花草", verb: "喘口氣", cycleLabel: "換一個" },
   quote: { object: "草地上的紙條", verb: "讀一句", cycleLabel: "換一句" }
 };
@@ -152,7 +150,6 @@ export default function App() {
   const [isResponding, setIsResponding] = useState(false);
   const [isAstroCardVisible, setIsAstroCardVisible] = useState(true);
   const [isAstroCycling, setIsAstroCycling] = useState(false);
-  const [astroMode, setAstroMode] = useState<AstroMode>("single");
   const [astroSpreadCards, setAstroSpreadCards] = useState<AstroReflectionCard[]>([]);
   const [activeStation, setActiveStation] = useState<StationType | null>(null);
   const [stationContent, setStationContent] = useState<StationContent>(null);
@@ -300,27 +297,15 @@ export default function App() {
     if (astroUnlockTimerRef.current) window.clearTimeout(astroUnlockTimerRef.current);
     setIsAstroCycling(false);
     setIsAstroCardVisible(true);
-    setAstroMode("single");
-    setAstroSpreadCards([]);
     setActiveStation(station);
-    setStationContent(pickStationContent(station));
-  }
 
-  function switchAstroMode(nextMode: AstroMode) {
-    if (activeStation !== "astro" || astroMode === nextMode || isAstroCycling) return;
-    if (astroCycleTimerRef.current) window.clearTimeout(astroCycleTimerRef.current);
-    if (astroUnlockTimerRef.current) window.clearTimeout(astroUnlockTimerRef.current);
-
-    setIsAstroCardVisible(true);
-    setAstroMode(nextMode);
-    if (nextMode === "spread") {
+    if (station === "astro") {
       setStationContent(null);
       setAstroSpreadCards(pickAstroSpreadCards());
-      return;
+    } else {
+      setAstroSpreadCards([]);
+      setStationContent(pickStationContent(station));
     }
-
-    setAstroSpreadCards([]);
-    setStationContent(pickStationContent("astro"));
   }
 
   function cycleStationContent() {
@@ -334,15 +319,11 @@ export default function App() {
       setIsAstroCycling(true);
       setIsAstroCardVisible(false);
       astroCycleTimerRef.current = window.setTimeout(() => {
-        if (astroMode === "spread") {
-          setAstroSpreadCards(pickAstroSpreadCards());
-        } else {
-          setStationContent(pickStationContent(activeStation));
-        }
+        setAstroSpreadCards(pickAstroSpreadCards());
         setIsAstroCardVisible(true);
         astroUnlockTimerRef.current = window.setTimeout(() => {
           setIsAstroCycling(false);
-        }, astroMode === "spread" ? 1500 : 400);
+        }, 1500);
       }, 200);
       return;
     }
@@ -355,7 +336,6 @@ export default function App() {
     if (astroUnlockTimerRef.current) window.clearTimeout(astroUnlockTimerRef.current);
     setIsAstroCycling(false);
     setIsAstroCardVisible(true);
-    setAstroMode("single");
     setAstroSpreadCards([]);
     setActiveStation(null);
     setStationContent(null);
@@ -392,7 +372,6 @@ export default function App() {
     if (astroUnlockTimerRef.current) window.clearTimeout(astroUnlockTimerRef.current);
     setIsAstroCycling(false);
     setIsAstroCardVisible(true);
-    setAstroMode("single");
     setAstroSpreadCards([]);
     setIsDepositing(false);
     setIsThinking(false);
@@ -480,9 +459,7 @@ export default function App() {
           saved={saved}
           isAstroCardVisible={isAstroCardVisible}
           isAstroCycling={isAstroCycling}
-          astroMode={astroMode}
           astroSpreadCards={astroSpreadCards}
-          onAstroModeChange={switchAstroMode}
           onCycle={cycleStationContent}
           onClose={closeStation}
           onClearSaved={clearSaved}
@@ -524,9 +501,7 @@ interface StationViewProps {
   saved: SavedItem[];
   isAstroCardVisible: boolean;
   isAstroCycling: boolean;
-  astroMode: AstroMode;
   astroSpreadCards: AstroReflectionCard[];
-  onAstroModeChange: (mode: AstroMode) => void;
   onCycle: () => void;
   onClose: () => void;
   onClearSaved: () => void;
@@ -539,16 +514,14 @@ function StationView({
   saved,
   isAstroCardVisible,
   isAstroCycling,
-  astroMode,
   astroSpreadCards,
-  onAstroModeChange,
   onCycle,
   onClose,
   onClearSaved,
   stationRef
 }: StationViewProps) {
   const [failedAstroImageIds, setFailedAstroImageIds] = useState<Record<string, true>>({});
-  const hasAstroSpread = station === "astro" && astroMode === "spread" && astroSpreadCards.length === 3;
+  const hasAstroSpread = station === "astro" && astroSpreadCards.length === 3;
 
   return (
     <section className={`station-panel station-${station}`} aria-label="場景小站" ref={stationRef}>
@@ -598,27 +571,6 @@ function StationView({
             </button>
           </div>
           <div className="station-body">
-            {station === "astro" && (
-              <div className="station-mode-toggle" role="group" aria-label="星空抽卡模式">
-                <button
-                  type="button"
-                  className={astroMode === "single" ? "station-mode-active" : ""}
-                  onClick={() => onAstroModeChange("single")}
-                  disabled={isAstroCycling}
-                >
-                  抽一張
-                </button>
-                <button
-                  type="button"
-                  className={astroMode === "spread" ? "station-mode-active" : ""}
-                  onClick={() => onAstroModeChange("spread")}
-                  disabled={isAstroCycling}
-                >
-                  攤開三張
-                </button>
-              </div>
-            )}
-
             {content?.type === "reflection" && (
               <article className="station-reflection-card">
                 <span className="station-tag">想一下</span>
@@ -637,35 +589,6 @@ function StationView({
               </article>
             )}
 
-            {content?.type === "astro" && astroMode === "single" && (
-              <article className={`station-astro-card ${isAstroCardVisible ? "station-astro-card-visible" : "station-astro-card-hidden"}`}>
-                <div className="station-astro-card-art">
-                  {failedAstroImageIds[content.data.id] ? (
-                    <div className="station-astro-card-fallback" role="img" aria-label={`${content.data.name}卡牌正在準備中`}>
-                      <span aria-hidden="true">✦</span>
-                      <p>卡牌正在準備中</p>
-                      <span aria-hidden="true">✦</span>
-                    </div>
-                  ) : (
-                    <img
-                      src={getAstroCardImagePath(content.data)}
-                      alt={`${content.data.name}卡面`}
-                      loading="eager"
-                      onError={() => {
-                        setFailedAstroImageIds((current) => ({ ...current, [content.data.id]: true }));
-                      }}
-                    />
-                  )}
-                </div>
-                <div className="station-astro-reading">
-                  <span className="station-tag">抽到的是</span>
-                  <h3>{content.data.name}</h3>
-                  <p className="station-astro-hint">看圖、感受。不必對應字面解釋。</p>
-                </div>
-                <small>娛樂與反思用，不是預測或專業建議。</small>
-              </article>
-            )}
-
             {hasAstroSpread && (
               <div className={`station-astro-spread ${isAstroCardVisible ? "station-astro-spread-visible" : "station-astro-spread-hidden"}`}>
                 <div className="station-astro-spread-grid">
@@ -677,7 +600,6 @@ function StationView({
                     >
                       <div className="station-astro-spread-position">
                         <span>{astroSpreadPositions[index].label}</span>
-                        <p>{astroSpreadPositions[index].prompt}</p>
                       </div>
                       <div className="station-astro-card-art">
                         {failedAstroImageIds[card.id] ? (
@@ -699,20 +621,11 @@ function StationView({
                       </div>
                       <div className="station-astro-reading">
                         <h3>{card.name}</h3>
-                        {card.lines.map((line) => (
-                          <p key={line}>{line}</p>
-                        ))}
                       </div>
-                      {index === 2 && card.healingTip && (
-                        <div className="station-astro-tip">
-                          <span>接下來的小提醒</span>
-                          <p>{card.healingTip}</p>
-                        </div>
-                      )}
                     </article>
                   ))}
                 </div>
-                <p className="station-astro-combined-reading">{getCombinedReading(astroSpreadCards)}</p>
+                <p className="station-astro-spread-hint">看圖、感受。不必對應字面解釋。</p>
                 <small>娛樂與反思用，不是預測或專業建議。</small>
               </div>
             )}
@@ -734,7 +647,7 @@ function StationView({
           {(content || hasAstroSpread) && (
             <div className="station-actions">
               <button type="button" onClick={onCycle} disabled={station === "astro" && isAstroCycling}>
-                {station === "astro" && astroMode === "spread" ? "換一組" : stationCopy[station].cycleLabel}
+                {stationCopy[station].cycleLabel}
               </button>
             </div>
           )}

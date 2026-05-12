@@ -13,7 +13,14 @@ const normalResponse: ConversationResponse = {
   tinyAction: "先把下一個可確認的欄位做好就好。",
   gentleQuestion: "下一個最小欄位是什麼？",
   closingLine: "今晚先不用把所有格子都放進腦袋裡。",
-  followupActions: []
+  followupActions: [],
+  astro: {
+    id: "astro-saturn",
+    name: "土星的邊界",
+    lines: ["你不用替所有混亂負責。", "先把能確認的確認好，", "剩下的，交回流程和團隊。"],
+    scenarioTags: ["shortage_pressure", "inventory_control", "team_doubt"],
+    healingTip: "列出今晚確認過的3件事，提醒自己有把關。"
+  }
 };
 
 describe("ResponseCard", () => {
@@ -32,6 +39,9 @@ describe("ResponseCard", () => {
     expect(html).toContain("交班和紀錄一直追著跑。");
     expect(html).toContain("那些沒有人稱讚的確認，其實都在保護後面的人。");
     expect(html).toContain("先把下一個可確認的欄位做好就好。");
+    expect(html).toContain("信中的小貼");
+    expect(html).toContain("列出今晚確認過的3件事，提醒自己有把關。");
+    expect(html).not.toContain("土星的邊界");
     expect(html).toContain("— 樹洞");
     expect(html).toContain("收下這封信");
     expect(html).toContain("再投一張紙條");
