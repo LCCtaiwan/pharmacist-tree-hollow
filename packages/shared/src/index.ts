@@ -88,3 +88,13 @@ export interface ConversationResponse {
   song?: SongRecommendation;
   astro?: AstroReflectionCard;
 }
+
+export type AILetterMode = "hold_and_praise" | "praise_only" | "hold_only" | "crisis";
+
+export interface AILetterResponse {
+  mode: AILetterMode;
+  careTitle: string;
+  hold: string;
+  praise: string;
+  praiseNotes: string[];
+}

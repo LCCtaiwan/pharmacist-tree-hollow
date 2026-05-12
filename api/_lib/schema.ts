@@ -1,4 +1,6 @@
-export type AILetterMode = "hold_and_praise" | "praise_only" | "hold_only" | "crisis";
+import type { AILetterMode, AILetterResponse } from "@pharmacist-tree-hollow/shared";
+
+export type { AILetterMode, AILetterResponse };
 
 export const VALID_MODES = [
   "hold_and_praise",
@@ -6,14 +8,6 @@ export const VALID_MODES = [
   "hold_only",
   "crisis"
 ] as const satisfies readonly AILetterMode[];
-
-export interface AILetterResponse {
-  mode: AILetterMode;
-  careTitle: string;
-  hold: string;
-  praise: string;
-  praiseNotes: string[];
-}
 
 const MAX_CARE_TITLE_LEN = 14;
 
