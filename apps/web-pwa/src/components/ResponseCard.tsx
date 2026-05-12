@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
-import type { ConversationResponse } from "@pharmacist-tree-hollow/shared";
+import type { AILetterResponse } from "@pharmacist-tree-hollow/shared";
 
 export function ResponseCard({
-  response,
+  letter,
   onSave,
   onNewNote
 }: {
-  response: ConversationResponse;
+  letter: AILetterResponse;
   onSave: () => void;
   onNewNote: () => void;
 }) {
-  const isCrisis = response.riskLevel === "crisis";
   const [savedOnce, setSavedOnce] = useState(false);
-  const praiseNotes = response.praiseNotes?.length ? response.praiseNotes : [];
 
   useEffect(() => {
     setSavedOnce(false);
-  }, [response]);
+  }, [letter]);
 
   function handleSave() {
     onSave();
@@ -24,24 +22,24 @@ export function ResponseCard({
   }
 
   return (
-    <article className={`letter-card ${isCrisis ? "letter-card-crisis" : ""}`} aria-live="polite">
+    <article className="letter-card" aria-live="polite">
       <header className="letter-header">
-        <span className="letter-stamp">{isCrisis ? "先聽見你" : "樹洞回信"}</span>
-        {response.careTitle && <h2 className="letter-subject">{response.careTitle}</h2>}
+        <span className="letter-stamp">樹洞回信</span>
+        {letter.careTitle && <h2 className="letter-subject">{letter.careTitle}</h2>}
       </header>
 
       <div className="letter-body">
-        {response.message.map((line, index) => (
-          <p key={`m-${index}`}>{line}</p>
-        ))}
+        {letter.hold && <p>{letter.hold}</p>}
 
-        <p className="letter-praise">{response.praise}</p>
-        {praiseNotes.map((note) => (
+        {letter.praise && <p className="letter-praise">{letter.praise}</p>}
+        {letter.praiseNotes.map((note) => (
           <p key={note} className="letter-praise-extend">{note}</p>
         ))}
 
         <p className="letter-signoff">—— 燈還亮著</p>
       </div>
+
+      <p className="letter-disclosure">樹洞回信由 AI 協助撰寫，內容不會被保留訓練。</p>
 
       <div className="letter-actions">
         <button type="button" className="btn-text" onClick={handleSave} disabled={savedOnce}>

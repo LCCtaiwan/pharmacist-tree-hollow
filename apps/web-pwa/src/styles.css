@@ -2598,6 +2598,16 @@ textarea::placeholder {
   letter-spacing: 0.14em;
 }
 
+.letter-disclosure {
+  margin: 14px 4px 0;
+  color: var(--ink-soft);
+  font-family: "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
+  font-size: 0.74rem;
+  line-height: 1.55;
+  letter-spacing: 0.04em;
+  opacity: 0.68;
+}
+
 .letter-actions {
   display: flex;
   justify-content: space-between;

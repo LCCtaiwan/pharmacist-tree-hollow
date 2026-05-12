@@ -1,56 +1,78 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import type { ConversationResponse } from "@pharmacist-tree-hollow/shared";
+import type { AILetterResponse } from "@pharmacist-tree-hollow/shared";
 import { ResponseCard } from "./ResponseCard";
 
-const normalResponse: ConversationResponse = {
-  riskLevel: "normal",
-  careTitle: "一格一格確認的重量",
-  message: ["交班和紀錄一直追著跑。", "你願意回到流程，是在替後面的人守門。"],
-  empathy: "交班和紀錄一直追著跑。",
-  praise: "那些沒有人稱讚的確認，其實都在保護後面的人。",
-  praiseNotes: ["那些沒有人稱讚的確認，其實都在保護後面的人。"],
-  tinyAction: "先把下一個可確認的欄位做好就好。",
-  gentleQuestion: "下一個最小欄位是什麼？",
-  closingLine: "今晚先不用把所有格子都放進腦袋裡。",
-  followupActions: [],
-  astro: {
-    id: "astro-saturn",
-    name: "土星的邊界",
-    lines: ["你不用替所有混亂負責。", "先把能確認的確認好，", "剩下的，交回流程和團隊。"],
-    scenarioTags: ["shortage_pressure", "inventory_control", "team_doubt"],
-    healingTip: "列出今晚確認過的3件事，提醒自己有把關。"
-  }
+const aiLetter: AILetterResponse = {
+  mode: "hold_and_praise",
+  careTitle: "那段對話的重量",
+  hold: "那句話刮得很用力。今晚還在你身上沒散。",
+  praise: "你撐住了現場，這不是運氣。",
+  praiseNotes: [
+    "你沒把對方的情緒丟回去。",
+    "你把說明留在流程裡。"
+  ]
 };
 
 describe("ResponseCard", () => {
-  it("renders the response as a handwritten letter", () => {
+  it("信件主結構：stamp + careTitle + hold + praise + 延伸 + 燈還亮著", () => {
     const html = renderToStaticMarkup(
-      <ResponseCard
-        response={normalResponse}
-        onSave={() => undefined}
-        onNewNote={() => undefined}
-      />
+      <ResponseCard letter={aiLetter} onSave={() => undefined} onNewNote={() => undefined} />
     );
-
-    // 信件結構（極簡化：信頭 + 段落 + 誇誇 + 燈還亮著署名）
     expect(html).toContain("樹洞回信");
-    expect(html).toContain("一格一格確認的重量");
-    expect(html).toContain("交班和紀錄一直追著跑。");
-    expect(html).toContain("那些沒有人稱讚的確認，其實都在保護後面的人。");
+    expect(html).toContain("那段對話的重量");
+    expect(html).toContain("那句話刮得很用力");
+    expect(html).toContain("你撐住了現場");
+    expect(html).toContain("你沒把對方的情緒丟回去。");
+    expect(html).toContain("你把說明留在流程裡。");
     expect(html).toContain("燈還亮著");
-    expect(html).toContain("收下這封信");
-    expect(html).toContain("再投一張紙條");
-    // 已移除的元素：tinyAction、gentleQuestion、closingLine、healingTip、再誇我一句、— 樹洞 footer
-    expect(html).not.toContain("先把下一個可確認的欄位做好就好。");
-    expect(html).not.toContain("下一個最小欄位是什麼？");
-    expect(html).not.toContain("今晚先不用把所有格子");
+  });
+
+  it("顯示 AI 揭露文案", () => {
+    const html = renderToStaticMarkup(
+      <ResponseCard letter={aiLetter} onSave={() => undefined} onNewNote={() => undefined} />
+    );
+    expect(html).toContain("樹洞回信由 AI 協助撰寫");
+  });
+
+  it("praise_only：無 hold、有 praise", () => {
+    const praiseOnly: AILetterResponse = {
+      mode: "praise_only",
+      careTitle: "沒被淹掉的一天",
+      hold: "",
+      praise: "你能說沒淹水，代表今天有在數浪頭。",
+      praiseNotes: ["平穩來自很多小判斷。"]
+    };
+    const html = renderToStaticMarkup(
+      <ResponseCard letter={praiseOnly} onSave={() => undefined} onNewNote={() => undefined} />
+    );
+    expect(html).toContain("你能說沒淹水");
+    expect(html).toContain("沒被淹掉的一天");
+  });
+
+  it("hold_only：有 hold、無 praise / praiseNotes", () => {
+    const holdOnly: AILetterResponse = {
+      mode: "hold_only",
+      careTitle: "今晚先放在紙上",
+      hold: "這種重量，不需要急著被整理。",
+      praise: "",
+      praiseNotes: []
+    };
+    const html = renderToStaticMarkup(
+      <ResponseCard letter={holdOnly} onSave={() => undefined} onNewNote={() => undefined} />
+    );
+    expect(html).toContain("這種重量");
+    expect(html).not.toContain("letter-praise-extend");
+  });
+
+  it("舊欄位不再出現（tinyAction/gentleQuestion/closingLine 已被移除）", () => {
+    const html = renderToStaticMarkup(
+      <ResponseCard letter={aiLetter} onSave={() => undefined} onNewNote={() => undefined} />
+    );
+    expect(html).not.toContain("先慢慢吐一口氣");
+    expect(html).not.toContain("最想先放下哪一幕");
     expect(html).not.toContain("信中的小貼");
-    expect(html).not.toContain("列出今晚確認過的3件事");
     expect(html).not.toContain("再誇我一句");
     expect(html).not.toContain("— 樹洞");
-    // aftercare drawer 已移除
-    expect(html).not.toContain("還想留一下");
-    expect(html).not.toContain("接著可以選一個");
   });
 });
