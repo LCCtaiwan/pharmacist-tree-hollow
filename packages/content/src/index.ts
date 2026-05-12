@@ -228,42 +228,6 @@ export const songs: SongRecommendation[] = songSeeds.map(([title, artist, langua
   reason
 }));
 
-const combinedReadingCopy: Array<[ScenarioTag, string]> = [
-  ["after_shift", "今晚整體都在『下班還沒回家』的階段。"],
-  ["unseen_effort", "今晚的關鍵字是『被看見』，先讓自己看見自己。"],
-  ["pgy_pressure", "今晚特別跟 PGY 的不安有關，慢慢來，路還長。"],
-  ["not_professional", "『不夠專業』的念頭今晚比較大聲，先聽，不必信。"],
-  ["night_shift", "夜班的節奏在卡今晚的整體，先讓身體落地。"],
-  ["customer_conflict", "白天那段對話，今晚還在你身上沒散，可以慢慢放下。"],
-  ["prescription_overload", "今晚的重量是『太多事一起來』，先收一格就好。"],
-  ["shortage_pressure", "短缺的壓力今晚還在，但不是一個人扛的事。"],
-  ["team_doubt", "團隊裡的不確定今晚還在搖晃，先回到自己的腳步。"],
-  ["interaction_worry", "今晚對交互作用的擔心比較大，先信任你查過的部分。"],
-  ["inventory_control", "今晚的『管控感』比較緊，已經做的就足夠交班。"],
-  ["leaving_thought", "『要不要走』的念頭今晚浮起來了，不必今晚就答。"]
-];
-
-export function getCombinedReading(cards: AstroReflectionCard[]): string {
-  const counts = new Map<ScenarioTag, number>();
-
-  for (const card of cards) {
-    for (const tag of card.scenarioTags) {
-      counts.set(tag, (counts.get(tag) ?? 0) + 1);
-    }
-  }
-
-  let best: { tag: ScenarioTag; count: number; text: string } | null = null;
-  for (const [tag, text] of combinedReadingCopy) {
-    const count = counts.get(tag) ?? 0;
-    if (count < 2) continue;
-    if (!best || count > best.count) {
-      best = { tag, count, text };
-    }
-  }
-
-  return best?.text ?? "今晚是雜的，雜也是一種真實。";
-}
-
 export function pickByScenario<T extends { scenarioTags: ScenarioTag[] }>(
   items: T[],
   scenario: ScenarioTag,

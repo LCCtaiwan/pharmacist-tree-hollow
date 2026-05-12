@@ -91,41 +91,6 @@ const assets: ArtAsset[] = [
     prompt: "a small green sprout pushing through cracked earth, single object, watercolor style, transparent background"
   },
   {
-    filename: "healing-boundary.png",
-    displaySize: "400x600",
-    apiSize: "1024x1536",
-    tier: "standard",
-    prompt: "a stone garden with a single curved path, vertical watercolor healing card background, leave quiet blank space in lower left for card name"
-  },
-  {
-    filename: "healing-handoff.png",
-    displaySize: "400x600",
-    apiSize: "1024x1536",
-    tier: "standard",
-    prompt: "two hands gently passing a small lantern, vertical watercolor healing card background, leave quiet blank space in lower left for card name"
-  },
-  {
-    filename: "healing-small-light.png",
-    displaySize: "400x600",
-    apiSize: "1024x1536",
-    tier: "standard",
-    prompt: "a single firefly resting on a leaf, vertical watercolor healing card background, leave quiet blank space in lower left for card name"
-  },
-  {
-    filename: "healing-temperance.png",
-    displaySize: "400x600",
-    apiSize: "1024x1536",
-    tier: "standard",
-    prompt: "a half-filled teapot, vertical watercolor healing card background, leave quiet blank space in lower left for card name"
-  },
-  {
-    filename: "healing-breathe.png",
-    displaySize: "400x600",
-    apiSize: "1024x1536",
-    tier: "standard",
-    prompt: "a wide-open window with curtains lifting in breeze, vertical watercolor healing card background, leave quiet blank space in lower left for card name"
-  },
-  {
     filename: "astro-saturn.png",
     displaySize: "400x600",
     apiSize: "1024x1536",

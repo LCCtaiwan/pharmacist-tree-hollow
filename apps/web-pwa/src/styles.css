@@ -1830,15 +1830,6 @@ textarea::placeholder {
   }
 }
 
-@keyframes astroCardInitialFade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 @keyframes astroSpreadCardIn {
   from {
     opacity: 0;
@@ -1847,15 +1838,6 @@ textarea::placeholder {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes astroSpreadCombinedIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
   }
 }
 
@@ -2090,82 +2072,6 @@ textarea::placeholder {
   gap: 14px;
 }
 
-.station-mode-toggle {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: min(100%, 320px);
-  padding: 3px;
-  border: 1px solid rgba(58, 44, 30, 0.12);
-  border-radius: 999px;
-  background: rgba(255, 250, 236, 0.52);
-}
-
-.station-mode-toggle button {
-  min-height: 32px;
-  border: none;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--ink-soft);
-  font-family: "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
-  font-weight: 500;
-  font-size: 0.84rem;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  transition: background 160ms ease, color 160ms ease;
-}
-
-.station-mode-toggle button:disabled {
-  cursor: default;
-  opacity: 0.62;
-}
-
-.station-mode-toggle .station-mode-active {
-  background: rgba(239, 224, 184, 0.82);
-  color: var(--ink);
-}
-
-.station-astro-card {
-  position: relative;
-  width: min(100%, 320px);
-  margin: 0 auto;
-  padding: 10px 10px 14px !important;
-  overflow: hidden;
-  border: 1px solid rgba(58, 44, 30, 0.18);
-  border-radius: 8px;
-  background:
-    radial-gradient(circle at 50% 7%, rgba(255, 250, 236, 0.68), transparent 32%),
-    linear-gradient(180deg, rgba(255, 250, 236, 0.86), rgba(239, 224, 184, 0.82)),
-    var(--paper);
-  box-shadow:
-    0 14px 32px rgba(58, 44, 30, 0.18),
-    0 2px 0 rgba(255, 255, 255, 0.48) inset,
-    0 0 0 6px rgba(255, 250, 236, 0.24) inset;
-  opacity: 0;
-  animation: astroCardInitialFade 500ms ease-out forwards;
-  transition: opacity 400ms ease-out;
-}
-
-.station-astro-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.16;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='96' height='96' filter='url(%23p)' opacity='.42'/%3E%3C/svg%3E");
-  mix-blend-mode: multiply;
-}
-
-.station-astro-card-visible {
-  opacity: 1;
-}
-
-.station-astro-card-hidden {
-  opacity: 0;
-  animation: none;
-  transition-duration: 200ms;
-  pointer-events: none;
-}
-
 .station-astro-card-art {
   position: relative;
   z-index: 1;
@@ -2210,30 +2116,6 @@ textarea::placeholder {
   color: inherit;
   font-size: 0.92rem;
   letter-spacing: 0.06em;
-}
-
-.station-astro-reading {
-  position: relative;
-  z-index: 1;
-  padding: 14px 4px 0;
-}
-
-.station-astro-card .station-tag {
-  margin-bottom: 6px;
-}
-
-.station-astro-card h3 {
-  font-size: 1.18rem;
-}
-
-.station-astro-card p {
-  font-size: 0.94rem;
-}
-
-.station-astro-card > small {
-  position: relative;
-  z-index: 1;
-  margin: 12px 4px 0;
 }
 
 .station-astro-spread {
@@ -2295,12 +2177,8 @@ textarea::placeholder {
   margin-top: 2px;
 }
 
-.station-astro-spread-card .station-astro-reading {
-  padding-top: 10px;
-}
-
 .station-astro-spread-card h3 {
-  margin: 6px 0 0;
+  margin: 12px 0 0;
   text-align: center;
   font-size: 1rem;
   letter-spacing: 0.1em;
@@ -2315,23 +2193,6 @@ textarea::placeholder {
   line-height: 1.6;
   letter-spacing: 0.04em;
   opacity: 0.82;
-}
-
-.station-astro-combined-reading {
-  width: min(100%, 680px);
-  margin: 14px auto 0;
-  padding: 10px 14px;
-  border-left: 3px solid rgba(201, 122, 74, 0.4);
-  background: rgba(255, 250, 236, 0.56);
-  color: var(--ink);
-  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
-  font-size: 0.96rem;
-  line-height: 1.75;
-  opacity: 0;
-}
-
-.station-astro-spread-visible .station-astro-combined-reading {
-  animation: astroSpreadCombinedIn 600ms ease-out 900ms forwards;
 }
 
 .station-astro-spread > small {
@@ -2351,37 +2212,6 @@ textarea::placeholder {
     width: min(100%, 320px);
     margin: 0 auto;
   }
-}
-
-/* Astro station — tip block */
-.station-astro-tip {
-  position: relative;
-  z-index: 1;
-  margin-top: 16px;
-  padding: 12px 14px 12px 16px;
-  border: none;
-  border-left: 3px solid var(--moss-deep);
-  border-radius: 0;
-  background: rgba(155, 184, 116, 0.1);
-}
-
-.station-astro-tip span {
-  display: inline-block;
-  margin-bottom: 6px;
-  padding: 1px 9px;
-  border: 1px dashed var(--moss-deep);
-  border-radius: 999px;
-  background: rgba(245, 234, 208, 0.92);
-  color: var(--moss-deep);
-  font-size: 0.74rem;
-  letter-spacing: 0.1em;
-  font-family: "Noto Serif TC", serif;
-}
-
-.station-astro-tip p {
-  margin: 0;
-  color: var(--ink);
-  line-height: 1.7;
 }
 
 /* Saved station */

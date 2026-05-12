@@ -90,9 +90,13 @@ function pickRandom<T>(arr: readonly T[]): T | null {
 }
 
 function pickAstroSpreadCards(): AstroReflectionCard[] {
-  return [...astroCards]
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 3);
+  const pool = [...astroCards];
+  const picked: AstroReflectionCard[] = [];
+  for (let i = 0; i < 3 && pool.length > 0; i++) {
+    const idx = Math.floor(Math.random() * pool.length);
+    picked.push(pool.splice(idx, 1)[0]);
+  }
+  return picked;
 }
 
 type StationContent =
@@ -104,13 +108,13 @@ type StationContent =
   | null;
 
 const astroSpreadPositions = [
-  { label: "過去", prompt: "白天的你，被什麼牽住？" },
-  { label: "現在", prompt: "夜歸的此刻，你停在哪？" },
-  { label: "接下來", prompt: "睡前 / 明天，給自己什麼？" }
+  { label: "過去" },
+  { label: "現在" },
+  { label: "接下來" }
 ] as const;
 
-function getAstroCardImagePath(card: AstroReflectionCard): string {
-  return `/art/${card.id}.png`;
+function getAstroCardImagePath(id: string): string {
+  return `/art/${id}.png`;
 }
 
 function pickStationContent(station: StationType): StationContent {
@@ -141,7 +145,7 @@ export default function App() {
   const [introFlow] = useState<IntroFlow>(() => getIntroFlow());
   const [appPhase, setAppPhase] = useState<AppPhase>(() => (introFlow === "skip" ? "scene" : "splash"));
   const [isSceneRevealing, setIsSceneRevealing] = useState(false);
-  const mood: MoodTag = "累"; // 內部 default，不再由 NPC click 決定
+  const mood: MoodTag = "累";
   const [input, setInput] = useState("");
   const [response, setResponse] = useState<ConversationResponse | null>(null);
   const [saved, setSaved] = useState<SavedItem[]>([]);
@@ -610,7 +614,7 @@ function StationView({
                           </div>
                         ) : (
                           <img
-                            src={getAstroCardImagePath(card)}
+                            src={getAstroCardImagePath(card.id)}
                             alt={`${card.name}卡面`}
                             loading="eager"
                             onError={() => {
@@ -619,9 +623,7 @@ function StationView({
                           />
                         )}
                       </div>
-                      <div className="station-astro-reading">
-                        <h3>{card.name}</h3>
-                      </div>
+                      <h3>{card.name}</h3>
                     </article>
                   ))}
                 </div>
