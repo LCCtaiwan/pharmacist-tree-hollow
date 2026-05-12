@@ -2579,110 +2579,23 @@ textarea::placeholder {
 
 /* 段落間視覺呼吸：誇誇前面加空心點分隔 */
 .letter-praise {
-  position: relative;
-  margin-top: 28px;
-  padding-top: 18px;
-}
-
-.letter-praise::before {
-  content: "·  ·  ·";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  color: rgba(201, 122, 74, 0.5);
-  font-size: 0.85rem;
-  letter-spacing: 0.4em;
-  line-height: 1;
-}
-
-.letter-action {
-  margin-top: 22px;
-}
-
-.letter-praise {
-  color: var(--terracotta);
-}
-
-.letter-action {
-  position: relative;
-  padding-left: 14px;
-}
-
-.letter-action::before {
-  content: "—";
-  position: absolute;
-  left: 0;
-  color: rgba(58, 44, 30, 0.4);
-}
-
-.letter-question {
-  padding-left: 14px;
-  border-left: 2px solid rgba(155, 184, 116, 0.4);
-  color: rgba(58, 44, 30, 0.84);
-  font-style: italic;
-}
-
-.letter-closing {
-  margin-top: 18px !important;
-  padding-top: 14px;
-  border-top: 1px dashed rgba(58, 44, 30, 0.14);
-  color: rgba(58, 44, 30, 0.78);
-}
-
-.letter-astro-tip {
-  margin-top: 20px;
-  padding: 10px 12px;
-  border-left: 2px solid rgba(155, 184, 116, 0.48);
-  background: rgba(155, 184, 116, 0.08);
-}
-
-.letter-astro-tip span {
-  display: inline-block;
-  margin-bottom: 4px;
-  color: var(--moss-deep);
-  font-family: "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
-  font-size: 0.74rem;
-  letter-spacing: 0.08em;
-}
-
-.letter-astro-tip p {
-  margin: 0;
-  color: rgba(58, 44, 30, 0.84);
-  font-size: 0.94rem;
-  line-height: 1.75;
-}
-
-.letter-cycle {
-  display: inline-block;
-  margin: -6px 0 14px;
-  padding: 2px 0;
-  border: none;
-  background: none;
-  color: var(--terracotta);
-  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
-  font-size: 0.86rem;
-  text-decoration: underline wavy var(--terracotta);
-  text-underline-offset: 4px;
-  text-decoration-thickness: 1px;
-  cursor: pointer;
-}
-
-.letter-cycle:hover {
+  margin-top: 14px;
   color: var(--ink);
-  text-decoration-color: var(--ink);
+  font-weight: 500;
 }
 
-.letter-footer {
-  margin-top: 22px;
+.letter-praise-extend {
+  margin-top: 10px;
+  color: rgba(58, 44, 30, 0.88);
+  line-height: 1.95;
+}
+
+.letter-signoff {
+  margin-top: 28px !important;
   text-align: right;
-}
-
-.letter-signature {
-  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
-  font-size: 0.95rem;
-  letter-spacing: 0.16em;
   color: var(--ink-soft);
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
 }
 
 .letter-actions {

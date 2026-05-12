@@ -12,22 +12,15 @@ export function ResponseCard({
 }) {
   const isCrisis = response.riskLevel === "crisis";
   const [savedOnce, setSavedOnce] = useState(false);
-  const [praiseIndex, setPraiseIndex] = useState(0);
-  const praiseNotes = response.praiseNotes?.length ? response.praiseNotes : [response.praise];
-  const currentPraise = praiseNotes[praiseIndex % praiseNotes.length];
+  const praiseNotes = response.praiseNotes?.length ? response.praiseNotes : [];
 
   useEffect(() => {
     setSavedOnce(false);
-    setPraiseIndex(0);
   }, [response]);
 
   function handleSave() {
     onSave();
     setSavedOnce(true);
-  }
-
-  function nextPraise() {
-    setPraiseIndex((index) => index + 1);
   }
 
   return (
@@ -42,34 +35,13 @@ export function ResponseCard({
           <p key={`m-${index}`}>{line}</p>
         ))}
 
-        <p className="letter-praise">{currentPraise}</p>
-        {!isCrisis && praiseNotes.length > 1 && (
-          <button type="button" className="letter-cycle" onClick={nextPraise}>
-            再誇我一句
-          </button>
-        )}
+        <p className="letter-praise">{response.praise}</p>
+        {praiseNotes.map((note) => (
+          <p key={note} className="letter-praise-extend">{note}</p>
+        ))}
 
-        <p className="letter-action">{response.tinyAction}</p>
-
-        {response.gentleQuestion && !isCrisis && (
-          <p className="letter-question">{response.gentleQuestion}</p>
-        )}
-
-        {response.closingLine && (
-          <p className="letter-closing">{response.closingLine}</p>
-        )}
-
-        {response.astro?.healingTip && !isCrisis && (
-          <aside className="letter-astro-tip" aria-label="信中的小貼">
-            <span>信中的小貼</span>
-            <p>{response.astro.healingTip}</p>
-          </aside>
-        )}
+        <p className="letter-signoff">—— 燈還亮著</p>
       </div>
-
-      <footer className="letter-footer">
-        <span className="letter-signature">— 樹洞</span>
-      </footer>
 
       <div className="letter-actions">
         <button type="button" className="btn-text" onClick={handleSave} disabled={savedOnce}>
