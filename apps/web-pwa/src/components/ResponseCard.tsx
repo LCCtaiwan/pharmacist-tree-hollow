@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { AILetterResponse } from "@pharmacist-tree-hollow/shared";
+import { hasDisclosureSeen, markDisclosureSeen } from "../lib/disclosure";
 
 export function ResponseCard({
   letter,
@@ -11,6 +12,11 @@ export function ResponseCard({
   onNewNote: () => void;
 }) {
   const [savedOnce, setSavedOnce] = useState(false);
+  const [showDisclosure] = useState(() => !hasDisclosureSeen());
+
+  useEffect(() => {
+    if (showDisclosure) markDisclosureSeen();
+  }, [showDisclosure]);
 
   useEffect(() => {
     setSavedOnce(false);
@@ -39,7 +45,9 @@ export function ResponseCard({
         <p className="letter-signoff">—— 燈還亮著</p>
       </div>
 
-      <p className="letter-disclosure">樹洞回信由 AI 協助撰寫，內容不會被保留訓練。</p>
+      {showDisclosure && (
+        <p className="letter-disclosure">樹洞回信由 AI 協助撰寫，內容不會被保留訓練。</p>
+      )}
 
       <div className="letter-actions">
         <button type="button" className="btn-text" onClick={handleSave} disabled={savedOnce}>

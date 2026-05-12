@@ -1,7 +1,22 @@
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AILetterResponse } from "@pharmacist-tree-hollow/shared";
 import { ResponseCard } from "./ResponseCard";
+
+function createLocalStorageMock(): Storage {
+  const data = new Map<string, string>();
+
+  return {
+    get length() {
+      return data.size;
+    },
+    clear: () => data.clear(),
+    getItem: (key: string) => data.get(key) ?? null,
+    key: (index: number) => Array.from(data.keys())[index] ?? null,
+    removeItem: (key: string) => data.delete(key),
+    setItem: (key: string, value: string) => data.set(key, value)
+  };
+}
 
 const aiLetter: AILetterResponse = {
   mode: "hold_and_praise",
@@ -15,6 +30,16 @@ const aiLetter: AILetterResponse = {
 };
 
 describe("ResponseCard", () => {
+  beforeEach(() => {
+    vi.stubGlobal("localStorage", createLocalStorageMock());
+    localStorage.clear();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+    vi.unstubAllGlobals();
+  });
+
   it("信件主結構：stamp + careTitle + hold + praise + 延伸 + 燈還亮著", () => {
     const html = renderToStaticMarkup(
       <ResponseCard letter={aiLetter} onSave={() => undefined} onNewNote={() => undefined} />
@@ -74,5 +99,13 @@ describe("ResponseCard", () => {
     expect(html).not.toContain("信中的小貼");
     expect(html).not.toContain("再誇我一句");
     expect(html).not.toContain("— 樹洞");
+  });
+
+  it("第二封信不再顯示揭露文案（已看過）", () => {
+    localStorage.setItem("pharmacist-tree-hollow:disclosureSeen", "1");
+    const html = renderToStaticMarkup(
+      <ResponseCard letter={aiLetter} onSave={() => undefined} onNewNote={() => undefined} />
+    );
+    expect(html).not.toContain("樹洞回信由 AI 協助撰寫");
   });
 });
