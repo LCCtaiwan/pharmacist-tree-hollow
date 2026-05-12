@@ -1,5 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { callGemini } from './_lib/gemini-client.js';
+import { checkAndIncrementIp } from './_lib/rate-limit.js';
+import { isBudgetExhausted } from './_lib/budget.js';
 
 const MAX_INPUT_LEN = 500;
 const VALID_MOODS = ['累', '煩', '委屈', '想哭', '空', '緊繃', '還可以'];
@@ -7,6 +9,11 @@ const VALID_MOODS = ['累', '煩', '委屈', '想哭', '空', '緊繃', '還可�
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'method_not_allowed' });
+    return;
+  }
+
+  if (isBudgetExhausted()) {
+    res.status(503).json({ error: 'budget_exhausted' });
     return;
   }
 
@@ -29,6 +36,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
 
   if (!VALID_MOODS.includes(mood)) {
     res.status(400).json({ error: 'invalid_mood' });
+    return;
+  }
+
+  const ip = (req.headers['x-forwarded-for'] as string | undefined)?.split(',')[0]?.trim()
+    ?? (req.headers['x-real-ip'] as string | undefined)
+    ?? 'unknown';
+  const limit = await checkAndIncrementIp(ip);
+  if (!limit.allowed) {
+    res.status(429).json({ error: 'rate_limit', count: limit.count, limit: limit.limit });
     return;
   }
 
