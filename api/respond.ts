@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { callGemini } from './_lib/gemini-client';
+import { callGemini } from './_lib/gemini-client.js';
 
 const MAX_INPUT_LEN = 500;
 const VALID_MOODS = ['累', '煩', '委屈', '想哭', '空', '緊繃', '還可以'];

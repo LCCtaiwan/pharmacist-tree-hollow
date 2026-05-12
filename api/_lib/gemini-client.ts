@@ -1,6 +1,6 @@
 import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
-import { validateAILetter, type AILetterResponse } from "./schema";
-import { SYSTEM_PROMPT } from "./system-prompt";
+import { validateAILetter, type AILetterResponse } from "./schema.js";
+import { SYSTEM_PROMPT } from "./system-prompt.js";
 
 const AI_LETTER_RESPONSE_SCHEMA = {
   type: "OBJECT",
