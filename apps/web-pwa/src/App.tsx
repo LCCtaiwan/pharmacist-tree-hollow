@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
+import { classifySafety, redactSensitiveText } from "@pharmacist-tree-hollow/ai-safety";
 import type {
+  AILetterResponse,
   AstroReflectionCard,
-  ConversationResponse,
   FollowupAction,
   HealingQuote,
   MicroTool,
@@ -20,7 +21,10 @@ import {
 } from "@pharmacist-tree-hollow/content";
 import { WatercolorScene } from "./components/WatercolorScene";
 import type { SceneState } from "./components/WatercolorScene";
+import { CrisisCard } from "./components/CrisisCard";
 import { ResponseCard } from "./components/ResponseCard";
+import { requestAILetter } from "./lib/letter-client";
+import { staticToAILetter } from "./lib/letter-adapter";
 import { buildResponse } from "./lib/respond";
 import "./styles.css";
 
@@ -147,7 +151,7 @@ export default function App() {
   const [isSceneRevealing, setIsSceneRevealing] = useState(false);
   const mood: MoodTag = "累";
   const [input, setInput] = useState("");
-  const [response, setResponse] = useState<ConversationResponse | null>(null);
+  const [response, setResponse] = useState<AILetterResponse | null>(null);
   const [saved, setSaved] = useState<SavedItem[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const [isDepositing, setIsDepositing] = useState(false);
@@ -240,7 +244,7 @@ export default function App() {
     };
   }, [activeStation, response]);
 
-  const crisis = response?.riskLevel === "crisis";
+  const crisis = response?.mode === "crisis";
   const sceneState: SceneState = isDepositing
     ? "depositing"
     : isThinking
@@ -263,7 +267,7 @@ export default function App() {
         ? "astro"
         : null;
 
-  function submit() {
+  async function submit() {
     const trimmed = input.trim();
     timersRef.current.forEach((timer) => window.clearTimeout(timer));
     timersRef.current = [];
@@ -273,27 +277,44 @@ export default function App() {
     setIsResponding(false);
     setResponse(null);
 
-    const depositingTimer = window.setTimeout(() => {
+    try {
+      await new Promise<void>((resolve) => {
+        const depositingTimer = window.setTimeout(() => {
+          resolve();
+        }, 600);
+
+        timersRef.current.push(depositingTimer);
+      });
+
       setIsDepositing(false);
       setIsThinking(true);
 
-      const thinkingTimer = window.setTimeout(() => {
-        setIsThinking(false);
-        const result = buildResponse(trimmed || `今天覺得${mood}`, mood);
-        setResponse(result);
-        setIsResponding(true);
+      const userText = trimmed || `今天覺得${mood}`;
+      const safety = classifySafety(userText);
+      let letter: AILetterResponse;
 
-        const respondingTimer = window.setTimeout(() => {
-          setIsResponding(false);
-        }, 600);
+      if (safety.riskLevel === "crisis") {
+        const staticCrisis = buildResponse(userText, mood);
+        letter = staticToAILetter({ ...staticCrisis, riskLevel: "crisis" });
+      } else {
+        const safeText = redactSensitiveText(userText);
+        const result = await requestAILetter(safeText, mood);
+        letter = result.letter;
+      }
 
-        timersRef.current.push(respondingTimer);
-      }, 260);
+      setResponse(letter);
+      setIsThinking(false);
+      setIsResponding(true);
 
-      timersRef.current.push(thinkingTimer);
-    }, 600);
+      const respondingTimer = window.setTimeout(() => {
+        setIsResponding(false);
+      }, 600);
 
-    timersRef.current.push(depositingTimer);
+      timersRef.current.push(respondingTimer);
+    } catch {
+      setIsDepositing(false);
+      setIsThinking(false);
+    }
   }
 
   function selectStation(station: StationType) {
@@ -350,7 +371,7 @@ export default function App() {
 
   function saveCurrent() {
     if (!response) return;
-    const text = [response.careTitle, response.empathy, response.praiseNotes?.[0] ?? response.praise, response.tinyAction, response.closingLine]
+    const text = [response.careTitle, response.hold, response.praise, ...response.praiseNotes]
       .filter(Boolean)
       .join("\n");
     const item: SavedItem = {
@@ -473,11 +494,15 @@ export default function App() {
 
       {response ? (
         <div className="response-wrap" ref={responseRegionRef}>
-          <ResponseCard
-            response={response}
-            onSave={saveCurrent}
-            onNewNote={resetConversation}
-          />
+          {response.mode === "crisis" ? (
+            <CrisisCard letter={response} onNewNote={resetConversation} />
+          ) : (
+            <ResponseCard
+              letter={response}
+              onSave={saveCurrent}
+              onNewNote={resetConversation}
+            />
+          )}
         </div>
       ) : isThinking ? (
         <section className="quiet-note quiet-note-thinking" aria-live="polite">
