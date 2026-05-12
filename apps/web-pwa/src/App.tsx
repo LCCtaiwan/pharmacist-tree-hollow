@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { CSSProperties } from "react";
+import type { CSSProperties, Dispatch, RefObject, SetStateAction } from "react";
 import { classifySafety, redactSensitiveText } from "@pharmacist-tree-hollow/ai-safety";
 import type {
   AILetterResponse,
@@ -159,6 +159,8 @@ export default function App() {
   const [isAstroCardVisible, setIsAstroCardVisible] = useState(true);
   const [isAstroCycling, setIsAstroCycling] = useState(false);
   const [astroSpreadCards, setAstroSpreadCards] = useState<AstroReflectionCard[]>([]);
+  const [failedAstroImageIds, setFailedAstroImageIds] = useState<Record<string, true>>({});
+  const [astroImageRetries, setAstroImageRetries] = useState<Record<string, number>>({});
   const [activeStation, setActiveStation] = useState<StationType | null>(null);
   const [stationContent, setStationContent] = useState<StationContent>(null);
   const timersRef = useRef<number[]>([]);
@@ -214,6 +216,14 @@ export default function App() {
       if (astroUnlockTimerRef.current) window.clearTimeout(astroUnlockTimerRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (astroSpreadCards.length === 0) return;
+    astroSpreadCards.forEach((card) => {
+      const img = new Image();
+      img.src = getAstroCardImagePath(card.id);
+    });
+  }, [astroSpreadCards]);
 
   useEffect(() => {
     if (!response) return;
@@ -326,6 +336,8 @@ export default function App() {
 
     if (station === "astro") {
       setStationContent(null);
+      setFailedAstroImageIds({});
+      setAstroImageRetries({});
       setAstroSpreadCards(pickAstroSpreadCards());
     } else {
       setAstroSpreadCards([]);
@@ -344,6 +356,8 @@ export default function App() {
       setIsAstroCycling(true);
       setIsAstroCardVisible(false);
       astroCycleTimerRef.current = window.setTimeout(() => {
+        setFailedAstroImageIds({});
+        setAstroImageRetries({});
         setAstroSpreadCards(pickAstroSpreadCards());
         setIsAstroCardVisible(true);
         astroUnlockTimerRef.current = window.setTimeout(() => {
@@ -485,6 +499,10 @@ export default function App() {
           isAstroCardVisible={isAstroCardVisible}
           isAstroCycling={isAstroCycling}
           astroSpreadCards={astroSpreadCards}
+          failedAstroImageIds={failedAstroImageIds}
+          astroImageRetries={astroImageRetries}
+          setFailedAstroImageIds={setFailedAstroImageIds}
+          setAstroImageRetries={setAstroImageRetries}
           onCycle={cycleStationContent}
           onClose={closeStation}
           onClearSaved={clearSaved}
@@ -531,10 +549,14 @@ interface StationViewProps {
   isAstroCardVisible: boolean;
   isAstroCycling: boolean;
   astroSpreadCards: AstroReflectionCard[];
+  failedAstroImageIds: Record<string, true>;
+  astroImageRetries: Record<string, number>;
+  setFailedAstroImageIds: Dispatch<SetStateAction<Record<string, true>>>;
+  setAstroImageRetries: Dispatch<SetStateAction<Record<string, number>>>;
   onCycle: () => void;
   onClose: () => void;
   onClearSaved: () => void;
-  stationRef: React.RefObject<HTMLElement | null>;
+  stationRef: RefObject<HTMLElement | null>;
 }
 
 function StationView({
@@ -544,14 +566,15 @@ function StationView({
   isAstroCardVisible,
   isAstroCycling,
   astroSpreadCards,
+  failedAstroImageIds,
+  astroImageRetries,
+  setFailedAstroImageIds,
+  setAstroImageRetries,
   onCycle,
   onClose,
   onClearSaved,
   stationRef
 }: StationViewProps) {
-  const [failedAstroImageIds, setFailedAstroImageIds] = useState<Record<string, true>>({});
-  const [astroImageRetries, setAstroImageRetries] = useState<Record<string, number>>({});
-
   const MAX_IMAGE_RETRIES = 2;
 
   function handleAstroImageError(cardId: string) {
@@ -657,6 +680,8 @@ function StationView({
                             alt={`${card.name}卡面`}
                             loading="eager"
                             decoding="async"
+                            width={1024}
+                            height={1536}
                             onError={() => handleAstroImageError(card.id)}
                           />
                         )}
