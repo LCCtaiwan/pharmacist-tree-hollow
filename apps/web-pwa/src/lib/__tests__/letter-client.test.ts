@@ -79,6 +79,18 @@ describe("requestAILetter", () => {
     expect(mockedBuildResponse).toHaveBeenCalledWith("今天很累", "累");
   });
 
+  it("API 429 → throws RateLimitedError（不 fallback）", async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 429,
+      json: async () => ({ error: "rate_limit" })
+    }) as unknown as typeof fetch;
+
+    const { requestAILetter, RateLimitedError } = await importClient();
+    await expect(requestAILetter("test", "煩")).rejects.toBeInstanceOf(RateLimitedError);
+    expect(mockedBuildResponse).not.toHaveBeenCalled();
+  });
+
   it("fetch reject 時 fallback", async () => {
     global.fetch = vi.fn().mockRejectedValue(new Error("network down")) as unknown as typeof fetch;
 

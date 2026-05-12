@@ -9,6 +9,13 @@ export type LetterResult = {
   source: LetterSource;
 };
 
+export class RateLimitedError extends Error {
+  constructor() {
+    super("rate_limit");
+    this.name = "RateLimitedError";
+  }
+}
+
 function looksLikeAILetter(data: unknown): data is AILetterResponse {
   if (typeof data !== "object" || data === null) return false;
 
@@ -38,6 +45,10 @@ export async function requestAILetter(input: string, mood: string): Promise<Lett
       body: JSON.stringify({ input, mood })
     });
 
+    if (response.status === 429) {
+      throw new RateLimitedError();
+    }
+
     if (!response.ok) return fallback(input, mood);
 
     const parsed: unknown = await response.json();
@@ -47,7 +58,8 @@ export async function requestAILetter(input: string, mood: string): Promise<Lett
       letter: parsed,
       source: "ai"
     };
-  } catch {
+  } catch (err) {
+    if (err instanceof RateLimitedError) throw err;
     return fallback(input, mood);
   }
 }
