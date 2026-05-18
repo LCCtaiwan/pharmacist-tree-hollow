@@ -1,52 +1,10 @@
 import type { HealingQuote } from "@pharmacist-tree-hollow/shared";
 
 /**
- * Codex 補充：國外影劇 20 + 國內影劇 10 = 30 句
- * 整合到 healingQuotes.ts
+ * 影劇金句（去除醫療職場劇出處後保留）：Ted Lasso/The Office/Brooklyn 99/Parks and Rec、
+ * Pixar 三部、台劇非醫療向（我們與惡的距離/想見你/做工的人/俗女養成記/人選之人/火神的眼淚）
  */
 export const codexQuotes: HealingQuote[] = [
-  {
-    id: "tv-001",
-    text: "你不需要每次都完美，只要再核對一次。",
-    source: "tv",
-    attribution: "Grey's Anatomy",
-    language: "zh-Hant"
-  },
-  {
-    id: "tv-002",
-    text: "慢一點，也可以把事情做清楚。",
-    source: "tv",
-    attribution: "The Good Doctor",
-    language: "zh-Hant"
-  },
-  {
-    id: "tv-003",
-    text: "深夜的值班，也值得被溫柔接住。",
-    source: "tv",
-    attribution: "ER",
-    language: "zh-Hant"
-  },
-  {
-    id: "tv-004",
-    text: "先喝口水，再面對下一張單。",
-    source: "tv",
-    attribution: "Scrubs",
-    language: "zh-Hant"
-  },
-  {
-    id: "tv-005",
-    text: "今天救不了全部，也能照顧眼前一件事。",
-    source: "tv",
-    attribution: "New Amsterdam",
-    language: "zh-Hant"
-  },
-  {
-    id: "tv-006",
-    text: "把心放軟，不代表你不專業。",
-    source: "tv",
-    attribution: "機智的醫生生活 (Hospital Playlist)",
-    language: "zh-Hant"
-  },
   {
     id: "tv-007",
     text: "Be curious, not judgmental.",
@@ -97,48 +55,6 @@ export const codexQuotes: HealingQuote[] = [
     language: "zh-Hant"
   },
   {
-    id: "tv-011",
-    text: "你可以承認累，也仍然很可靠。",
-    source: "tv",
-    attribution: "Grey's Anatomy",
-    language: "zh-Hant"
-  },
-  {
-    id: "tv-012",
-    text: "看見細節，是你的能力，不是你的負擔。",
-    source: "tv",
-    attribution: "The Good Doctor",
-    language: "zh-Hant"
-  },
-  {
-    id: "tv-013",
-    text: "交班前的安靜確認，已經很珍貴。",
-    source: "tv",
-    attribution: "ER",
-    language: "zh-Hant"
-  },
-  {
-    id: "tv-014",
-    text: "今天可以先不逞強。",
-    source: "tv",
-    attribution: "Scrubs",
-    language: "zh-Hant"
-  },
-  {
-    id: "tv-015",
-    text: "照顧別人之前，也留一格給自己。",
-    source: "tv",
-    attribution: "New Amsterdam",
-    language: "zh-Hant"
-  },
-  {
-    id: "tv-016",
-    text: "同事的一句辛苦了，也可以先收下。",
-    source: "tv",
-    attribution: "機智的醫生生活 (Hospital Playlist)",
-    language: "zh-Hant"
-  },
-  {
     id: "tv-017",
     text: "Believe in small steps.",
     source: "tv",
@@ -157,13 +73,6 @@ export const codexQuotes: HealingQuote[] = [
     text: "有些想念，先交給明天的光。",
     source: "tv",
     attribution: "想見你",
-    language: "zh-Hant"
-  },
-  {
-    id: "tv-cht-003",
-    text: "手穩住了，心也可以慢慢穩住。",
-    source: "tv",
-    attribution: "麻醉風暴",
     language: "zh-Hant"
   },
   {
@@ -192,20 +101,6 @@ export const codexQuotes: HealingQuote[] = [
     text: "把話說清楚之前，先把肩膀放鬆。",
     source: "tv",
     attribution: "人選之人",
-    language: "zh-Hant"
-  },
-  {
-    id: "tv-cht-008",
-    text: "再小的專業，也能在今天守住一個人。",
-    source: "tv",
-    attribution: "村裡來了個暴走女外科",
-    language: "zh-Hant"
-  },
-  {
-    id: "tv-cht-009",
-    text: "你不是孤單撐著，流程也在陪你。",
-    source: "tv",
-    attribution: "麻醉風暴",
     language: "zh-Hant"
   },
   {

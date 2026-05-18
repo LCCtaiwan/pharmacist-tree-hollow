@@ -1,7 +1,7 @@
 import type { HealingQuote } from "@pharmacist-tree-hollow/shared";
 
 /**
- * Gemini 補充：書摘 20 + 自寫補強 20 = 40 句
+ * 書摘 20 句（保留全部）+ 自寫 3 句（去藥師化後僅保留通用內容）
  * 整合到 healingQuotes.ts
  */
 export const geminiQuotes: HealingQuote[] = [
@@ -146,84 +146,6 @@ export const geminiQuotes: HealingQuote[] = [
     language: "zh-Hant"
   },
   {
-    id: "original-021",
-    text: "稽核手中的紅筆，劃不掉你認真對待每一張處方的良心。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-022",
-    text: "面對生澀的長串學名，你的每一秒遲疑，都是病人的第一道安全防線。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-023",
-    text: "學弟妹的進度雖慢，但當年的你也曾渴望過一份不帶情緒的耐心。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-024",
-    text: "繁瑣的管制藥登記與慢箋換算，是你對醫療秩序最沉默的守護。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-025",
-    text: "面對缺藥的無奈，你耐心解釋替代藥物的神情，比藥物本身更具撫慰力。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-026",
-    text: "病人的質疑是出自對疾病的焦慮；你的專業價值，不需要他人的肯定來證明。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-027",
-    text: "接手不熟悉的班次時，深吸一口氣。你只需要處理眼前的這一張單。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-028",
-    text: "脫下護士鞋後的腳痠，是你在藥局奔波整日的勳章。現在，請允許自己徹底休息。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-029",
-    text: "盤點時那幾顆對不起來的藥，不代表你的失敗。你追求卓越的真心更為珍貴。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-030",
-    text: "連假前的處方海雖然窒息，但走出藥局那一刻的晚風，會溫柔接住你的疲憊。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-031",
-    text: "會擔心出錯，是因為你比誰都看重生命。這份敬畏心，讓你成為更好的藥師。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-032",
-    text: "前輩的俐落是時間淬煉出來的。現在的你，正走在必經之路上，慢一點也沒關係。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-033",
-    text: "騎車回家的路上，把藥味與白袍留在身後。現在的你，只是你自己。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
     id: "original-034",
     text: "想離開的心情並不羞恥，那是在提醒你：你的靈魂值得一個更能呼吸的地方。",
     source: "original",
@@ -231,37 +153,13 @@ export const geminiQuotes: HealingQuote[] = [
   },
   {
     id: "original-035",
-    text: "家人不明白專業背後的壓力沒關係。你的價值，不需要在餐桌上的解釋中獲得。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-036",
-    text: "假日響起的藥局電話，試著練習拒絕。你的休息不是備品，而是必需品。",
+    text: "家人不明白你背後的壓力沒關係。你的價值，不需要在餐桌上的解釋中獲得。",
     source: "original",
     language: "zh-Hant"
   },
   {
     id: "original-037",
     text: "偶爾的疏忽會讓人心驚，但你也是人。承認侷限，反而能讓你在未來更堅定。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-038",
-    text: "轉換跑道的迷惘，就像換新藥一樣需要適應期。相信專業基礎，到哪都能開花。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-039",
-    text: "學長姊的高標準是他們的尺，不是你的枷鎖。記得給自己留一點呼吸的空間。",
-    source: "original",
-    language: "zh-Hant"
-  },
-  {
-    id: "original-040",
-    text: "主管的期待是業績，而你的初心是照護。守住心裡的平衡點，就不會迷失。",
     source: "original",
     language: "zh-Hant"
   }

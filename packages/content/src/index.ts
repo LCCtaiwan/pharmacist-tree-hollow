@@ -8,6 +8,7 @@ import type {
 
 export { reflectionQuestions } from "./reflectionQuestions";
 export { healingQuotes } from "./healingQuotes";
+export { lenormandCards, drawLenormandSpread, buildLenormandPrompt } from "./lenormand";
 
 export const microTools: MicroTool[] = [
   {
@@ -20,10 +21,10 @@ export const microTools: MicroTool[] = [
   },
   {
     id: "shortage-circle",
-    title: "缺藥壓力可控圈",
+    title: "壓力可控圈",
     scenarioTags: ["shortage_pressure", "inventory_control"],
     durationSeconds: 30,
-    steps: ["在心裡畫一個小圈。", "圈內放：我能查、能說明、能交代。", "圈外放：供貨、制度、別人的焦急。"],
+    steps: ["在心裡畫一個小圈。", "圈內放：我能查、能說明、能交代。", "圈外放：制度、條件、別人的焦急。"],
     completionText: "你負責把能做的做清楚，不負責讓所有限制消失。"
   },
   {
@@ -31,23 +32,23 @@ export const microTools: MicroTool[] = [
     title: "回到下一件能確認的事",
     scenarioTags: ["prescription_overload"],
     durationSeconds: 30,
-    steps: ["先看一眼桌面。", "只選下一件能確認的事，不看整座山。", "提醒自己：一段一段確認，就是把安全守住。"],
+    steps: ["先看一眼桌面。", "只選下一件能確認的事，不看整座山。", "提醒自己：一段一段確認，就足夠了。"],
     completionText: "不用一次處理全部。下一件事，就是現在的範圍。"
   },
   {
     id: "interaction-unload",
-    title: "安全線擔心卸載",
+    title: "擔心卸載",
     scenarioTags: ["interaction_worry"],
     durationSeconds: 30,
-    steps: ["把手放鬆一下。", "承認：你會擔心，是因為你在把關。", "回到 SOP、工具與團隊，不讓腦袋單獨扛。"],
-    completionText: "謹慎不是不夠好，是你在保護病人安全。"
+    steps: ["把手放鬆一下。", "承認：你會擔心，是因為你在乎。", "回到流程、工具與身邊的人，不讓腦袋單獨扛。"],
+    completionText: "謹慎不是不夠好，是你在好好把關自己的世界。"
   },
   {
     id: "handoff-shutdown",
-    title: "交班後關機儀式",
+    title: "下班關機儀式",
     scenarioTags: ["after_shift", "night_shift"],
     durationSeconds: 30,
-    steps: ["把肩膀往下放。", "心裡說：今天已經交到流程裡。", "讓身體先離開值班的速度。"],
+    steps: ["把肩膀往下放。", "心裡說：今天已經盡力了。", "讓身體先離開工作的速度。"],
     completionText: "下班後還想著工作很正常，但你可以慢慢回到自己。"
   }
 ];
@@ -58,91 +59,91 @@ export const astroCards: AstroReflectionCard[] = [
     name: "土星的邊界",
     scenarioTags: ["shortage_pressure", "inventory_control", "team_doubt"],
     lines: ["你不用替所有混亂負責。", "先把能確認的確認好，", "剩下的，交回流程和團隊。"],
-    healingTip: "列出今晚確認過的3件事，提醒自己有把關。"
+    healingTip: "列出今晚確認過的 3 件事，提醒自己有把握。"
   },
   {
     id: "astro-moon",
     name: "月亮的水面",
     scenarioTags: ["customer_conflict", "unseen_effort", "after_shift"],
     lines: ["今天有些委屈不必馬上整理好。", "先讓它安靜地浮著，", "你不需要現在就變得很堅強。"],
-    healingTip: "夜班後先不回高責任訊息，睡醒再處理。"
+    healingTip: "壓力大的夜晚先不回高責任訊息，睡醒再處理。"
   },
   {
     id: "astro-mercury",
     name: "水星的訊息",
     scenarioTags: ["customer_conflict", "team_doubt"],
     lines: ["你已經說明得很努力。", "有些誤會需要時間消化，", "不是每一句話都要立刻修好。"],
-    healingTip: "把難回的話先寫草稿，交班後再發。"
+    healingTip: "把難回的話先寫草稿，靜一晚再發。"
   },
   {
     id: "astro-mars",
     name: "火星的停頓",
     scenarioTags: ["customer_conflict", "prescription_overload"],
     lines: ["怒氣來的時候，先不要急著處理它。", "慢一拍，", "你就多一點空間保護自己。"],
-    healingTip: "先喝水離開櫃台30秒，再回到流程。"
+    healingTip: "先喝水離開現場 30 秒，再慢慢回來。"
   },
   {
     id: "astro-jupiter",
     name: "木星的小燈",
     scenarioTags: ["pgy_pressure", "not_professional"],
     lines: ["你不是一開始就要什麼都會。", "今天學到的一點點，", "也會慢慢變成你的底氣。"],
-    healingTip: "下班前記一個今天學到的藥名或流程。"
+    healingTip: "睡前記一件今天學到的新事。"
   },
   {
     id: "astro-venus",
     name: "金星的照顧",
     scenarioTags: ["night_shift", "after_shift", "unseen_effort"],
     lines: ["照顧別人很久的人，", "也需要被溫柔地放回自己身上。", "今晚先不要再責備自己。"],
-    healingTip: "夜班後先吃點東西，再檢討今天。"
+    healingTip: "累完一天先吃點東西，再檢討。"
   },
   {
     id: "astro-rahu",
     name: "羅喉的霧",
     scenarioTags: ["shortage_pressure", "prescription_overload", "interaction_worry"],
     lines: ["霧很厚的時候，先不要判斷整條路。", "看清楚腳下這一步，", "就已經夠了。"],
-    healingTip: "霧很厚時只查下一張處方，不想全部。"
+    healingTip: "霧很厚時只看下一步，不想全部。"
   },
   {
     id: "astro-sun",
     name: "太陽",
     scenarioTags: ["pgy_pressure", "not_professional", "after_shift"],
-    lines: ["有些光不是大聲發亮。", "它只是讓你在忙亂裡，還記得一個清楚的方向。", "今天你也替安全留了一盞燈。"],
-    healingTip: "交班前寫下今天照亮過的一個病人安全點。"
+    lines: ["有些光不是大聲發亮。", "它只是讓你在忙亂裡，還記得一個清楚的方向。", "今天你也替自己留了一盞燈。"],
+    healingTip: "睡前寫下今天被你照亮過的一件事。"
   },
   {
     id: "astro-neptune",
     name: "海王",
     scenarioTags: ["night_shift", "after_shift", "interaction_worry"],
     lines: ["夜裡的念頭像潮水，會把小事推得很遠。", "先不用追到海的盡頭。", "讓它退一點，你再回來看。"],
-    healingTip: "夜班後把反覆擔心寫成一句，再關燈。"
+    healingTip: "睡前把反覆擔心寫成一句，再關燈。"
   },
   {
     id: "astro-uranus",
     name: "天王",
     scenarioTags: ["team_doubt", "prescription_overload", "pgy_pressure"],
     lines: ["被打斷的節奏，不代表你失去能力。", "有時候清醒，是從承認混亂開始。", "你可以重新排列下一步。"],
-    healingTip: "流程被打斷時，先重排下一個可確認步驟。"
+    healingTip: "節奏被打斷時，先重排下一個可確認的小事。"
   },
   {
     id: "astro-pluto",
     name: "冥王",
     scenarioTags: ["leaving_thought", "team_doubt", "interaction_worry"],
     lines: ["有些重，不是今晚就能變輕。", "但你願意看見它，已經不是被它拖著走。", "深處也會慢慢換氣。"],
-    healingTip: "把最重的擔心交給一位可信任同事確認。"
+    healingTip: "把最重的擔心交給一位可信任的人確認。"
   },
   {
     id: "astro-beidou",
     name: "北斗",
     scenarioTags: ["pgy_pressure", "not_professional", "night_shift"],
-    lines: ["迷路時，不必一次看完整片天空。", "找一個穩定的點就好。", "它會陪你把班走完。"],
-    healingTip: "輪班前先標出今天唯一必守的安全準則。"
+    lines: ["迷路時，不必一次看完整片天空。", "找一個穩定的點就好。", "它會陪你把今天走完。"],
+    healingTip: "忙之前先標出今天唯一必守的原則。"
   },
   {
     id: "astro-weaver",
     name: "織女",
     scenarioTags: ["unseen_effort", "inventory_control", "after_shift"],
     lines: ["有些專業像細線，安靜地穿過一天。", "沒有人看見每一針，", "但缺口真的被你補上了。"],
-    healingTip: "把今天默默補上的一格庫存記下來。"
+    healingTip: "把今天默默補上的一件小事記下來。"
   },
   {
     id: "astro-meteor",

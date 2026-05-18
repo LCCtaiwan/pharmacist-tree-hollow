@@ -12,6 +12,9 @@
     "build": "npm --workspace apps/web-pwa run build",
     "art:dry": "tsx scripts/generate-art.ts",
     "art": "tsx scripts/generate-art.ts --execute",
+    "art:lenormand:dry": "tsx scripts/generate-lenormand.ts",
+    "art:lenormand": "tsx scripts/generate-lenormand.ts --execute",
+    "art:lenormand:qa": "tsx scripts/generate-lenormand.ts --execute --qa",
     "test": "vitest run",
     "test:watch": "vitest"
   },

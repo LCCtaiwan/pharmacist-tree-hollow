@@ -19,13 +19,13 @@ const sceneHotspots: Array<{
   object: string;
   className: string;
 }> = [
-  { station: "vent", label: "說一說", object: "樹洞", className: "scene-hotspot-hollow" },
-  { station: "saved", label: "看回顧", object: "小窩", className: "scene-hotspot-nest" },
-  { station: "reflection", label: "想一下", object: "枝頭", className: "scene-hotspot-owl" },
-  { station: "astro", label: "抽一張", object: "星光", className: "scene-hotspot-stars" },
-  { station: "breathing", label: "喘口氣", object: "花草", className: "scene-hotspot-flowers" },
-  { station: "song", label: "聽一首", object: "小屋", className: "scene-hotspot-house" },
-  { station: "quote", label: "讀一句", object: "草地", className: "scene-hotspot-meadow" }
+  { station: "vent", label: "樹洞私語", object: "樹洞", className: "scene-hotspot-hollow" },
+  { station: "saved", label: "情緒考古", object: "小窩", className: "scene-hotspot-nest" },
+  { station: "reflection", label: "意義拾荒", object: "枝頭", className: "scene-hotspot-owl" },
+  { station: "astro", label: "宇宙的悄悄話", object: "星光", className: "scene-hotspot-stars" },
+  { station: "breathing", label: "意識降落", object: "花草", className: "scene-hotspot-flowers" },
+  { station: "song", label: "頻率擁抱", object: "小屋", className: "scene-hotspot-house" },
+  { station: "quote", label: "文字微光", object: "草地", className: "scene-hotspot-meadow" }
 ];
 
 export function WatercolorScene({

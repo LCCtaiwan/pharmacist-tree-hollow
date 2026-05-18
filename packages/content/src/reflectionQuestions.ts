@@ -13,31 +13,31 @@ export const reflectionQuestions: ReflectionQuestion[] = [
   { id: "today-009", category: "today", text: "今天有沒有一個瞬間，你想說但沒說出口的「謝謝」？" },
   { id: "today-010", category: "today", text: "今天結束時，身體哪個部位最緊？" },
 
-  // role — 藥師角色內省（10 題；不用「櫃檯」隱喻）
+  // role — 角色內省（10 題；不限職業，去藥師化）
   { id: "role-001", category: "role", text: "如果你的工作台能說話，今天它會跟你說什麼？" },
   { id: "role-002", category: "role", text: "你是怎麼撐過今天最難那一刻的？" },
-  { id: "role-003", category: "role", text: "最近有沒有一個處方讓你心裡有點掙扎？你怎麼放下的？" },
+  { id: "role-003", category: "role", text: "最近有沒有一個決定讓你心裡有點掙扎？你怎麼放下的？" },
   { id: "role-004", category: "role", text: "你今天的「再確認一次」，總共做了幾次？" },
   { id: "role-005", category: "role", text: "哪件你今天默默做完的事，其實沒人知道？" },
-  { id: "role-006", category: "role", text: "如果今天有一張紙袋會記住你，它會記住哪一刻？" },
+  { id: "role-006", category: "role", text: "如果今天有一張紙條會記住你，它會記住哪一刻？" },
   { id: "role-007", category: "role", text: "你今天最不想被打斷的，是哪一段？" },
   { id: "role-008", category: "role", text: "如果可以重來今天一個對話，你想改哪一句？" },
   { id: "role-009", category: "role", text: "你今天有沒有一次「忍著沒解釋」的時候？" },
-  { id: "role-010", category: "role", text: "哪一個你以為很例行的動作，今天其實救到人了？" },
+  { id: "role-010", category: "role", text: "哪一個你以為很例行的動作，今天其實守住了什麼？" },
 
-  // team — 同事與團隊（10 題）
-  { id: "team-001", category: "team", text: "下次想對一個藥師同事說什麼，你還沒說出口？" },
-  { id: "team-002", category: "team", text: "如果今天的你可以多一個藥師，你最想他幫你做什麼？" },
+  // team — 同事與身邊的人（10 題）
+  { id: "team-001", category: "team", text: "下次想對一個同事說什麼，你還沒說出口？" },
+  { id: "team-002", category: "team", text: "如果今天的你可以多一個自己，你最想他幫你做什麼？" },
   { id: "team-003", category: "team", text: "今天有沒有誰，光是在旁邊就讓你比較不慌？" },
   { id: "team-004", category: "team", text: "哪一個同事的小動作，最近讓你覺得被罩住？" },
   { id: "team-005", category: "team", text: "你最近沒謝到誰？" },
-  { id: "team-006", category: "team", text: "今天哪一個交班，讓你比較放心？" },
+  { id: "team-006", category: "team", text: "今天哪一次轉手或交付，讓你比較放心？" },
   { id: "team-007", category: "team", text: "如果可以替一個同事擋下一件事，你會擋哪件？" },
   { id: "team-008", category: "team", text: "你最近有沒有一句話，想對前輩說但說不出口？" },
   { id: "team-009", category: "team", text: "如果今天有人替你接了一通電話，那個感覺像什麼？" },
-  { id: "team-010", category: "team", text: "你希望下一班的人，從你這裡接到什麼樣的「乾淨」？" },
+  { id: "team-010", category: "team", text: "你希望下一個接手的人，從你這裡接到什麼樣的「乾淨」？" },
 
-  // self — 工作以外的自己（10 題；不用「值班櫃檯」）
+  // self — 工作以外的自己（10 題）
   { id: "self-001", category: "self", text: "下班之後，你還願意被誰打擾？" },
   { id: "self-002", category: "self", text: "如果可以給今天的自己一個道謝，你會謝什麼？" },
   { id: "self-003", category: "self", text: "最近有沒有一件跟工作無關的事，讓你笑出來？" },

@@ -3,9 +3,9 @@ import type { CSSProperties, Dispatch, RefObject, SetStateAction } from "react";
 import { classifySafety, redactSensitiveText } from "@pharmacist-tree-hollow/ai-safety";
 import type {
   AILetterResponse,
-  AstroReflectionCard,
   FollowupAction,
   HealingQuote,
+  LenormandCard,
   MicroTool,
   MoodTag,
   ReflectionQuestion,
@@ -13,7 +13,8 @@ import type {
   StationType
 } from "@pharmacist-tree-hollow/shared";
 import {
-  astroCards,
+  buildLenormandPrompt,
+  drawLenormandSpread,
   healingQuotes,
   microTools,
   reflectionQuestions,
@@ -39,11 +40,11 @@ type AppPhase = "splash" | "intro" | "scene";
 type IntroFlow = "full" | "repeat" | "skip";
 
 const stationCopy: Record<Exclude<StationType, "vent" | "saved">, { object: string; verb: string; cycleLabel: string }> = {
-  reflection: { object: "枝頭的貓頭鷹", verb: "想一下", cycleLabel: "換一題" },
-  song: { object: "小屋的收音機", verb: "聽一首", cycleLabel: "換一首" },
-  astro: { object: "天上的星光", verb: "抽三張", cycleLabel: "換一組" },
-  breathing: { object: "搖晃的花草", verb: "喘口氣", cycleLabel: "換一個" },
-  quote: { object: "草地上的紙條", verb: "讀一句", cycleLabel: "換一句" }
+  reflection: { object: "枝頭的貓頭鷹", verb: "意義拾荒", cycleLabel: "換一題" },
+  song: { object: "小屋的收音機", verb: "頻率擁抱", cycleLabel: "換一首" },
+  astro: { object: "天上的星光", verb: "宇宙的悄悄話", cycleLabel: "換一組" },
+  breathing: { object: "搖晃的花草", verb: "意識降落", cycleLabel: "換一個" },
+  quote: { object: "草地上的紙條", verb: "文字微光", cycleLabel: "換一句" }
 };
 
 interface SavedItem {
@@ -94,32 +95,17 @@ function pickRandom<T>(arr: readonly T[]): T | null {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function pickAstroSpreadCards(): AstroReflectionCard[] {
-  const pool = [...astroCards];
-  const picked: AstroReflectionCard[] = [];
-  for (let i = 0; i < 3 && pool.length > 0; i++) {
-    const idx = Math.floor(Math.random() * pool.length);
-    picked.push(pool.splice(idx, 1)[0]);
-  }
-  return picked;
-}
-
 type StationContent =
   | { type: "reflection"; data: ReflectionQuestion }
   | { type: "song"; data: SongRecommendation }
-  | { type: "astro"; data: AstroReflectionCard }
   | { type: "breathing"; data: MicroTool }
   | { type: "quote"; data: HealingQuote }
   | null;
 
-const astroSpreadPositions = [
-  { label: "過去" },
-  { label: "現在" },
-  { label: "接下來" }
-] as const;
+const astroSpreadPositions = [{ label: "1" }, { label: "2" }, { label: "3" }] as const;
 
 function getAstroCardImagePath(id: string): string {
-  return `/art/${id}.png`;
+  return `/art/lenormand/${id}.png`;
 }
 
 function pickStationContent(station: StationType): StationContent {
@@ -130,10 +116,6 @@ function pickStationContent(station: StationType): StationContent {
   if (station === "song") {
     const data = pickRandom(songs);
     return data ? { type: "song", data } : null;
-  }
-  if (station === "astro") {
-    const data = pickRandom(astroCards);
-    return data ? { type: "astro", data } : null;
   }
   if (station === "breathing") {
     const data = pickRandom(microTools);
@@ -161,7 +143,7 @@ export default function App() {
   const [isResponding, setIsResponding] = useState(false);
   const [isAstroCardVisible, setIsAstroCardVisible] = useState(true);
   const [isAstroCycling, setIsAstroCycling] = useState(false);
-  const [astroSpreadCards, setAstroSpreadCards] = useState<AstroReflectionCard[]>([]);
+  const [astroSpreadCards, setAstroSpreadCards] = useState<LenormandCard[]>([]);
   const [failedAstroImageIds, setFailedAstroImageIds] = useState<Record<string, true>>({});
   const [astroImageRetries, setAstroImageRetries] = useState<Record<string, number>>({});
   const [activeStation, setActiveStation] = useState<StationType | null>(null);
@@ -362,7 +344,7 @@ export default function App() {
       setStationContent(null);
       setFailedAstroImageIds({});
       setAstroImageRetries({});
-      setAstroSpreadCards(pickAstroSpreadCards());
+      setAstroSpreadCards(drawLenormandSpread());
     } else {
       setAstroSpreadCards([]);
       setStationContent(pickStationContent(station));
@@ -382,7 +364,7 @@ export default function App() {
       astroCycleTimerRef.current = window.setTimeout(() => {
         setFailedAstroImageIds({});
         setAstroImageRetries({});
-        setAstroSpreadCards(pickAstroSpreadCards());
+        setAstroSpreadCards(drawLenormandSpread());
         setIsAstroCardVisible(true);
         astroUnlockTimerRef.current = window.setTimeout(() => {
           setIsAstroCycling(false);
@@ -585,7 +567,7 @@ interface StationViewProps {
   saved: SavedItem[];
   isAstroCardVisible: boolean;
   isAstroCycling: boolean;
-  astroSpreadCards: AstroReflectionCard[];
+  astroSpreadCards: LenormandCard[];
   failedAstroImageIds: Record<string, true>;
   astroImageRetries: Record<string, number>;
   setFailedAstroImageIds: Dispatch<SetStateAction<Record<string, true>>>;
@@ -624,6 +606,22 @@ function StationView({
     });
   }
   const hasAstroSpread = station === "astro" && astroSpreadCards.length === 3;
+  const [promptCopied, setPromptCopied] = useState(false);
+  const lenormandPrompt = hasAstroSpread ? buildLenormandPrompt(astroSpreadCards) : "";
+
+  useEffect(() => {
+    setPromptCopied(false);
+  }, [astroSpreadCards]);
+
+  async function handleCopyPrompt() {
+    try {
+      await navigator.clipboard.writeText(lenormandPrompt);
+      setPromptCopied(true);
+      window.setTimeout(() => setPromptCopied(false), 2200);
+    } catch {
+      setPromptCopied(false);
+    }
+  }
 
   return (
     <section className={`station-panel station-${station}`} aria-label="場景小站" ref={stationRef}>
@@ -675,7 +673,7 @@ function StationView({
           <div className="station-body">
             {content?.type === "reflection" && (
               <article className="station-reflection-card">
-                <span className="station-tag">想一下</span>
+                <span className="station-tag">意義拾荒</span>
                 <p>{content.data.text}</p>
                 <small>看了就走也行。不用回答。</small>
               </article>
@@ -705,16 +703,15 @@ function StationView({
                       </div>
                       <div className="station-astro-card-art">
                         {failedAstroImageIds[card.id] ? (
-                          <div className="station-astro-card-fallback" role="img" aria-label={`${card.name}卡牌正在準備中`}>
-                            <span aria-hidden="true">✦</span>
-                            <p>卡牌正在準備中</p>
-                            <span aria-hidden="true">✦</span>
+                          <div className="station-astro-card-fallback" role="img" aria-label={`${card.nameZh} 卡面`}>
+                            <span className="station-astro-card-emoji" aria-hidden="true">{card.emoji}</span>
+                            <p>{card.nameEn}</p>
                           </div>
                         ) : (
                           <img
                             key={`${card.id}-${astroImageRetries[card.id] ?? 0}`}
                             src={`${getAstroCardImagePath(card.id)}${astroImageRetries[card.id] ? `?r=${astroImageRetries[card.id]}` : ""}`}
-                            alt={`${card.name}卡面`}
+                            alt={`${card.nameZh} 卡面`}
                             loading="eager"
                             decoding="async"
                             width={1024}
@@ -723,11 +720,25 @@ function StationView({
                           />
                         )}
                       </div>
-                      <h3>{card.name}</h3>
+                      <h3>{card.nameZh}</h3>
+                      <p className="station-astro-card-en">{card.number}. {card.nameEn}</p>
                     </article>
                   ))}
                 </div>
-                <p className="station-astro-spread-hint">看圖、感受。不必對應字面解釋。</p>
+                <div className="station-lenormand-prompt">
+                  <p className="station-lenormand-prompt-hint">
+                    複製下方 prompt，貼到 ChatGPT / Claude / Gemini 讓它替你解讀。
+                  </p>
+                  <pre className="station-lenormand-prompt-body">{lenormandPrompt}</pre>
+                  <button
+                    type="button"
+                    className="station-lenormand-prompt-copy"
+                    onClick={handleCopyPrompt}
+                    aria-live="polite"
+                  >
+                    {promptCopied ? "已複製 ✓" : "複製到剪貼簿"}
+                  </button>
+                </div>
                 <small>娛樂與反思用，不是預測或專業建議。</small>
               </div>
             )}

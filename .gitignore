@@ -7,3 +7,6 @@ coverage/
 !.env.example
 *.local
 apps/web-pwa/.vite/
+.vercel
+.env*.local
+.claude/

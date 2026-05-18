@@ -18,7 +18,7 @@ export type RiskLevel = "normal" | "privacy" | "medical_boundary" | "crisis";
 
 export type FollowupAction = "song" | "card" | "astro";
 
-/** NPC 站點：樹洞=說一說、枝頭=想一下、小屋=聽一首、星光=抽一張、花草=喘口氣、草地=讀一句、小窩=看回顧 */
+/** NPC 站點：樹洞=樹洞私語、枝頭=意義拾荒、小屋=頻率擁抱、星光=宇宙的悄悄話、花草=意識降落、草地=文字微光、小窩=情緒考古 */
 export type StationType = "vent" | "reflection" | "song" | "astro" | "breathing" | "quote" | "saved";
 
 export interface SafetyResult {
@@ -54,6 +54,19 @@ export interface AstroReflectionCard {
   scenarioTags: ScenarioTag[];
   /** 今晚療癒提醒：針對藥師日常的具體小行動建議 */
   healingTip?: string;
+}
+
+/** Lenormand 36 張系統卡牌（線性 3 張牌陣使用） */
+export interface LenormandCard {
+  id: string;
+  /** 1-36 傳統編號 */
+  number: number;
+  nameZh: string;
+  nameEn: string;
+  /** PNG 就位前的 emoji 佔位符 */
+  emoji: string;
+  /** 傳統關鍵字（給 AI prompt 與 UI tooltip 使用） */
+  keywords: string[];
 }
 
 export interface ReflectionQuestion {
