@@ -112,3 +112,19 @@
 
 ---
 
+## 2026-05-19 · v0.5 收尾：CSS chip + 座標對位、殘餘醫療詞清理、commit & push a8ee169
+
+**完成：** CSS hotspot chip 樣式：水彩光暈 → 紙質卡片（cream linear-gradient + 細邊 +；7 個 hotspot 座標反覆迭代對位新夜晚場景：宇宙的悄悄話 77/21（月亮下方）、意義拾荒 24/48（貓頭鷹下
+**決策：** chip 風格：cream 紙質卡 + 軟陰影 + 小粉紅圓點 accent（對齊 reference 紙條風）
+**Commits：** a8ee169 feat: v0.5 重新定位 — 站點詩意化 + 金句去藥師化 + Lenormand 36 + Ghibli 夜晚場景
+
+---
+
+## 2026-05-19 · v0.6 站點 UI 重設計：夜空玻璃卡（reflection + vent 完成、其他 5 站待推）
+
+**完成：** 巡查現況：reflection / breathing / quote / vent / astro 五個站點截圖，定位；確立新設計語言「夜空玻璃卡」：rgba(22,16,36,0.78) + backdrop-filter blur(22
+**決策：** 重設計方向選 A 夜空玻璃卡（vs B 保留 cream 修字重、C 極簡白卡），因為跟新夜晚場景融為一體、不再 cream-on-cream
+**Commits：** a8ee169 feat: v0.5 重新定位 — 站點詩意化 + 金句去藥師化 + Lenormand 36 + Ghibli 夜晚場景
+
+---
+

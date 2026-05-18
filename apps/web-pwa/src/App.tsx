@@ -504,7 +504,10 @@ export default function App() {
               aria-label="寫一張投進樹洞的紙條"
             />
             <button type="button" className="send-button" onClick={submit} disabled={dailyLimitReached || rateLimitHit} aria-label="送進樹洞">
-              投
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M21.5 2.5 11 13" />
+                <path d="M21.5 2.5 14.5 21.5l-3.5-8.5-8.5-3.5z" />
+              </svg>
             </button>
           </div>
         </section>
