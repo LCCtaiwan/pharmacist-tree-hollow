@@ -2396,13 +2396,67 @@ textarea::placeholder {
 
 @media (max-width: 720px) {
   .station-astro-spread-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
   }
 
-  .station-astro-spread-card {
-    width: min(100%, 320px);
-    margin: 0 auto;
+  .station-astro-spread-card h3 {
+    font-size: 0.82rem;
   }
+
+  .station-astro-spread-card .station-astro-card-en {
+    font-size: 0.68rem;
+  }
+}
+
+/* Astro question input */
+.station-astro-question {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 20px;
+  width: 100%;
+}
+
+.station-astro-question-hint {
+  color: rgba(252, 246, 230, 0.68);
+  font-size: 0.84rem;
+  line-height: 1.6;
+  text-align: center;
+  margin: 0;
+}
+
+.station-astro-question-input {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 220, 160, 0.28);
+  border-radius: 12px;
+  color: rgba(252, 246, 230, 0.92);
+  font-family: "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  padding: 10px 14px;
+  resize: none;
+  outline: none;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.station-astro-question-input::placeholder {
+  color: rgba(252, 246, 230, 0.35);
+}
+
+.station-astro-question-input:focus {
+  border-color: rgba(255, 220, 160, 0.55);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.station-astro-draw-btn {
+  margin-top: 4px;
+  padding: 10px 32px;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
 }
 
 /* Saved station */

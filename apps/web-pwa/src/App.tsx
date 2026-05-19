@@ -144,6 +144,8 @@ export default function App() {
   const [isAstroCardVisible, setIsAstroCardVisible] = useState(true);
   const [isAstroCycling, setIsAstroCycling] = useState(false);
   const [astroSpreadCards, setAstroSpreadCards] = useState<LenormandCard[]>([]);
+  const [astroQuestion, setAstroQuestion] = useState("");
+  const [astroDrawn, setAstroDrawn] = useState(false);
   const [failedAstroImageIds, setFailedAstroImageIds] = useState<Record<string, true>>({});
   const [astroImageRetries, setAstroImageRetries] = useState<Record<string, number>>({});
   const [activeStation, setActiveStation] = useState<StationType | null>(null);
@@ -344,7 +346,9 @@ export default function App() {
       setStationContent(null);
       setFailedAstroImageIds({});
       setAstroImageRetries({});
-      setAstroSpreadCards(drawLenormandSpread());
+      setAstroSpreadCards([]);
+      setAstroQuestion("");
+      setAstroDrawn(false);
     } else {
       setAstroSpreadCards([]);
       setStationContent(pickStationContent(station));
@@ -364,7 +368,9 @@ export default function App() {
       astroCycleTimerRef.current = window.setTimeout(() => {
         setFailedAstroImageIds({});
         setAstroImageRetries({});
-        setAstroSpreadCards(drawLenormandSpread());
+        setAstroSpreadCards([]);
+        setAstroQuestion("");
+        setAstroDrawn(false);
         setIsAstroCardVisible(true);
         astroUnlockTimerRef.current = window.setTimeout(() => {
           setIsAstroCycling(false);
@@ -382,6 +388,8 @@ export default function App() {
     setIsAstroCycling(false);
     setIsAstroCardVisible(true);
     setAstroSpreadCards([]);
+    setAstroQuestion("");
+    setAstroDrawn(false);
     setActiveStation(null);
     setStationContent(null);
     if (ventOpen) {
@@ -521,6 +529,16 @@ export default function App() {
           isAstroCardVisible={isAstroCardVisible}
           isAstroCycling={isAstroCycling}
           astroSpreadCards={astroSpreadCards}
+          astroQuestion={astroQuestion}
+          astroDrawn={astroDrawn}
+          onAstroQuestionChange={setAstroQuestion}
+          onAstroDraw={() => {
+            setFailedAstroImageIds({});
+            setAstroImageRetries({});
+            setAstroSpreadCards(drawLenormandSpread());
+            setAstroDrawn(true);
+            setIsAstroCardVisible(true);
+          }}
           failedAstroImageIds={failedAstroImageIds}
           astroImageRetries={astroImageRetries}
           setFailedAstroImageIds={setFailedAstroImageIds}
@@ -571,6 +589,10 @@ interface StationViewProps {
   isAstroCardVisible: boolean;
   isAstroCycling: boolean;
   astroSpreadCards: LenormandCard[];
+  astroQuestion: string;
+  astroDrawn: boolean;
+  onAstroQuestionChange: (q: string) => void;
+  onAstroDraw: () => void;
   failedAstroImageIds: Record<string, true>;
   astroImageRetries: Record<string, number>;
   setFailedAstroImageIds: Dispatch<SetStateAction<Record<string, true>>>;
@@ -588,6 +610,10 @@ function StationView({
   isAstroCardVisible,
   isAstroCycling,
   astroSpreadCards,
+  astroQuestion,
+  astroDrawn,
+  onAstroQuestionChange,
+  onAstroDraw,
   failedAstroImageIds,
   astroImageRetries,
   setFailedAstroImageIds,
@@ -608,9 +634,10 @@ function StationView({
       return { ...current, [cardId]: attempts };
     });
   }
-  const hasAstroSpread = station === "astro" && astroSpreadCards.length === 3;
+  const hasAstroSpread = station === "astro" && astroDrawn && astroSpreadCards.length === 3;
+  const showAstroInput = station === "astro" && !astroDrawn;
   const [promptCopied, setPromptCopied] = useState(false);
-  const lenormandPrompt = hasAstroSpread ? buildLenormandPrompt(astroSpreadCards) : "";
+  const lenormandPrompt = hasAstroSpread ? buildLenormandPrompt(astroSpreadCards, astroQuestion) : "";
 
   useEffect(() => {
     setPromptCopied(false);
@@ -692,6 +719,27 @@ function StationView({
               </article>
             )}
 
+            {showAstroInput && (
+              <div className="station-astro-question">
+                <p className="station-astro-question-hint">寫下你想問的問題，或留空直接抽牌。</p>
+                <textarea
+                  className="station-astro-question-input"
+                  placeholder="例：最近工作的方向是否正確？"
+                  value={astroQuestion}
+                  onChange={(e) => onAstroQuestionChange(e.target.value)}
+                  rows={3}
+                  maxLength={100}
+                />
+                <button
+                  type="button"
+                  className="btn-paper station-astro-draw-btn"
+                  onClick={onAstroDraw}
+                >
+                  ✦ 抽牌
+                </button>
+              </div>
+            )}
+
             {hasAstroSpread && (
               <div className={`station-astro-spread ${isAstroCardVisible ? "station-astro-spread-visible" : "station-astro-spread-hidden"}`}>
                 <div className="station-astro-spread-grid">
@@ -758,7 +806,7 @@ function StationView({
               </article>
             )}
 
-            {!content && !hasAstroSpread && <p className="station-empty">這裡還在準備中。</p>}
+            {!content && !hasAstroSpread && !showAstroInput && <p className="station-empty">這裡還在準備中。</p>}
           </div>
           {(content || hasAstroSpread) && (
             <div className="station-actions">

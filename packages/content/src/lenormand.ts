@@ -59,31 +59,32 @@ export function drawLenormandSpread(): LenormandCard[] {
 }
 
 /**
- * 把抽到的 3 張卡組成 stargazer 風格 Lenormand prompt template
+ * 把抽到的 3 張卡組成中文 Lenormand prompt template
  * 不打 AI，純文字產出，供使用者複製貼到外部 AI（ChatGPT/Claude/Gemini）
  */
-export function buildLenormandPrompt(cards: LenormandCard[]): string {
+export function buildLenormandPrompt(cards: LenormandCard[], question?: string): string {
   if (cards.length !== 3) {
     throw new Error("Lenormand linear spread requires exactly 3 cards");
   }
   const [c1, c2, c3] = cards;
+  const questionLine = question?.trim() ? question.trim() : "（未填寫問題）";
   return [
-    "I'd like to consult the Lenormand cards on the following question:",
+    "請幫我用諾曼牌（Lenormand）解讀以下牌陣，以繁體中文回答。",
     "",
-    "Question: (no question entered)",
+    `我的問題是：${questionLine}`,
     "",
-    "Spread: 3-card linear (left to right)",
+    "牌陣：三張線性展開（左→中→右）",
     "",
-    `1. ${c1.nameEn} (${c1.nameZh})`,
-    `2. ${c2.nameEn} (${c2.nameZh})`,
-    `3. ${c3.nameEn} (${c3.nameZh})`,
+    `1. ${c1.nameZh}（${c1.nameEn}）`,
+    `2. ${c2.nameZh}（${c2.nameEn}）`,
+    `3. ${c3.nameZh}（${c3.nameEn}）`,
     "",
-    "Please interpret this spread in the Lenormand tradition as a linear reading:",
+    "請依照 Lenormand 傳統解讀方式：",
     "",
-    `  - Pair 1+2: ${c1.nameEn} + ${c2.nameEn}`,
-    `  - Pair 2+3: ${c2.nameEn} + ${c3.nameEn}`,
-    "  - Then read the three cards together as one connected sentence, and give the overall meaning.",
+    `  • 牌組 1+2：${c1.nameZh} + ${c2.nameZh} 的組合意義`,
+    `  • 牌組 2+3：${c2.nameZh} + ${c3.nameZh} 的組合意義`,
+    "  • 最後將三張牌串成一句完整的訊息，給出整體解讀。",
     "",
-    "Please respond in Traditional Chinese (繁體中文)."
+    "語氣溫和，以陪伴與反思為主，不做確定性預測。",
   ].join("\n");
 }
