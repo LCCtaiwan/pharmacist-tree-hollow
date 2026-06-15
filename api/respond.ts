@@ -1,9 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { classifySafety } from '@pharmacist-tree-hollow/ai-safety';
 import type { AILetterResponse } from '@pharmacist-tree-hollow/shared';
 import { callGemini } from './_lib/gemini-client.js';
 import { checkAndIncrementIp } from './_lib/rate-limit.js';
 import { isBudgetExhausted } from './_lib/budget.js';
+import { classifyApiSafety } from './_lib/safety.js';
 
 const MAX_INPUT_LEN = 500;
 const VALID_MOODS = ['累', '煩', '委屈', '想哭', '空', '緊繃', '還可以'];
@@ -81,9 +81,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   }
 
   const truncatedInput = input.slice(0, MAX_INPUT_LEN);
-  const safety = classifySafety(truncatedInput);
-  if (safety.riskLevel !== "normal") {
-    res.status(200).json({ ...buildSafetyLetter(safety.riskLevel), source: 'safety' });
+  const riskLevel = classifyApiSafety(truncatedInput);
+  if (riskLevel !== "normal") {
+    res.status(200).json({ ...buildSafetyLetter(riskLevel), source: 'safety' });
     return;
   }
 

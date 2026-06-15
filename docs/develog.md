@@ -32,6 +32,7 @@
 ## Completed Work
 
 - 2026-06-15: Reviewed current repo progress and reconciled the active checkpoint. Current `main` is at Web App v0.6 plus AI reply slices A/B/C: Gemini-backed `/api/respond`, frontend fallback, crisis card, one-letter-per-day soft limit, IP rate limit, budget cutoff, station-based scene UI, and 36-card Lenormand prompt flow. Added server-side safety pre-check to `/api/respond` so direct API calls with crisis, patient-specific medical requests, or identifiable data return static safety letters without calling Gemini.
+- 2026-06-15 production fix: Vercel runtime could not resolve workspace TS export `@pharmacist-tree-hollow/ai-safety/src/index.ts` from `/api/respond`. Added API-local `api/_lib/safety.ts` and changed the handler to import `./_lib/safety.js`, then redeployed production.
 - 2026-05-12: Integrated reply healing tips into `astroCards`, removed legacy healing card data/art (5 PNGs), and replaced the astro station single-card draw with a three-card past/present/next spread. Per A 方案 minimalism: removed per-card reflective lines, healingTip, position prompts, and combined reading — astro is now image-only ("看圖、感受。不必對應字面解釋。"). Differentiates the three reflective stations: 枝頭=文字、花草=動作、星光=圖像.
 - 2026-05-10: Fixed Web PWA interaction flow after deployed UI feedback: separated watercolor scene from the input controls, made normal followup choices visible immediately after a response, changed followups into full-width action rows with explanatory text, and auto-scrolls to response/focus panels.
 - 2026-05-10 revision: First screen still showed too little of the watercolor background, so the scene was enlarged and the mood controls were compressed into a single horizontal row.
@@ -83,6 +84,8 @@ Web App v0.6 is implemented on `main` and builds locally. The current app uses a
 ## Verification Status
 
 pass: 2026-06-15 repo review passed `npx vitest run api/_lib/__tests__/respond-handler.test.ts`, `npx tsc -p api/tsconfig.json --noEmit`, `npm test`, and `npm run build`. The new API safety tests verify crisis, medical-boundary, and privacy inputs do not call Gemini.
+
+pass: 2026-06-15 production deploy fix passed `npx vitest run api/_lib/__tests__/respond-handler.test.ts`, `npx tsc -p api/tsconfig.json --noEmit`, `npm test`, and `npm run build`; production smoke test should be rerun after redeploy.
 
 pass: 2026-05-12 astro v0.5 passed `npx tsc -p tsconfig.json --noEmit`, `npm run build`, and `npm test`. Vitest now excludes `.claude/**` temporary worktrees so tests run only against the project source.
 

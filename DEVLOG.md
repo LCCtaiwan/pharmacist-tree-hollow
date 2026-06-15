@@ -1,5 +1,13 @@
 # 開發日誌
 
+## 2026-06-15 · Production deploy 修正：API safety 改 local lib
+
+**完成：** Push 後 Vercel production 第一次部署 Ready，但 `/api/respond` smoke test 回 `FUNCTION_INVOCATION_FAILED`。Logs 顯示 runtime 無法解析 `@pharmacist-tree-hollow/ai-safety/src/index.ts` workspace TS export；改為新增 `api/_lib/safety.ts` 作為 API 專用輕量 classifier，`api/respond.ts` 改 import local `./_lib/safety.js`。
+**決策：** Vercel serverless function 不直接 import workspace package 的 TS source export；API runtime 用本地 `_lib` 模組，避免部署後 ESM resolution 失敗。
+**驗證：** `npx vitest run api/_lib/__tests__/respond-handler.test.ts` pass；`npx tsc -p api/tsconfig.json --noEmit` pass；`npm test` pass（15 files / 64 tests）；`npm run build` pass。
+
+---
+
 ## 2026-06-15 · 進度 review 後整理：API safety 補強 + 文件對齊 v0.6
 
 **完成：** review repo 現況，確認 Web App 已到 v0.6 + AI 回信切片 A/B/C + Lenormand 36 張；新增 `/api/respond` server-side safety pre-check，危機、醫療邊界、個資輸入直接回 static safety letter，不呼叫 Gemini；同步 `README.md`、`docs/develog.md`、`docs/MVP_SPEC.md`，移除過期 mood chip/櫃檯/醫護擴大敘述。
