@@ -4,7 +4,7 @@
 
 **完成：** Push 後 Vercel production 第一次部署 Ready，但 `/api/respond` smoke test 回 `FUNCTION_INVOCATION_FAILED`。Logs 顯示 runtime 無法解析 `@pharmacist-tree-hollow/ai-safety/src/index.ts` workspace TS export；改為新增 `api/_lib/safety.ts` 作為 API 專用輕量 classifier，`api/respond.ts` 改 import local `./_lib/safety.js`。
 **決策：** Vercel serverless function 不直接 import workspace package 的 TS source export；API runtime 用本地 `_lib` 模組，避免部署後 ESM resolution 失敗。
-**驗證：** `npx vitest run api/_lib/__tests__/respond-handler.test.ts` pass；`npx tsc -p api/tsconfig.json --noEmit` pass；`npm test` pass（15 files / 64 tests）；`npm run build` pass。
+**驗證：** `npx vitest run api/_lib/__tests__/respond-handler.test.ts` pass；`npx tsc -p api/tsconfig.json --noEmit` pass；`npm test` pass（15 files / 64 tests）；`npm run build` pass；production smoke tests returned `source: "safety"` for crisis and medical-boundary inputs after redeploy.
 
 ---
 
