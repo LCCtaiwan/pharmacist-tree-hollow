@@ -82,7 +82,7 @@ Web App v0.6 is implemented on `main` and builds locally. The current app uses a
 
 ## Verification Status
 
-pass: 2026-06-15 repo review passed `npx vitest run api/respond.test.ts`, `npx tsc -p api/tsconfig.json --noEmit`, `npm test`, and `npm run build`. The new API safety tests verify crisis, medical-boundary, and privacy inputs do not call Gemini.
+pass: 2026-06-15 repo review passed `npx vitest run api/_lib/__tests__/respond-handler.test.ts`, `npx tsc -p api/tsconfig.json --noEmit`, `npm test`, and `npm run build`. The new API safety tests verify crisis, medical-boundary, and privacy inputs do not call Gemini.
 
 pass: 2026-05-12 astro v0.5 passed `npx tsc -p tsconfig.json --noEmit`, `npm run build`, and `npm test`. Vitest now excludes `.claude/**` temporary worktrees so tests run only against the project source.
 

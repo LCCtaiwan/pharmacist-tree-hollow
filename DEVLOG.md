@@ -4,7 +4,7 @@
 
 **完成：** review repo 現況，確認 Web App 已到 v0.6 + AI 回信切片 A/B/C + Lenormand 36 張；新增 `/api/respond` server-side safety pre-check，危機、醫療邊界、個資輸入直接回 static safety letter，不呼叫 Gemini；同步 `README.md`、`docs/develog.md`、`docs/MVP_SPEC.md`，移除過期 mood chip/櫃檯/醫護擴大敘述。
 **決策：** safety 不能只靠前端；direct API request 也必須先過 `classifySafety`。LINE Bot 仍維持第二階段，尚未實作。
-**驗證：** `npx vitest run api/respond.test.ts` pass；`npx tsc -p api/tsconfig.json --noEmit` pass；`npm test` pass（15 files / 64 tests）；`npm run build` pass。
+**驗證：** `npx vitest run api/_lib/__tests__/respond-handler.test.ts` pass；`npx tsc -p api/tsconfig.json --noEmit` pass；`npm test` pass（15 files / 64 tests）；`npm run build` pass。
 
 ---
 

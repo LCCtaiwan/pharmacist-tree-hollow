@@ -5,19 +5,19 @@ const mockCallGemini = vi.hoisted(() => vi.fn());
 const mockCheckAndIncrementIp = vi.hoisted(() => vi.fn());
 const mockIsBudgetExhausted = vi.hoisted(() => vi.fn());
 
-vi.mock("./_lib/gemini-client.js", () => ({
+vi.mock("../gemini-client.js", () => ({
   callGemini: mockCallGemini
 }));
 
-vi.mock("./_lib/rate-limit.js", () => ({
+vi.mock("../rate-limit.js", () => ({
   checkAndIncrementIp: mockCheckAndIncrementIp
 }));
 
-vi.mock("./_lib/budget.js", () => ({
+vi.mock("../budget.js", () => ({
   isBudgetExhausted: mockIsBudgetExhausted
 }));
 
-import handler from "./respond";
+import handler from "../../respond";
 
 function mockReq(body: unknown): VercelRequest {
   return {
