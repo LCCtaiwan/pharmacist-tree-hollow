@@ -31,6 +31,7 @@
 
 ## Completed Work
 
+- 2026-06-15: Reviewed current repo progress and reconciled the active checkpoint. Current `main` is at Web App v0.6 plus AI reply slices A/B/C: Gemini-backed `/api/respond`, frontend fallback, crisis card, one-letter-per-day soft limit, IP rate limit, budget cutoff, station-based scene UI, and 36-card Lenormand prompt flow. Added server-side safety pre-check to `/api/respond` so direct API calls with crisis, patient-specific medical requests, or identifiable data return static safety letters without calling Gemini.
 - 2026-05-12: Integrated reply healing tips into `astroCards`, removed legacy healing card data/art (5 PNGs), and replaced the astro station single-card draw with a three-card past/present/next spread. Per A 方案 minimalism: removed per-card reflective lines, healingTip, position prompts, and combined reading — astro is now image-only ("看圖、感受。不必對應字面解釋。"). Differentiates the three reflective stations: 枝頭=文字、花草=動作、星光=圖像.
 - 2026-05-10: Fixed Web PWA interaction flow after deployed UI feedback: separated watercolor scene from the input controls, made normal followup choices visible immediately after a response, changed followups into full-width action rows with explanatory text, and auto-scrolls to response/focus panels.
 - 2026-05-10 revision: First screen still showed too little of the watercolor background, so the scene was enlarged and the mood controls were compressed into a single horizontal row.
@@ -56,11 +57,11 @@
 - Safety stance: supportive wellness, not diagnosis or professional advice。
 - UI direction: 深夜值班櫃檯 x 安靜樹洞 x 成人療癒感。
 - Art strategy: CSS-first MVP visuals, no runtime image generation, generated assets only after inspection gate。
-- MVP app: one-screen tree hollow input, healthcare-oriented mock response, embedded 30-second micro tool, song/card/astro panels and local saved items。
-- Copy direction updated: user-facing MVP copy now targets 醫護人員 broadly, with 藥師 pressure kept as one supported scenario instead of the whole product frame。
+- MVP app: station-based tree hollow scene, AI-assisted response with static fallback, embedded 30-second micro tool, song/quote/Lenormand stations and local saved items。
+- Copy direction corrected: user-facing MVP copy targets 藥師 specifically, not broad 醫護。
 - Response interaction upgraded: compact post-submit layout, rotating concrete praise notes, progressive aftercare drawer, auto-scrolling song/card/astro panels and stronger crisis-first mobile flow。
 - Focused response revision: post-submit header is removed, optional aftercare content renders in one shared response surface so the user can focus on one thing at a time。
-- Full-screen cultivation prototype: first screen now uses the CSS night counter as a full-viewport scene, moves identity into the in-scene `醫護樹洞` sign, hides the composer after a reply, and presents aftercare as object/NPC-style choices inside the response surface。
+- Full-screen scene prototype: first screen now uses object/NPC-style choices as station entry points, hides the composer until the user selects 樹洞私語, and keeps product identity as `藥師樹洞`。
 - Crisis flow: suppresses normal followups and reduces decorative visual prominence。
 - Medical boundary flow: avoids patient-specific advice and points back to SOP/senior/team resources。
 
@@ -70,20 +71,18 @@
 
 ## Current Checkpoint
 
-M1 Web App MVP implemented locally, but UI 美術方向被使用者退回。即將進行 2026-05-09 pivot：藥師定位回歸 + 水彩生態圖重設計。
+Web App v0.6 is implemented on `main` and builds locally. The current app uses a watercolor/night scene with seven stations, AI-assisted tree-hollow letters, first-run disclosure, local daily limit, server IP rate limit, crisis resources, and Lenormand 36-card visual draw with external prompt template. LINE Bot remains second-phase only and has not been implemented beyond README planning.
 
-## Recommended Next Step（2026-05-09 之後）
+## Recommended Next Step
 
-執行 [docs/art-direction.md](art-direction.md) 規劃：
-
-1. Codex 把所有 `醫護` 殘留文字改回藥師（包含 docs、source、HTML title、shop sign、aria-label、respond.ts 中一處 praise 文案）。
-2. Codex 撰寫 `scripts/generate-art.ts` 圖片生成腳本（OpenAI Images API），預設 dry-run 印 prompt。
-3. 使用者執行生成腳本，把資產落地到 `apps/web-pwa/public/art/`。
-4. Codex 重構 `styles.css` color tokens、`NightPharmacyScene.tsx` → `WatercolorScene.tsx` 改用 PNG 資產。
-5. Codex 執行 `npm test` 與 `npm run build` 驗證。
-6. 監督者人工檢查 375px 行動裝置視覺。
+1. Run a fresh mobile visual QA pass for the v0.6 station UI and crisis flow.
+2. Decide whether the next product slice is invite pilot instrumentation or LINE Bot M2.
+3. If preparing pilot: finalize privacy wording before adding anonymous event collection.
+4. If starting LINE Bot: implement a thin text-only webhook that reuses `/api/respond` behavior and mocked LINE payload tests.
 
 ## Verification Status
+
+pass: 2026-06-15 repo review passed `npx vitest run api/respond.test.ts`, `npx tsc -p api/tsconfig.json --noEmit`, `npm test`, and `npm run build`. The new API safety tests verify crisis, medical-boundary, and privacy inputs do not call Gemini.
 
 pass: 2026-05-12 astro v0.5 passed `npx tsc -p tsconfig.json --noEmit`, `npm run build`, and `npm test`. Vitest now excludes `.claude/**` temporary worktrees so tests run only against the project source.
 

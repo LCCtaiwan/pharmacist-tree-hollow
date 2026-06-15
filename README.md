@@ -61,12 +61,12 @@ npm run build
 
 Current MVP includes:
 
-- 手機優先樹洞輸入。
-- 夜間藥局 x 安靜樹洞 CSS 主視覺。
-- 藥師情境 mock response：同理、具體誇誇、小步驟。
-- 內嵌 30 秒 micro tool。
-- `給這一刻一首歌`、療癒牌、星象反思卡。
-- 危機、醫療邊界、個資輸入的基礎安全流程。
+- 手機優先的水彩場景入口，七個物件站點對應樹洞、反思、歌曲、呼吸、金句、抽牌與收藏。
+- Gemini-backed `/api/respond` AI 回信，前端有 fallback 靜態回覆。
+- 藥師情境回信：先接住壓力，再做具體誇誇，不做診斷或專業判斷。
+- 內嵌 30 秒 micro tools、心情歌曲、金句池與 Lenormand 36 張抽牌 prompt flow。
+- 危機、醫療邊界、個資輸入的前端與 API 端 safety pre-check。
+- Vercel KV IP rate limit、budget cutoff、本機每日一封軟限制與首次 AI 揭露。
 - localStorage 收藏，不保存原始樹洞文字。
 
-Next step: prepare invite pilot, then add anonymous event collection after privacy wording is finalized.
+Next step: fresh mobile visual QA, then choose invite pilot instrumentation or LINE Bot M2.

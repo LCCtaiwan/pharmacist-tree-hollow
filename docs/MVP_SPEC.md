@@ -8,17 +8,17 @@
 
 做出一個手機優先的 Web App，讓藥師在 30 秒內完成一次舒壓互動：
 
-1. 選心情或輸入一句話。
+1. 點選場景物件，或進入樹洞寫一句話。
 2. 收到具體同理與誇誇。
-3. 可選擇抽牌、點歌、收藏或做 30 秒喘口氣。
+3. 可選擇抽牌、點歌、收藏、讀一句或做 30 秒喘口氣。
 
 ## Success Criteria
 
 MVP 完成時必須符合：
 
-- 使用者打開首頁，不需要看教學就知道可以輸入心情。
+- 使用者打開首頁，不需要看教學就知道可以點場景物件開始互動。
 - 首次互動可在 30 秒內完成。
-- 回覆包含同理、具體誇誇、一個小步驟。
+- 回覆包含同理與具體誇誇；危機或高重量內容可只接住，不硬誇。
 - 至少 12 組藥師工作情境有對應品質良好的回覆。
 - 危機語句會進安全流程。
 - 不輸出醫療診斷、心理診斷、處方建議。
@@ -29,7 +29,7 @@ MVP 完成時必須符合：
 
 ```mermaid
 flowchart TD
-    A["Open Web App"] --> B["Mood Check-in"]
+    A["Open Web App"] --> B["Clickable Scene Stations"]
     B --> C["Write to Tree Hollow"]
     C --> D["Safety Pre-check"]
     D --> E{"Risk?"}
@@ -52,20 +52,20 @@ Purpose:
 - No marketing hero.
 - The first screen is the usable product.
 
-Required elements:
+Current required elements:
 
 - App title: 藥師樹洞。
-- Small status line: 深夜櫃檯還亮著。
-- Mood chips: 熱湯、紙巾、苦茶、空碗、小火、雨傘、白水。
-- Text input: 「寫一張投進深夜櫃檯的紙條」。
-- Primary action: send icon button.
-- Secondary actions: 誇誇我、抽牌、點歌、喘口氣。
+- Watercolor/night scene with clickable station hotspots.
+- Station labels: 樹洞私語、意義拾荒、頻率擁抱、宇宙的悄悄話、意識降落、文字微光、情緒考古。
+- Tree-hollow text input appears only after selecting 樹洞私語.
+- Primary action: send paper/note action.
+- Secondary station actions: reflection question, song, breathing, quote, Lenormand draw, saved items.
 - Visual: watercolor pharmacy tree hollow scene using prepared image assets.
 
 Acceptance:
 
 - Mobile first viewport can use without scrolling for the first interaction.
-- Text input and send action are obvious.
+- Scene station entry points are obvious, and the tree-hollow composer is clear once opened.
 - No giant landing page.
 - The first screen reads as 藥師樹洞, not a generic forest app, medical admin tool or exam platform.
 
@@ -78,17 +78,16 @@ Purpose:
 Required response sections:
 
 - A short reply that feels like someone read the note.
-- One concrete praise.
-- A second praise/reframe can be rotated in place without generating a new page.
-- One tiny action.
-- Actions: 收藏、再誇我一次、幫我點歌、抽一張牌。
+- One concrete praise when appropriate.
+- Optional praiseNotes when the note has concrete pharmacist action to reflect.
+- Fixed signoff handled by frontend: 「燈還亮著」。
+- Actions: 收下這封信、再投一張紙條。
 
 Acceptance:
 
 - Response is short enough to read in one screen.
 - Praise mentions the user's situation when available.
-- Followup actions use progressive disclosure: first response should not feel like a task list, and optional actions appear only after the user chooses to stay.
-- Optional song/card/astro/30-second experiences should render inside the same focused response surface instead of stacking as separate sections.
+- Optional song/card/quote/30-second experiences live as scene stations, not as a stacked task list after every reply.
 - No generic forced positivity.
 
 ### 3. Daily Healing
@@ -134,25 +133,27 @@ Purpose:
 
 - Entertainment and reflection.
 
-Required elements:
+Current required elements:
 
 - Disclaimer: entertainment/reflection, not prediction.
-- Card name.
-- Simple symbolic card visual in MVP.
-- Interpretation.
-- Reflection question.
+- Optional question input.
+- Three-card Lenormand visual draw.
+- Copyable prompt template for external AI interpretation.
+- Card images with fallback placeholder if an asset fails to load.
 
 Acceptance:
 
 - Does not claim accuracy.
 - Does not predict high-stakes outcomes.
 - Does not tell user to make clinical, financial or relationship decisions.
+- Does not call the product AI directly for divination interpretation.
 
-### 5a. Astro Reflection Card
+### 5a. Legacy Astro Reflection Card
 
 Purpose:
 
 - Give a small ritualized reframe after AI support without turning the product into fortune-telling.
+- Status: superseded in the current UI by the Lenormand 36-card station. Legacy content may remain in `packages/content` until cleaned up.
 
 Required elements:
 
@@ -230,13 +231,13 @@ The app should feel calm, mature and low-stimulation. It should not look like a 
 Mobile first screen order:
 
 1. App title: 藥師樹洞。
-2. Status line: 深夜櫃檯還亮著。
-3. Watercolor pharmacy tree hollow scene.
-4. Mood chips.
-5. Text input and send icon button.
-6. Small secondary action row only if it does not compete with the input.
+2. Short intro/splash if not previously seen.
+3. Watercolor/night tree-hollow scene.
+4. Clickable object station hotspots.
+5. Text input and send action only after 樹洞私語 is selected.
+6. Station card for non-vent interactions.
 
-The text input and send action are the priority. Decoration must not make the first interaction harder.
+The scene is the primary navigation surface. Decoration must not obscure station hotspots or make the tree-hollow composer harder to find.
 
 ### Watercolor Scene Elements
 

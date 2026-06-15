@@ -1,5 +1,13 @@
 # 開發日誌
 
+## 2026-06-15 · 進度 review 後整理：API safety 補強 + 文件對齊 v0.6
+
+**完成：** review repo 現況，確認 Web App 已到 v0.6 + AI 回信切片 A/B/C + Lenormand 36 張；新增 `/api/respond` server-side safety pre-check，危機、醫療邊界、個資輸入直接回 static safety letter，不呼叫 Gemini；同步 `README.md`、`docs/develog.md`、`docs/MVP_SPEC.md`，移除過期 mood chip/櫃檯/醫護擴大敘述。
+**決策：** safety 不能只靠前端；direct API request 也必須先過 `classifySafety`。LINE Bot 仍維持第二階段，尚未實作。
+**驗證：** `npx vitest run api/respond.test.ts` pass；`npx tsc -p api/tsconfig.json --noEmit` pass；`npm test` pass（15 files / 64 tests）；`npm run build` pass。
+
+---
+
 ## 2026-05-10 · v0.1→v0.4 上線：水彩 pivot + NPC hub + 紙質設計系統
 
 **完成：** 藥師定位回歸（撤回前一輪「醫護」擴大），全文清掉醫護殘留；水彩美術 pivot：依 DESERTOPIA + 解憂雜貨店 風格，22 張資產（2 場景 + letter + 7 
@@ -128,3 +136,34 @@
 
 ---
 
+## 2026-05-19 · 站點 7 改名 + 金句池去藥師化 + Lenormand 36 張系統取代行星卡
+
+**完成：** 站點 7 個全面改名：宇宙的悄悄話(astro)/意義拾荒(reflection)/樹洞私語(vent)/情緒考古(sa；金句池全面去藥師化：移除 ~48 句醫療/職場相關（含 Grey's Anatomy/ER/麻醉風暴等醫療劇出處）+ 新
+**決策：** 卡牌系統選 Lenormand 36 張完整傳統系統（捨棄保留行星 13、捨棄混合方案）
+**Commits：** 76a6df1 feat(astro): add question input flow + fix mobile 3-col layout, 23e7cce feat: v0.6 站點 UI 重設計（夜空玻璃卡）+ Lenormand 27 張卡面, a8ee169 feat: v0.5 重新定位 — 站點詩意化 + 金句去藥師化 + Lenormand 36 + Ghibli 夜晚場景
+
+---
+
+## 2026-05-19 · v0.6 玻璃卡 UI 推廣完成（7 站 + ResponseCard）+ commit 23e7cce
+
+**完成：** 推廣玻璃卡到剩餘 5 站：quote（blockquote 暖金 bar + 暖白字）、astro（Lenormand ；ResponseCard（letter-card）轉玻璃信：拿掉 -0.3deg 旋轉 + 全部 dashed bord
+**決策：** Letter (ResponseCard) 沿用 station 系列 glass design language，不另外開「紙信」變體；簽名「── 燈還亮著」
+**Commits：** 76a6df1 feat(astro): add question input flow + fix mobile 3-col layout, 23e7cce feat: v0.6 站點 UI 重設計（夜空玻璃卡）+ Lenormand 27 張卡面, a8ee169 feat: v0.5 重新定位 — 站點詩意化 + 金句去藥師化 + Lenormand 36 + Ghibli 夜晚場景
+
+---
+
+## 2026-05-19 · 清掉 GitHub Dependabot 6 個漏洞警告（npm audit fix + 5 個 dismiss）
+
+**完成：** 盤點 6 個 Dependabot 漏洞：1 high (minimatch ReDoS)、4 moderate (un；風險評估：build-time 工具為主、production runtime 攻擊面小（無 WS server、無惡意
+**決策：** 選最安全做法（A npm overrides / B 純 audit fix / C 全 dismiss）的混合：先 audit fix 修能修的、剩下 5 個
+**Commits：** dad12e6 chore(deps): npm audit fix — 修 smol-toml moderate 漏洞, 76a6df1 feat(astro): add question input flow + fix mobile 3-col layout, 23e7cce feat: v0.6 站點 UI 重設計（夜空玻璃卡）+ Lenormand 27 張卡面, a8ee169 feat: v0.5 重新定位 — 站點詩意化 + 金句去藥師化 + Lenormand 36 + Ghibli 夜晚場景
+
+---
+
+## 2026-05-19 · Lenormand 36/36 卡面確認完成 + 驗收保留 astro question 輸入流程
+
+**完成：** 進度確認：Lenormand 36/36 卡面在 commit 76a6df1 已 push，前一個 Codex age；目視 spot-check 兩張新卡（lenormand-32-moon.png + lenormand-36-cros
+**決策：** Astro question 輸入流程保留現狀不動（vs 抽掉回「邊抽邊」）— v0.5 時用戶曾拒絕、但 Codex 在 v0.6 加進來、實測體驗 OK 後
+**Commits：** dad12e6 chore(deps): npm audit fix — 修 smol-toml moderate 漏洞, 76a6df1 feat(astro): add question input flow + fix mobile 3-col layout, 23e7cce feat: v0.6 站點 UI 重設計（夜空玻璃卡）+ Lenormand 27 張卡面, a8ee169 feat: v0.5 重新定位 — 站點詩意化 + 金句去藥師化 + Lenormand 36 + Ghibli 夜晚場景
+
+---
